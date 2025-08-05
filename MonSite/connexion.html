@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Connexion - IHM Explorer</title>
+  <link rel="stylesheet" href="auth.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* Styles spécifiques à la page de connexion */
+    .login-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 1rem 2rem 4rem;
+      padding-top: 7rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-container {
+      max-width: 480px;
+      width: 100%;
+      background-color: var(--background);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 8px 30px var(--shadow-strong);
+      padding: 2.5rem;
+      position: relative;
+      z-index: 5;
+      transition: all var(--transition);
+    }
+
+    /* Styles pour les onglets */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab-btn {
+      padding: 1rem 2rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-light);
+      position: relative;
+      transition: all var(--transition);
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+    }
+
+    .tab-indicator {
+      position: absolute;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      bottom: -1px;
+      left: 0;
+      transition: all 0.3s ease;
+      border-radius: 3px 3px 0 0;
+    }
+
+    .tab-content {
+      transition: all 0.3s ease;
+    }
+
+    .tab-content.hidden {
+      display: none;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 580px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .terms {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .terms-text {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .terms-text a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .terms-text a:hover {
+      text-decoration: underline;
+    }
+
+    .signup-button {
+      width: 100%;
+      padding: 0.9rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border: none;
+      border-radius: var(--radius);
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .signup-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    .form-group {
+      position: relative;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem 2.75rem 0.75rem 2.75rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background-color: var(--background);
+      color: var(--text-dark);
+      transition: all var(--transition);
+      font-size: 1rem;
+    }
+
+    .form-group input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.2);
+      outline: none;
+    }
+
+    .form-group i.fa-envelope,
+    .form-group i.fa-lock,
+    .form-group i.fa-user {
+      position: absolute;
+      left: 1rem;
+      top: 2.35rem;
+      color: var(--text-lighter);
+      transition: all var(--transition);
+    }
+
+    .form-group input:focus + i {
+      color: var(--primary);
+    }
+
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .custom-checkbox {
+      width: 18px;
+      height: 18px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: transparent;
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+
+    .remember-me:hover .custom-checkbox {
+      border-color: var(--primary);
+    }
+
+    .remember-me input:checked + .custom-checkbox {
+      background-color: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .remember-me-text {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .forgot-password {
+      font-size: 0.9rem;
+      color: var(--primary);
+      text-decoration: none;
+      transition: all var(--transition);
+    }
+
+    .forgot-password:hover {
+      color: var(--primary-dark);
+      text-decoration: underline;
+    }
+
+    .login-button {
+      margin-top: 1rem;
+      width: 100%;
+      padding: 0.9rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border: none;
+      border-radius: var(--radius);
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
+    }
+
+    .login-button:active {
+      transform: translateY(-1px);
+    }
+
+    .login-button::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+      opacity: 0;
+      transition: all 0.8s;
+    }
+
+    .login-button:hover::after {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .signup-link {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+
+    .signup-link a {
+      color: var(--primary);
+      font-weight: 600;
+      transition: all var(--transition);
+    }
+
+    .signup-link a:hover {
+      color: var(--primary-dark);
+      text-decoration: underline;
+    }
+
+    .back-to-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-light);
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius);
+      transition: all var(--transition);
+    }
+
+    .back-to-home:hover {
+      color: var(--primary);
+      background-color: rgba(0, 188, 212, 0.1);
+    }
+
+    /* Éléments décoratifs améliorés */
+    .login-decoration {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .login-circle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.15;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      filter: blur(5px);
+      animation: pulse 8s infinite alternate ease-in-out;
+    }
+
+    .login-circle-1 {
+      width: 400px;
+      height: 400px;
+      top: -150px;
+      right: -100px;
+    }
+
+    .login-circle-2 {
+      width: 500px;
+      height: 500px;
+      bottom: -150px;
+      left: -100px;
+      animation-delay: 4s;
+    }
+
+    .login-circle-3 {
+      width: 300px;
+      height: 300px;
+      top: 40%;
+      right: -50px;
+      opacity: 0.08;
+      animation-delay: 2s;
+    }
+
+    .login-circle-4 {
+      width: 250px;
+      height: 250px;
+      bottom: 30%;
+      left: -50px;
+      opacity: 0.08;
+      animation-delay: 6s;
+    }
+
+    .login-particle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--primary);
+      opacity: 0;
+      box-shadow: 0 0 15px 2px rgba(0, 188, 212, 0.5);
+      animation: float 20s infinite ease-in-out, glow 6s infinite alternate;
+    }
+
+    .login-particle-1 {
+      top: 15%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .login-particle-2 {
+      top: 70%;
+      left: 25%;
+      animation-delay: 2s;
+    }
+
+    .login-particle-3 {
+      top: 25%;
+      right: 10%;
+      animation-delay: 4s;
+    }
+
+    .login-particle-4 {
+      top: 60%;
+      right: 20%;
+      animation-delay: 6s;
+    }
+
+    .login-particle-5 {
+      top: 45%;
+      left: 30%;
+      animation-delay: 8s;
+    }
+
+    .login-particle-6 {
+      top: 30%;
+      left: 50%;
+      animation-delay: 10s;
+    }
+
+    .login-particle-7 {
+      top: 80%;
+      right: 30%;
+      animation-delay: 12s;
+    }
+
+    .login-particle-8 {
+      top: 20%;
+      right: 40%;
+      animation-delay: 14s;
+    }
+
+    .login-particle-9 {
+      top: 50%;
+      left: 15%;
+      animation-delay: 16s;
+    }
+
+    .login-particle-10 {
+      top: 40%;
+      right: 15%;
+      animation-delay: 18s;
+    }
+
+    .login-star {
+      position: absolute;
+      opacity: 0;
+      animation: twinkle 8s infinite;
+    }
+
+    .login-star:before {
+      content: '';
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+    }
+
+    .login-star-1 { top: 20%; left: 15%; animation-delay: 0s; }
+    .login-star-2 { top: 30%; left: 35%; animation-delay: 1s; }
+    .login-star-3 { top: 15%; left: 60%; animation-delay: 2s; }
+    .login-star-4 { top: 40%; left: 80%; animation-delay: 3s; }
+    .login-star-5 { top: 65%; left: 75%; animation-delay: 4s; }
+    .login-star-6 { top: 75%; left: 35%; animation-delay: 5s; }
+    .login-star-7 { top: 55%; left: 15%; animation-delay: 6s; }
+    .login-star-8 { top: 80%; left: 55%; animation-delay: 7s; }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.5;
+      }
+      50% {
+        transform: translateY(-30px) translateX(20px);
+        opacity: 0.8;
+      }
+      80% {
+        opacity: 0.5;
+      }
+      100% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+      }
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 0.08;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.15;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 0.08;
+      }
+    }
+
+    @keyframes glow {
+      0% {
+        box-shadow: 0 0 5px 1px rgba(0, 188, 212, 0.3);
+      }
+      100% {
+        box-shadow: 0 0 20px 4px rgba(0, 188, 212, 0.7);
+      }
+    }
+
+    @keyframes twinkle {
+      0% {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.2);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+    }
+
+    /* Form validation */
+    .form-group input:invalid:not(:focus):not(:placeholder-shown) {
+      border-color: var(--red);
+    }
+
+    .form-group input:invalid:not(:focus):not(:placeholder-shown) + i {
+      color: var(--red);
+    }
+
+    .error-message {
+      display: none;
+      color: var(--red);
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+    }
+
+    .form-group input:invalid:not(:focus):not(:placeholder-shown) ~ .error-message {
+      display: block;
+    }
+
+    /* Animation d'entrée du formulaire */
+    .login-container {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeIn 0.8s forwards ease-out;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Bouton de bascule pour le mot de passe */
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 38px;
+      background: none;
+      border: none;
+      color: var(--text-lighter);
+      cursor: pointer;
+      transition: all var(--transition);
+      padding: 5px;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 20px;
+      width: 20px;
+    }
+
+    .toggle-password:hover, .toggle-password:focus {
+      color: var(--primary);
+    }
+
+    /* Styles pour connexion sociale */
+    .social-login {
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+
+    .social-text {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      position: relative;
+      margin-bottom: 1.25rem;
+    }
+
+    .social-text::before, .social-text::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 25%;
+      height: 1px;
+      background-color: var(--border);
+    }
+
+    .social-text::before {
+      left: 0;
+    }
+
+    .social-text::after {
+      right: 0;
+    }
+
+    .social-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .social-button {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background-color: var(--background);
+      color: var(--text-dark);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .social-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 10px var(--shadow);
+    }
+
+    .social-button.google {
+      color: #DB4437;
+      border-color: rgba(219, 68, 55, 0.3);
+    }
+
+    .social-button.facebook {
+      color: #4267B2;
+      border-color: rgba(66, 103, 178, 0.3);
+    }
+
+    .social-button.github {
+      color: #333;
+      border-color: rgba(51, 51, 51, 0.3);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .login-container {
+        padding: 2rem 1.5rem;
+      }
+      
+      .social-buttons {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .login-section {
+        padding: 7rem 1rem 2rem;
+        padding-top: 5rem;
+      }
+      
+      .form-options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .tab-btn {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header avec navigation -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-circle">IHM</div>
+      <span>IHM Technologies</span>
+    </div>
+    <nav class="nav">
+      <a href="index.html">Accueil</a>
+      <a href="concepts.html">Concepts</a>
+      <a href="ressources.html">Ressources</a>
+      <a href="design.html">Design</a>
+      <a href="cours.html">Cours</a>
+      <a href="evenements.html">Événements</a>
+      <a href="forum.html">Forum</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <button class="theme-toggle" aria-label="Basculer mode sombre">
+        <i class="fas fa-moon" id="theme-icon"></i>
+      </button>
+      <a href="connexion.html" class="login-btn active">
+        <i class="fas fa-user"></i>
+        <span>Connexion</span>
+      </a>
+      <button class="menu-toggle" aria-label="Menu mobile">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Menu mobile (affiché uniquement sur mobile) -->
+  <div class="mobile-menu">
+    <div class="mobile-menu-header">
+      <div class="logo">
+        <div class="logo-circle">IHM</div>
+        <span>IHM Technologies</span>
+      </div>
+      <button class="close-menu">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <nav class="mobile-nav">
+      <a href="index.html">Accueil</a>
+      <a href="concepts.html">Concepts</a>
+      <a href="ressources.html">Ressources</a>
+      <a href="design.html">Design</a>
+      <a href="evenements.html">Événements</a>
+      <a href="cours.html">Cours</a>
+      <a href="forum.html">Forum</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="mobile-actions">
+      <a href="connexion.html" class="btn outline-btn active">
+        <i class="fas fa-user"></i>
+        <span>Connexion</span>
+      </a>
+      <div class="mobile-social">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay pour menu mobile -->
+  <div class="overlay"></div>
+
+  <!-- Section de connexion -->
+  <section class="login-section section-hidden">
+    <div class="login-decoration">
+      <div class="login-circle login-circle-1"></div>
+      <div class="login-circle login-circle-2"></div>
+      <div class="login-circle login-circle-3"></div>
+      <div class="login-circle login-circle-4"></div>
+      <div class="login-particle login-particle-1"></div>
+      <div class="login-particle login-particle-2"></div>
+      <div class="login-particle login-particle-3"></div>
+      <div class="login-particle login-particle-4"></div>
+      <div class="login-particle login-particle-5"></div>
+      <div class="login-particle login-particle-6"></div>
+      <div class="login-particle login-particle-7"></div>
+      <div class="login-particle login-particle-8"></div>
+      <div class="login-particle login-particle-9"></div>
+      <div class="login-particle login-particle-10"></div>
+      <div class="login-star login-star-1"></div>
+      <div class="login-star login-star-2"></div>
+      <div class="login-star login-star-3"></div>
+      <div class="login-star login-star-4"></div>
+      <div class="login-star login-star-5"></div>
+      <div class="login-star login-star-6"></div>
+      <div class="login-star login-star-7"></div>
+      <div class="login-star login-star-8"></div>
+    </div>
+
+    <div class="login-container">
+      <a href="index.html" class="back-to-home">
+        <i class="fas fa-arrow-left"></i>
+        Retour à l'accueil
+      </a>
+      
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="login">Connexion</button>
+        <button class="tab-btn" data-tab="signup">Inscription</button>
+        <span class="tab-indicator"></span>
+      </div>
+      
+      <div class="tab-content" id="login-tab">
+        <form class="login-form" id="login-form" novalidate>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Votre adresse email" required>
+            <i class="fas fa-envelope"></i>
+            <div class="error-message">Veuillez entrer une adresse email valide</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="password" placeholder="Votre mot de passe" required minlength="6">
+            <i class="fas fa-lock"></i>
+            <button type="button" class="toggle-password" aria-label="Afficher/masquer le mot de passe">
+              <i class="fas fa-eye"></i>
+            </button>
+            <div class="error-message">Le mot de passe doit comporter au moins 6 caractères</div>
+          </div>
+          
+          <div class="form-options">
+            <label class="remember-me">
+              <input type="checkbox" id="remember" name="remember" class="sr-only">
+              <span class="custom-checkbox"><i class="fas fa-check"></i></span>
+              <span class="remember-me-text">Se souvenir de moi</span>
+            </label>
+            
+            <a href="#" class="forgot-password">Mot de passe oublié ?</a>
+          </div>
+          
+          <button type="submit" class="login-button">
+            <span>Se connecter</span>
+          </button>
+        </form>
+      </div>
+      
+      <div class="tab-content hidden" id="signup-tab">
+        <form class="signup-form" id="signup-form" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstname">Prénom</label>
+              <input type="text" id="firstname" name="firstname" placeholder="Votre prénom" required>
+              <i class="fas fa-user"></i>
+              <div class="error-message">Veuillez entrer votre prénom</div>
+            </div>
+            
+            <div class="form-group">
+              <label for="lastname">Nom</label>
+              <input type="text" id="lastname" name="lastname" placeholder="Votre nom" required>
+              <i class="fas fa-user"></i>
+              <div class="error-message">Veuillez entrer votre nom</div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" name="email" placeholder="Votre adresse email" required>
+            <i class="fas fa-envelope"></i>
+            <div class="error-message">Veuillez entrer une adresse email valide</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="signup-password">Mot de passe</label>
+            <input type="password" id="signup-password" name="password" placeholder="Choisissez un mot de passe" required minlength="6">
+            <i class="fas fa-lock"></i>
+            <button type="button" class="toggle-password" aria-label="Afficher/masquer le mot de passe">
+              <i class="fas fa-eye"></i>
+            </button>
+            <div class="error-message">Le mot de passe doit comporter au moins 6 caractères</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="confirm-password">Confirmez le mot de passe</label>
+            <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirmez votre mot de passe" required>
+            <i class="fas fa-lock"></i>
+            <button type="button" class="toggle-password" aria-label="Afficher/masquer le mot de passe">
+              <i class="fas fa-eye"></i>
+            </button>
+            <div class="error-message">Les mots de passe ne correspondent pas</div>
+          </div>
+          
+          <div class="terms">
+            <input type="checkbox" id="terms" name="terms" class="sr-only" required>
+            <span class="custom-checkbox"><i class="fas fa-check"></i></span>
+            <span class="terms-text">
+              J'accepte les <a href="#">Conditions d'utilisation</a> et la <a href="#">Politique de confidentialité</a>
+            </span>
+          </div>
+          
+          <button type="submit" class="signup-button">
+            <span>Créer mon compte</span>
+          </button>
+        </form>
+      </div>
+      
+      <div class="social-login">
+        <p class="social-text">Ou connectez-vous avec</p>
+        <div class="social-buttons">
+          <button class="social-button google">
+            <i class="fab fa-google"></i>
+            <span>Google</span>
+          </button>
+          <button class="social-button facebook">
+            <i class="fab fa-facebook-f"></i>
+            <span>Facebook</span>
+          </button>
+          <button class="social-button github">
+            <i class="fab fa-github"></i>
+            <span>GitHub</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <div class="logo">
+            <div class="logo-circle">IHM</div>
+            <span>IHM Technologies</span>
+          </div>
+          <p>Explorez le monde de l'Interface Homme-Machine et découvrez comment elle façonne notre avenir numérique.</p>
+          <div class="newsletter">
+            <input type="email" placeholder="Votre email" />
+            <button><i class="fas fa-paper-plane"></i></button>
+          </div>
+        </div>
+        
+        <div class="footer-links">
+          <h4>Liens rapides</h4>
+          <div class="links-grid">
+            <ul>
+              <li><a href="index.html">Accueil</a></li>
+              <li><a href="ressources.html">Ressources</a></li>
+              <li><a href="design.html">Design</a></li>
+              <li><a href="cours.html">Cours</a></li>
+              <li><a href="evenements.html">Événements</a></li>
+            </ul>
+            <ul>
+              <li><a href="concepts.html">Concepts</a></li>
+              <li><a href="forum.html">Forum</a></li>
+              <li><a href="contact.html">Contact</a></li>
+              <li><a href="connexion.html">Connexion</a></li>
+              <li><a href="#">Inscription</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="footer-contact">
+          <h4>Contact</h4>
+          <ul class="contact-list">
+            <li><i class="fas fa-map-marker-alt"></i> 123 Avenue de l'Innovation, 75001 Paris</li>
+            <li><i class="fas fa-phone"></i> +33 1 23 45 67 89</li>
+            <li><i class="fas fa-envelope"></i> contact@ihm-explorer.com</li>
+          </ul>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <div class="copyright">© 2025 IHM Technologies. Tous droits réservés.</div>
+        <div class="legal-links">
+          <a href="#">Mentions légales</a>
+          <a href="#">Politique de confidentialité</a>
+          <a href="#">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="chatbot.js"></script>
+  <script src="auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Afficher la section de connexion immédiatement
+      const loginSection = document.querySelector('.login-section');
+      if (loginSection) {
+        setTimeout(() => {
+          loginSection.classList.add('section-visible');
+        }, 100);
+      }
+
+      // Gestion du checkbox "Se souvenir de moi"
+      const rememberCheckbox = document.getElementById('remember');
+      const rememberLabel = document.querySelector('.remember-me');
+      const rememberCustomCheckbox = document.querySelector('.remember-me .custom-checkbox');
+      
+      if (rememberCheckbox && rememberCustomCheckbox && rememberLabel) {
+        // Initialiser l'état visuel
+        if (rememberCheckbox.checked) {
+          rememberCustomCheckbox.style.backgroundColor = 'var(--primary)';
+          rememberCustomCheckbox.style.borderColor = 'var(--primary)';
+          rememberCustomCheckbox.style.color = 'white';
+        }
+        
+        // Style au clic sur le checkbox ou le label
+        rememberLabel.addEventListener('click', function(e) {
+          // Empêcher le comportement par défaut pour éviter les doubles clics
+          e.preventDefault();
+          
+          // Inverser l'état du checkbox
+          rememberCheckbox.checked = !rememberCheckbox.checked;
+          
+          // Mettre à jour l'apparence visuelle
+          if (rememberCheckbox.checked) {
+            rememberCustomCheckbox.style.backgroundColor = 'var(--primary)';
+            rememberCustomCheckbox.style.borderColor = 'var(--primary)';
+            rememberCustomCheckbox.style.color = 'white';
+          } else {
+            rememberCustomCheckbox.style.backgroundColor = 'transparent';
+            rememberCustomCheckbox.style.borderColor = 'var(--border)';
+            rememberCustomCheckbox.style.color = 'transparent';
+          }
+        });
+      }
+
+      // Gestion des onglets
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+      const tabIndicator = document.querySelector('.tab-indicator');
+      
+      // Initialiser l'indicateur sur le premier onglet
+      if (tabIndicator && tabBtns.length > 0) {
+        const activeTab = document.querySelector('.tab-btn.active');
+        tabIndicator.style.width = `${activeTab.offsetWidth}px`;
+        tabIndicator.style.left = `${activeTab.offsetLeft}px`;
+      }
+      
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const tabId = this.getAttribute('data-tab');
+          
+          // Mettre à jour les classes active
+          tabBtns.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Mettre à jour l'indicateur
+          tabIndicator.style.width = `${this.offsetWidth}px`;
+          tabIndicator.style.left = `${this.offsetLeft}px`;
+          
+          // Afficher le contenu correspondant
+          tabContents.forEach(content => {
+            content.classList.add('hidden');
+            if (content.id === `${tabId}-tab`) {
+              content.classList.remove('hidden');
+            }
+          });
+        });
+      });
+      
+      // Bascule d'affichage du mot de passe
+      const togglePasswordBtns = document.querySelectorAll('.toggle-password');
+      
+      togglePasswordBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const passwordInput = this.previousElementSibling.previousElementSibling;
+          
+          // Changer le type de l'input
+          const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+          passwordInput.setAttribute('type', type);
+          
+          // Changer l'icône
+          const icon = this.querySelector('i');
+          if (type === 'password') {
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+          } else {
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+          }
+        });
+      });
+      
+      // Validation du formulaire
+      const loginForm = document.getElementById('login-form');
+      
+      if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          const email = document.getElementById('email');
+          const password = document.getElementById('password');
+          let isValid = true;
+          
+          // Validation de l'email
+          if (!email.value || !email.value.includes('@')) {
+            isValid = false;
+            email.classList.add('error');
+          } else {
+            email.classList.remove('error');
+          }
+          
+          // Validation du mot de passe
+          if (!password.value || password.value.length < 6) {
+            isValid = false;
+            password.classList.add('error');
+          } else {
+            password.classList.remove('error');
+          }
+          
+          // Animation du bouton
+          const loginButton = document.querySelector('.login-button');
+          loginButton.classList.add('clicked');
+          
+          setTimeout(() => {
+            loginButton.classList.remove('clicked');
+            
+            // Si le formulaire est valide
+            if (isValid) {
+              // Simulation de connexion réussie
+              loginButton.innerHTML = '<i class="fas fa-check"></i> Connecté!';
+              loginButton.style.backgroundColor = 'var(--green)';
+              
+              // Redirection après un délai (simulé)
+              setTimeout(() => {
+                window.location.href = 'index.html';
+              }, 1500);
+            }
+          }, 300);
+        });
+        
+        // Suppression du message d'erreur quand l'utilisateur commence à taper
+        const inputs = loginForm.querySelectorAll('input');
+        inputs.forEach(input => {
+          input.addEventListener('input', function() {
+            this.classList.remove('error');
+          });
+        });
+      }
+      
+      // Validation du formulaire d'inscription
+      const signupForm = document.getElementById('signup-form');
+      
+      if (signupForm) {
+        signupForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          const firstname = document.getElementById('firstname');
+          const lastname = document.getElementById('lastname');
+          const email = document.getElementById('signup-email');
+          const password = document.getElementById('signup-password');
+          const confirmPassword = document.getElementById('confirm-password');
+          const terms = document.getElementById('terms');
+          let isValid = true;
+          
+          // Validation du prénom
+          if (!firstname.value.trim()) {
+            isValid = false;
+            firstname.classList.add('error');
+          } else {
+            firstname.classList.remove('error');
+          }
+          
+          // Validation du nom
+          if (!lastname.value.trim()) {
+            isValid = false;
+            lastname.classList.add('error');
+          } else {
+            lastname.classList.remove('error');
+          }
+          
+          // Validation de l'email
+          if (!email.value || !email.value.includes('@')) {
+            isValid = false;
+            email.classList.add('error');
+          } else {
+            email.classList.remove('error');
+          }
+          
+          // Validation du mot de passe
+          if (!password.value || password.value.length < 6) {
+            isValid = false;
+            password.classList.add('error');
+          } else {
+            password.classList.remove('error');
+          }
+          
+          // Validation de la confirmation du mot de passe
+          if (password.value !== confirmPassword.value) {
+            isValid = false;
+            confirmPassword.classList.add('error');
+          } else {
+            confirmPassword.classList.remove('error');
+          }
+          
+          // Validation des conditions d'utilisation
+          if (!terms.checked) {
+            isValid = false;
+            document.querySelector('.terms .custom-checkbox').style.borderColor = 'var(--red)';
+          } else {
+            document.querySelector('.terms .custom-checkbox').style.borderColor = '';
+          }
+          
+          // Animation du bouton
+          const signupButton = document.querySelector('.signup-button');
+          signupButton.classList.add('clicked');
+          
+          setTimeout(() => {
+            signupButton.classList.remove('clicked');
+            
+            // Si le formulaire est valide
+            if (isValid) {
+              // Simulation d'inscription réussie
+              signupButton.innerHTML = '<i class="fas fa-check"></i> Compte créé!';
+              signupButton.style.backgroundColor = 'var(--green)';
+              
+              // Redirection après un délai (simulé)
+              setTimeout(() => {
+                window.location.href = 'index.html';
+              }, 1500);
+            }
+          }, 300);
+        });
+        
+        // Suppression du message d'erreur quand l'utilisateur commence à taper
+        const signupInputs = signupForm.querySelectorAll('input');
+        signupInputs.forEach(input => {
+          input.addEventListener('input', function() {
+            this.classList.remove('error');
+            if (this.id === 'terms') {
+              document.querySelector('.terms .custom-checkbox').style.borderColor = '';
+            }
+          });
+        });
+        
+        // Gestion du checkbox pour les termes et conditions
+        const termsCheckbox = document.getElementById('terms');
+        const termsLabel = document.querySelector('.terms');
+        const termsCustomCheckbox = document.querySelector('.terms .custom-checkbox');
+        
+        if (termsCheckbox && termsCustomCheckbox && termsLabel) {
+          // Initialiser l'état visuel
+          if (termsCheckbox.checked) {
+            termsCustomCheckbox.style.backgroundColor = 'var(--primary)';
+            termsCustomCheckbox.style.borderColor = 'var(--primary)';
+            termsCustomCheckbox.style.color = 'white';
+          }
+          
+          // Style au clic sur le checkbox ou le label
+          termsLabel.addEventListener('click', function(e) {
+            // Empêcher le comportement par défaut
+            e.preventDefault();
+            
+            // Inverser l'état du checkbox
+            termsCheckbox.checked = !termsCheckbox.checked;
+            
+            // Mettre à jour l'apparence visuelle
+            if (termsCheckbox.checked) {
+              termsCustomCheckbox.style.backgroundColor = 'var(--primary)';
+              termsCustomCheckbox.style.borderColor = 'var(--primary)';
+              termsCustomCheckbox.style.color = 'white';
+            } else {
+              termsCustomCheckbox.style.backgroundColor = 'transparent';
+              termsCustomCheckbox.style.borderColor = 'var(--border)';
+              termsCustomCheckbox.style.color = 'transparent';
+            }
+          });
+        }
+      }
+    });
+  </script>
+  
+</body>
+</html>

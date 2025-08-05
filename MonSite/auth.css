@@ -1,0 +1,454 @@
+/**
+ * Styles pour l'authentification et les composants liés à l'utilisateur
+ * Ajoute les styles pour le menu utilisateur et les notifications
+ */
+
+/* Menu utilisateur et notifications */
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+}
+
+/* Avatar utilisateur */
+.user-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--primary);
+  background-color: var(--background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition);
+  padding: 0;
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.2);
+}
+
+/* Menu déroulant utilisateur */
+.user-dropdown {
+  position: relative;
+}
+
+.user-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  min-width: 240px;
+  background-color: var(--background);
+  border-radius: var(--radius);
+  box-shadow: 0 5px 20px var(--shadow-strong);
+  padding: 0.75rem 0;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.user-dropdown-menu.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Info utilisateur dans le menu */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.5rem;
+}
+
+.user-info img {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-info div {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-info strong {
+  color: var(--text-dark);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.user-info span {
+  color: var(--text-light);
+  font-size: 0.8rem;
+}
+
+/* Éléments du menu déroulant */
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: var(--text-dark);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all var(--transition);
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+
+.dropdown-item i {
+  width: 1.25rem;
+  color: var(--text-light);
+  transition: all var(--transition);
+}
+
+.dropdown-item:hover {
+  background-color: rgba(0, 188, 212, 0.1);
+  color: var(--primary);
+}
+
+.dropdown-item:hover i {
+  color: var(--primary);
+}
+
+/* Séparateur dans le menu */
+.user-dropdown-menu hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0.5rem 0;
+}
+
+/* Bouton de déconnexion */
+.user-dropdown-menu #logout-button {
+  color: var(--red);
+}
+
+.user-dropdown-menu #logout-button i {
+  color: var(--red);
+}
+
+.user-dropdown-menu #logout-button:hover {
+  background-color: rgba(244, 67, 54, 0.1);
+}
+
+/* Cloche de notification */
+.notification-bell {
+  position: relative;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition);
+  color: var(--text-dark);
+}
+
+.notification-bell:hover {
+  background-color: rgba(0, 188, 212, 0.1);
+  color: var(--primary);
+}
+
+/* Badge de compteur de notifications */
+.notification-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 1.25rem;
+  height: 1.25rem;
+  background-color: var(--red);
+  color: white;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Panneau de notifications */
+.notifications-dropdown {
+  position: relative;
+}
+
+.notifications-panel {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  width: 320px;
+  max-width: 90vw;
+  background-color: var(--background);
+  border-radius: var(--radius);
+  box-shadow: 0 5px 20px var(--shadow-strong);
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.notifications-panel.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* En-tête du panneau de notifications */
+.notifications-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.notifications-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-dark);
+}
+
+.mark-all-read {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0;
+  transition: all var(--transition);
+}
+
+.mark-all-read:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+/* Liste des notifications */
+.notifications-list {
+  padding: 0.5rem 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Élément de notification */
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  transition: all var(--transition);
+  position: relative;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-item:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.notification-item.unread {
+  background-color: rgba(0, 188, 212, 0.05);
+}
+
+.notification-item.unread:hover {
+  background-color: rgba(0, 188, 212, 0.1);
+}
+
+/* Icône de notification */
+.notification-icon {
+  width: 2rem;
+  height: 2rem;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.notification-header h4 {
+  font-size: 0.9rem;
+  margin: 0;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.notification-time {
+  font-size: 0.75rem;
+  color: var(--text-lighter);
+}
+
+.notification-content p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  line-height: 1.4;
+}
+
+/* Bouton pour marquer une notification comme lue */
+.notification-mark-read {
+  background: none;
+  border: none;
+  color: var(--text-lighter);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  transition: all var(--transition);
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.notification-item:hover .notification-mark-read {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.notification-mark-read:hover {
+  background-color: rgba(0, 188, 212, 0.1);
+  color: var(--primary);
+}
+
+/* États de chargement et d'erreur */
+.notification-loading,
+.notification-empty,
+.notification-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  color: var(--text-light);
+  text-align: center;
+}
+
+.notification-loading i,
+.notification-empty i,
+.notification-error i {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.notification-empty i {
+  color: var(--green);
+}
+
+.notification-error i {
+  color: var(--red);
+}
+
+.notification-loading p,
+.notification-empty p,
+.notification-error p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Alerte d'erreur pour les formulaires */
+.error-alert {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: var(--red);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.error-alert i {
+  color: var(--red);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Adaptations responsives */
+@media (max-width: 768px) {
+  .notifications-panel {
+    width: 100%;
+    max-width: 100%;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 0;
+    max-height: none;
+  }
+  
+  .user-dropdown-menu {
+    width: 100%;
+    max-width: 100%;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    border-radius: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-menu {
+    gap: 0.5rem;
+  }
+  
+  .notification-bell,
+  .user-avatar {
+    width: 2rem;
+    height: 2rem;
+  }
+}

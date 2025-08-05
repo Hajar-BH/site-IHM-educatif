@@ -1,0 +1,2385 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head> 
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ressources IHM - IHM Explorer</title>
+  <link rel="stylesheet" href="auth.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* Styles spécifiques à la page ressources */
+    .hero-wave {
+      background-color: #E5F2F8;
+      padding: 10rem 0 12rem; /* Augmenté l'espace en haut pour compenser la suppression du bouton */
+      position: relative;
+      overflow: hidden;
+      z-index: 0;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 113, 194, 0.2);
+      color: #333;
+    }
+    
+    /* Effet brillant animé */
+    .hero-wave::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      animation: shine 3s infinite linear;
+      transform: skewX(-20deg);
+    }
+    
+    @keyframes shine {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+    
+    /* Animations pour les étoiles et bulles */
+    .stars {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    
+    .star {
+      position: absolute;
+      top: var(--top);
+      left: var(--left);
+      width: var(--size);
+      height: var(--size);
+      background: rgba(0, 194, 203, 0.7);
+      border-radius: 50%;
+      filter: blur(1px);
+      animation: twinkle var(--duration) ease-in-out infinite;
+      animation-delay: var(--delay);
+      opacity: 0;
+      z-index: 2;
+    }
+    
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(0.5); filter: blur(1px); }
+      50% { opacity: 1; transform: scale(1); filter: blur(2px); }
+    }
+    
+    .bubbles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .bubble {
+      position: absolute;
+      bottom: 0;
+      left: var(--left);
+      z-index: 5;
+      width: var(--size);
+      height: var(--size);
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(0, 194, 203, 0.9), rgba(0, 113, 194, 0.9));
+      animation-name: float;
+      animation-duration: var(--duration);
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+      animation-delay: var(--delay);
+      animation-fill-mode: both;
+      box-shadow: 0 0 30px rgba(0, 194, 203, 0.9), inset 0 0 20px rgba(255, 255, 255, 0.9);
+      opacity: 1;
+      border: 3px solid rgba(255, 255, 255, 0.8);
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+      10% { opacity: 1; transform: scale(1.1); }
+      30% { transform: translateY(-300%) rotate(90deg) scale(1.2); }
+      50% { transform: translateY(-500%) rotate(180deg) scale(1); }
+      70% { transform: translateY(-700%) rotate(270deg) scale(1.2); }
+      90% { opacity: 1; transform: scale(1.1); }
+      100% { transform: translateY(-1000%) rotate(360deg) scale(0.8); opacity: 0.2; }
+    }
+
+    .hero-wave::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 180px;
+      background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 230" xmlns="http://www.w3.org/2000/svg"><path fill="white" d="M0,96L48,106.7C96,117,192,139,288,138.7C384,139,480,117,576,122.7C672,128,768,160,864,170.7C960,181,1056,171,1152,154.7C1248,139,1344,117,1392,106.7L1440,96L1440,230L1392,230C1344,230,1248,230,1152,230C1056,230,960,230,864,230C768,230,672,230,576,230C480,230,384,230,288,230C192,230,96,230,48,230L0,230Z"></path></svg>') no-repeat bottom;
+      background-size: cover;
+    }
+
+    .badge {
+      display: inline-block;
+      background-color: rgba(0, 194, 203, 0.15);
+      color: #0071c2;
+      padding: 0.5rem 1.5rem;
+      border-radius: 20px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+
+    .hero-title span {
+      color: #0071c2;
+      text-shadow: 0 0 15px rgba(0, 194, 203, 0.3);
+    }
+
+    .hero-description {
+      max-width: 700px;
+      margin: 0 auto;
+      font-size: 1.1rem;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .resources-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* Style pour les sections */
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: #333;
+      text-align: center;
+      position: relative;
+    }
+    
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(135deg, #00c2cb, #0071c2);
+      margin: 10px auto 0;
+      border-radius: 3px;
+    }
+
+    .section-description {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 3rem;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* Style pour les catégories de ressources */
+    .resources-tabs {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 2rem;
+    }
+
+    .tab-button {
+      background: none;
+      border: 2px solid rgba(0, 168, 255, 0.1);
+      border-radius: 30px;
+      padding: 0.7rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tab-button:hover {
+      background: rgba(0, 168, 255, 0.05);
+      border-color: rgba(0, 168, 255, 0.3);
+      color: #00a8ff;
+    }
+
+    .tab-button.active {
+      background: linear-gradient(135deg, #00c2cb, #0071c2);
+      border-color: transparent;
+      color: white;
+      box-shadow: 0 4px 10px rgba(0, 113, 194, 0.2);
+    }
+
+    /* Style pour la grille de ressources */
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .resource-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .resource-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .resource-image {
+      height: 100px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .resource-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .resource-card:hover .resource-image img {
+      transform: scale(1.05);
+    }
+
+    .resource-type {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: linear-gradient(135deg, #00c2cb, #0071c2);
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      box-shadow: 0 3px 8px rgba(0, 113, 194, 0.2);
+    }
+
+    .resource-content {
+      padding: 0.8rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .resource-title {
+      font-size: 0.9rem;
+      margin: 0 0 0.4rem;
+      color: #333;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .resource-description {
+      margin: 0 0 0.8rem;
+      color: #666;
+      font-size: 0.8rem;
+      line-height: 1.4;
+      flex-grow: 1;
+      max-height: 2.8rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .resource-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 0.5rem;
+      border-top: 1px solid #f0f0f0;
+      font-size: 0.7rem;
+    }
+
+    .resource-author {
+      color: #888;
+      display: flex;
+      align-items: center;
+    }
+
+    .resource-author i {
+      margin-right: 5px;
+      color: #00c2cb;
+    }
+
+    .resource-date {
+      color: #888;
+    }
+
+    .resource-link {
+      display: inline-flex;
+      align-items: center;
+      background: linear-gradient(135deg, #00c2cb, #0071c2);
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.75rem;
+      transition: all 0.3s ease;
+      margin-top: 0.5rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(0, 113, 194, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .resource-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+      z-index: 1;
+    }
+
+    .resource-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0, 113, 194, 0.3);
+    }
+
+    .resource-link:hover::before {
+      left: 100%;
+    }
+
+    .resource-link i {
+      margin-left: 6px;
+    }
+
+    /* Style pour la section livres recommandés */
+    .books-section {
+      background: linear-gradient(to right, rgba(0, 194, 203, 0.05), rgba(0, 113, 194, 0.05));
+      padding: 3rem 2rem;
+      border-radius: 12px;
+      margin-bottom: 3rem;
+    }
+
+    .books-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .book-card {
+      display: flex;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      margin-bottom: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .book-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .book-cover {
+      flex: 0 0 140px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .book-content {
+      flex: 1;
+      padding: 1.5rem;
+    }
+
+    .book-title {
+      font-size: 1.3rem;
+      margin: 0 0 0.8rem;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .book-author {
+      color: #00c2cb;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .book-description {
+      color: #666;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .book-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .book-detail {
+      display: flex;
+      align-items: center;
+      color: #777;
+    }
+
+    .book-detail i {
+      margin-right: 8px;
+      color: #00c2cb;
+      font-size: 1.1rem;
+    }
+
+    .book-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    /* Style pour la section outils */
+    .tools-section {
+      margin-bottom: 3rem;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .tool-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .tool-header {
+      padding: 2rem;
+      background: linear-gradient(135deg, #00c2cb, #0071c2);
+      color: white;
+      text-align: center;
+    }
+
+    .tool-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tool-title {
+      font-size: 1.3rem;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .tool-content {
+      padding: 1.5rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tool-description {
+      color: #666;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+      flex-grow: 1;
+    }
+
+    .tool-features {
+      margin-bottom: 1.5rem;
+    }
+
+    .tool-feature {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.8rem;
+      color: #555;
+    }
+
+    .tool-feature i {
+      color: #00c2cb;
+      margin-right: 10px;
+      font-size: 0.8rem;
+    }
+
+    /* Style pour la section de contact/newsletter */
+    .newsletter-section {
+      background: linear-gradient(135deg, #00c2cb, #0071c2);
+      border-radius: 12px;
+      padding: 3rem 2rem;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 113, 194, 0.3);
+    }
+
+    .newsletter-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      animation: shine 5s infinite linear;
+      transform: skewX(-20deg);
+    }
+
+    .newsletter-title {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .newsletter-description {
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    .newsletter-form {
+      max-width: 500px;
+      margin: 0 auto;
+      display: flex;
+      position: relative;
+      z-index: 1;
+    }
+
+    .newsletter-input {
+      flex-grow: 1;
+      padding: 0.8rem 1.2rem;
+      border: none;
+      border-radius: 30px 0 0 30px;
+      font-size: 1rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .newsletter-input:focus {
+      outline: none;
+    }
+
+    .newsletter-button {
+      background: #333;
+      color: white;
+      border: none;
+      padding: 0 1.5rem;
+      border-radius: 0 30px 30px 0;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .newsletter-button:hover {
+      background: #222;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.4rem;
+      }
+
+      .book-card {
+        flex-direction: column;
+      }
+
+      .book-cover {
+        height: 200px;
+        flex-basis: auto;
+      }
+
+      .newsletter-form {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .newsletter-input, .newsletter-button {
+        width: 100%;
+        border-radius: 30px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .resources-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Styles pour la bibliothèque d'assets */
+    .assets-section {
+      margin-top: 3rem;
+      padding: 2rem;
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 5px 15px var(--shadow);
+    }
+
+    .assets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .asset-category {
+      background: var(--background-alt);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: 0 5px 15px var(--shadow);
+      transition: transform var(--transition);
+    }
+
+    .asset-category:hover {
+      transform: translateY(-5px);
+    }
+
+    .asset-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.2rem;
+      color: var(--text-dark);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .asset-items {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .asset-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: var(--radius);
+      background: white;
+      transition: all var(--transition);
+      text-decoration: none;
+      color: var(--text-dark);
+    }
+
+    .asset-item:hover {
+      background: var(--primary-light);
+      transform: translateX(5px);
+    }
+
+    .asset-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      font-size: 1.2rem;
+    }
+
+    .asset-info h4 {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--text-dark);
+    }
+
+    .asset-info p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-medium);
+    }
+
+    @media (max-width: 768px) {
+      .assets-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Styles pour la bibliothèque d'assets interactive */
+    .assets-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .assets-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .add-asset-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .add-asset-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .search-box {
+      position: relative;
+      width: 300px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.8rem 1rem 0.8rem 2.5rem;
+      border: 2px solid var(--border);
+      border-radius: 30px;
+      font-size: 1rem;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-medium);
+    }
+
+    .assets-filters {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .filter-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-tag {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      background: var(--background-alt);
+      color: var(--text-medium);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-tag:hover, .filter-tag.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .sort-options select {
+      padding: 0.5rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      background: white;
+      color: var(--text-dark);
+    }
+
+    .asset-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .asset-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px var(--shadow);
+    }
+
+    .asset-preview {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+    }
+
+    .asset-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .asset-actions {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .action-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .action-btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .asset-info {
+      padding: 1.5rem;
+    }
+
+    .asset-info h3 {
+      margin: 0 0 0.5rem;
+      color: var(--text-dark);
+    }
+
+    .asset-description {
+      color: var(--text-medium);
+      margin-bottom: 1rem;
+    }
+
+    .asset-meta {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: var(--text-medium);
+    }
+
+    .asset-meta i {
+      margin-right: 0.3rem;
+      color: var(--primary);
+    }
+
+    .asset-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tag {
+      padding: 0.3rem 0.8rem;
+      background: var(--background-alt);
+      border-radius: 15px;
+      font-size: 0.8rem;
+      color: var(--text-medium);
+    }
+
+    .asset-stats {
+      display: flex;
+      gap: 1rem;
+      color: var(--text-medium);
+      font-size: 0.9rem;
+    }
+
+    .asset-stats i {
+      margin-right: 0.3rem;
+      color: var(--primary);
+    }
+
+    /* Modal styles */
+    .add-asset-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+
+    .modal-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 1.2rem 1.2rem 1.5rem 1.2rem;
+      border-radius: 12px;
+      width: 95%;
+      max-width: 400px;
+    }
+
+    .asset-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .form-group label {
+      font-weight: 500;
+      color: var(--text-dark);
+      font-size: 0.98rem;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 0.5rem 0.7rem;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.97rem;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 0.7rem;
+      justify-content: flex-end;
+      margin-top: 0.7rem;
+    }
+
+    .submit-btn, .cancel-btn {
+      padding: 0.5rem 1.1rem;
+      border-radius: 8px;
+      font-size: 0.97rem;
+    }
+
+    @media (max-width: 768px) {
+      .assets-header {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .assets-actions {
+        width: 100%;
+        flex-direction: column;
+      }
+
+      .search-box {
+        width: 100%;
+      }
+
+      .assets-filters {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .filter-tags {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+      }
+
+      .sort-options {
+        width: 100%;
+      }
+
+      .sort-options select {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header avec navigation -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-circle">IHM</div>
+      <span>IHM Technologies</span>
+    </div>
+    <nav class="nav">
+      <a href="index.html">Accueil</a>
+      <a href="concepts.html">Concepts</a>
+      <a href="ressources.html" class="active">Ressources</a>
+      <a href="design.html">Design</a>
+      <a href="cours.html">Cours</a>
+      <a href="evenements.html">Événements</a>
+      <a href="forum.html">Forum</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <button class="theme-toggle" aria-label="Basculer mode sombre">
+        <i class="fas fa-moon" id="theme-icon"></i>
+      </button>
+      <a href="connexion.html" class="login-btn">
+        <i class="fas fa-user"></i>
+        <span>Connexion</span>
+      </a>
+      <button class="menu-toggle" aria-label="Menu mobile">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Menu mobile -->
+  <div class="mobile-menu">
+    <div class="mobile-menu-header">
+      <div class="logo">
+        <div class="logo-circle">IHM</div>
+        <span>IHM Technologies</span>
+      </div>
+      <button class="mobile-menu-close">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <nav class="mobile-nav">
+      <a href="index.html">Accueil</a>
+      <a href="concepts.html">Concepts</a>
+      <a href="ressources.html" class="active">Ressources</a>
+      <a href="design.html">Design</a>
+      <a href="evenements.html">Événements</a>
+      <a href="cours.html">Cours</a>
+      <a href="forum.html">Forum</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="mobile-menu-footer">
+      <a href="connexion.html" class="login-btn">
+        <i class="fas fa-user"></i>
+        <span>Connexion</span>
+      </a>
+    </div>
+  </div>
+  
+  <!-- Overlay pour menu mobile -->
+  <div class="overlay"></div>
+
+  <!-- Section Hero avec vague et animations -->
+  <section class="hero-wave">
+    <!-- Étoiles animées -->
+    <div class="stars">
+      <span class="star" style="--top: 15%; --left: 10%; --size: 6px; --duration: 3s; --delay: 0.5s;"></span>
+      <span class="star" style="--top: 25%; --left: 22%; --size: 5px; --duration: 4s; --delay: 1s;"></span>
+      <span class="star" style="--top: 10%; --left: 30%; --size: 7px; --duration: 5s; --delay: 2s;"></span>
+      <span class="star" style="--top: 30%; --left: 60%; --size: 6px; --duration: 3.5s; --delay: 0s;"></span>
+      <span class="star" style="--top: 20%; --left: 70%; --size: 5px; --duration: 4.5s; --delay: 1.5s;"></span>
+      <span class="star" style="--top: 8%; --left: 80%; --size: 7px; --duration: 3s; --delay: 2.5s;"></span>
+      <span class="star" style="--top: 35%; --left: 90%; --size: 5px; --duration: 4s; --delay: 0.2s;"></span>
+    </div>
+    
+    <!-- Bulles animées -->
+    <div class="bubbles">
+      <div class="bubble" style="--size: 40px; --left: 5%; --duration: 15s; --delay: 0s;"></div>
+      <div class="bubble" style="--size: 25px; --left: 12%; --duration: 18s; --delay: 0s;"></div>
+      <div class="bubble" style="--size: 50px; --left: 20%; --duration: 16s; --delay: 0s;"></div>
+      <div class="bubble" style="--size: 35px; --left: 28%; --duration: 14s; --delay: 0s;"></div>
+      <div class="bubble" style="--size: 45px; --left: 35%; --duration: 17s; --delay: 0s;"></div>
+      <div class="bubble" style="--size: 30px; --left: 42%; --duration: 15s; --delay: 0s;"></div>
+      <div class="bubble" style="--size: 55px; --left: 50%; --duration: 18s; --delay: 0s;"></div>
+      <div class="bubble" style="--size: 25px; --left: 58%; --duration: 13s; --delay: 0s;"></div>
+      <div class="bubble" style="--size: 35px; --left: 65%; --duration: 15s; --delay: 0s;"></div>
+      <div class="bubble" style="--size: 45px; --left: 72%; --duration: 16s; --delay: 0s;"></div>
+      <div class="bubble" style="--size: 30px; --left: 80%; --duration: 14s; --delay: 0s;"></div>
+      <div class="bubble" style="--size: 50px; --left: 88%; --duration: 17s; --delay: 0s;"></div>
+      <div class="bubble" style="--size: 35px; --left: 95%; --duration: 15s; --delay: 0s;"></div>
+      <div class="bubble" style="--size: 40px; --left: 15%; --duration: 18s; --delay: 0s;"></div>
+      <div class="bubble" style="--size: 30px; --left: 45%; --duration: 14s; --delay: 0s;"></div>
+      <div class="bubble" style="--size: 48px; --left: 75%; --duration: 16s; --delay: 0s;"></div>
+    </div>
+    
+    <h1 class="hero-title">Nos <span>Ressources</span> Pédagogiques</h1>
+    <p class="hero-description">Découvrez notre sélection d'articles, livres, outils et tutoriels pour approfondir vos connaissances en Interface Homme-Machine.</p>
+  </section>
+
+  <!-- Contenu principal des ressources -->
+  <div class="resources-container">
+    
+    <!-- Section Articles et Tutoriels -->
+    <section>
+      <h2 class="section-title">Articles & Tutoriels</h2>
+      <p class="section-description">Une collection de ressources sélectionnées par nos experts pour développer vos compétences en conception d'interfaces.</p>
+      
+      <!-- Filtres/Tabs -->
+      <div class="resources-tabs">
+        <button class="tab-button active" data-filter="all">Tous</button>
+        <button class="tab-button" data-filter="design">Design UI/UX</button>
+        <button class="tab-button" data-filter="accessibility">Accessibilité</button>
+        <button class="tab-button" data-filter="research">Recherche utilisateur</button>
+        <button class="tab-button" data-filter="evaluation">Évaluation</button>
+      </div>
+      
+      <!-- Grille d'articles et tutoriels -->
+      <div class="resources-grid">
+        <!-- Article 1 -->
+        <div class="resource-card" data-category="design">
+          <div class="resource-image">
+            <img src="https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Principes de design">
+            <span class="resource-type">Article</span>
+          </div>
+          <div class="resource-content">
+            <h3 class="resource-title">Les principes de design UI/UX pour des interfaces intuitives</h3>
+            <p class="resource-description">Explorez les principes fondamentaux qui guident la création d'interfaces utilisateur intuitives et efficaces. Découvrez comment appliquer ces principes à vos projets.</p>
+            <div class="resource-meta">
+              <span class="resource-author"><i class="fas fa-user"></i> Marie Dupont</span>
+              <span class="resource-date">12 mars 2025</span>
+            </div>
+            <a href="#" class="resource-link">Lire l'article <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+        
+
+        
+        <!-- Article 3 -->
+        <div class="resource-card" data-category="research">
+          <div class="resource-image">
+            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Recherche utilisateur">
+            <span class="resource-type">Article</span>
+          </div>
+          <div class="resource-content">
+            <h3 class="resource-title">Méthodes de recherche utilisateur pour améliorer l'expérience</h3>
+            <p class="resource-description">Découvrez les différentes méthodes de recherche utilisateur et apprenez comment recueillir des données précieuses pour guider vos décisions de conception.</p>
+            <div class="resource-meta">
+              <span class="resource-author"><i class="fas fa-user"></i> Sophie Bernard</span>
+              <span class="resource-date">18 février 2025</span>
+            </div>
+            <a href="#" class="resource-link">Lire l'article <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+        
+        <!-- Article 4 -->
+        <div class="resource-card" data-category="evaluation">
+          <div class="resource-image">
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Tests d'utilisabilité">
+            <span class="resource-type">Guide</span>
+          </div>
+          <div class="resource-content">
+            <h3 class="resource-title">Tests d'utilisabilité : de la préparation à l'analyse</h3>
+            <p class="resource-description">Un guide étape par étape pour mener des tests d'utilisabilité efficaces, analyser les résultats et implémenter des améliorations basées sur les retours utilisateurs.</p>
+            <div class="resource-meta">
+              <span class="resource-author"><i class="fas fa-user"></i> Pierre Durand</span>
+              <span class="resource-date">25 mars 2025</span>
+            </div>
+            <a href="#" class="resource-link">Consulter le guide <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+        
+        <!-- Article 5 -->
+        <div class="resource-card" data-category="design">
+          <div class="resource-image">
+            <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Design systems">
+            <span class="resource-type">Tutoriel</span>
+          </div>
+          <div class="resource-content">
+            <h3 class="resource-title">Créer et maintenir un système de design efficace</h3>
+            <p class="resource-description">Apprenez à construire un système de design cohérent qui améliore la collaboration entre designers et développeurs tout en garantissant la cohérence de vos produits.</p>
+            <div class="resource-meta">
+              <span class="resource-author"><i class="fas fa-user"></i> Émilie Laurent</span>
+              <span class="resource-date">7 avril 2025</span>
+            </div>
+            <a href="#" class="resource-link">Voir le tutoriel <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+        
+        <!-- Article 6 -->
+        <div class="resource-card" data-category="accessibility">
+          <div class="resource-image">
+            <img src="https://images.unsplash.com/photo-1527689368864-3a821dbccc34?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Mobile accessibility">
+            <span class="resource-type">Article</span>
+          </div>
+          <div class="resource-content">
+            <h3 class="resource-title">L'accessibilité sur mobile : défis et solutions</h3>
+            <p class="resource-description">Explorez les défis spécifiques de l'accessibilité sur les appareils mobiles et découvrez des solutions pratiques pour créer des applications inclusives.</p>
+            <div class="resource-meta">
+              <span class="resource-author"><i class="fas fa-user"></i> Nicolas Petit</span>
+              <span class="resource-date">2 mars 2025</span>
+            </div>
+            <a href="#" class="resource-link">Lire l'article <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Section Ressources et Outils divisée en deux colonnes -->
+    <section class="resources-tools-section">
+      <style>
+        .resources-tools-section {
+          margin-bottom: 3rem;
+        }
+        
+        .resources-tools-container {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+          align-items: stretch; /* Assure que les deux colonnes ont la même hauteur */
+        }
+        
+        .resources-column, .tools-column {
+          background: linear-gradient(to right, rgba(0, 194, 203, 0.05), rgba(0, 113, 194, 0.05));
+          border-radius: 12px;
+          padding: 2rem;
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .column-title {
+          font-size: 1.6rem;
+          margin-bottom: 1.2rem;
+          color: #333;
+          text-align: center;
+          position: relative;
+        }
+        
+        .column-title::after {
+          content: '';
+          display: block;
+          width: 60px;
+          height: 3px;
+          background: linear-gradient(135deg, #00c2cb, #0071c2);
+          margin: 8px auto 0;
+          border-radius: 3px;
+        }
+        
+        .book-list {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+        
+        .book-item {
+          display: flex;
+          background: white;
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+          transition: all 0.3s ease;
+        }
+        
+        .book-item:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .book-item-cover {
+          flex: 0 0 100px;
+          background-size: cover;
+          background-position: center;
+        }
+        
+        .book-item-content {
+          padding: 1rem;
+          flex: 1;
+        }
+        
+        .book-item-title {
+          font-size: 1rem;
+          font-weight: 600;
+          margin-bottom: 0.3rem;
+          color: #333;
+        }
+        
+        .book-item-author {
+          color: #00c2cb;
+          font-size: 0.8rem;
+          margin-bottom: 0.6rem;
+          display: block;
+        }
+        
+        .book-item-description {
+          font-size: 0.8rem;
+          color: #666;
+          margin-bottom: 0.8rem;
+          line-height: 1.4;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        
+        .tool-list {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+        
+        .tool-item {
+          display: flex;
+          align-items: center;
+          background: white;
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+          transition: all 0.3s ease;
+          padding: 1rem;
+        }
+        
+        .tool-item:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .tool-item-logo {
+          flex: 0 0 70px;
+          height: 50px;
+          margin-right: 1.5rem;
+          object-fit: contain;
+          display: block;
+        }
+        
+        .tool-item-content {
+          flex: 1;
+        }
+        
+        .tool-item-title {
+          font-size: 1rem;
+          font-weight: 600;
+          margin-bottom: 0.3rem;
+          color: #333;
+        }
+        
+        .tool-item-description {
+          font-size: 0.8rem;
+          color: #666;
+          margin-bottom: 0.8rem;
+          line-height: 1.4;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        
+        @media (max-width: 768px) {
+          .resources-tools-container {
+            grid-template-columns: 1fr;
+          }
+          
+          .resources-column, .tools-column {
+            margin-bottom: 1.5rem;
+          }
+        }
+      </style>
+      
+      <div class="resources-tools-container">
+        <!-- Colonne gauche : Bibliothèque de ressources -->
+        <div class="resources-column">
+          <h2 class="column-title">Bibliothèque de ressources</h2>
+          <div class="book-list">
+            <!-- Livre 1 -->
+            <div class="book-item">
+              <div class="book-item-cover" style="background-image: url('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+              <div class="book-item-content">
+                <h3 class="book-item-title">Design d'interfaces : Principes et méthodes</h3>
+                <span class="book-item-author">Par Jean Martin & Claire Duval</span>
+                <p class="book-item-description">Ce livre examine les principes fondamentaux du design d'interfaces et propose des méthodes pratiques pour concevoir des produits numériques centrés sur l'utilisateur.</p>
+                <a href="#" class="resource-link" style="display: inline-flex; align-items: center; gap: 0.5rem;">Consulter <i class="fas fa-external-link-alt"></i></a>
+                <span style="display: inline-flex; align-items: center; gap: 0.5rem; margin-left: 0.7rem;">
+                  <button title="Commenter" style="background: none; border: none; cursor: pointer; color: #00c2cb; font-size: 1.1rem;"><i class="fas fa-comment"></i></button>
+                  <button title="Télécharger" style="background: none; border: none; cursor: pointer; color: #0071c2; font-size: 1.1rem;"><i class="fas fa-download"></i></button>
+                </span>
+              </div>
+            </div>
+            
+            <!-- Livre 2 -->
+            <div class="book-item">
+              <div class="book-item-cover" style="background-image: url('https://images.unsplash.com/photo-1464983953574-0892a716854b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+              <div class="book-item-content">
+                <h3 class="book-item-title">L'art et la science de l'UX : Recherche et méthodes</h3>
+                <span class="book-item-author">Par Sophie Moreau</span>
+                <p class="book-item-description">Un ouvrage complet qui explore les bases scientifiques de l'expérience utilisateur tout en offrant des approches pratiques pour la recherche UX.</p>
+                <a href="#" class="resource-link" style="display: inline-flex; align-items: center; gap: 0.5rem;">Consulter <i class="fas fa-external-link-alt"></i></a>
+                <span style="display: inline-flex; align-items: center; gap: 0.5rem; margin-left: 0.7rem;">
+                  <button title="Commenter" style="background: none; border: none; cursor: pointer; color: #00c2cb; font-size: 1.1rem;"><i class="fas fa-comment"></i></button>
+                  <button title="Télécharger" style="background: none; border: none; cursor: pointer; color: #0071c2; font-size: 1.1rem;"><i class="fas fa-download"></i></button>
+                </span>
+              </div>
+            </div>
+            
+            <!-- Livre 3 -->
+            <div class="book-item">
+              <div class="book-item-cover" style="background-image: url('https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+              <div class="book-item-content">
+                <h3 class="book-item-title">Interfaces accessibles : Guide pratique</h3>
+                <span class="book-item-author">Par Thomas Blanc & Marie Robert</span>
+                <p class="book-item-description">Un guide essentiel pour concevoir des interfaces accessibles à tous. Ce livre aborde les normes d'accessibilité et propose des solutions concrètes.</p>
+                <a href="#" class="resource-link" style="display: inline-flex; align-items: center; gap: 0.5rem;">Consulter <i class="fas fa-external-link-alt"></i></a>
+                <span style="display: inline-flex; align-items: center; gap: 0.5rem; margin-left: 0.7rem;">
+                  <button title="Commenter" style="background: none; border: none; cursor: pointer; color: #00c2cb; font-size: 1.1rem;"><i class="fas fa-comment"></i></button>
+                  <button title="Télécharger" style="background: none; border: none; cursor: pointer; color: #0071c2; font-size: 1.1rem;"><i class="fas fa-download"></i></button>
+                </span>
+              </div>
+            </div>
+            
+            <!-- Livre 4 -->
+            <div class="book-item">
+              <div class="book-item-cover" style="background-image: url('https://images.unsplash.com/photo-1516979187457-637abb4f9353?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+              <div class="book-item-content">
+                <h3 class="book-item-title">Ergonomie web : Optimiser l'expérience utilisateur</h3>
+                <span class="book-item-author">Par Alexandre Dupont</span>
+                <p class="book-item-description">Ce livre propose une approche pratique de l'ergonomie des interfaces web, avec des conseils concrets pour améliorer l'expérience utilisateur de vos sites.</p>
+                <a href="#" class="resource-link" style="display: inline-flex; align-items: center; gap: 0.5rem;">Consulter <i class="fas fa-external-link-alt"></i></a>
+                <span style="display: inline-flex; align-items: center; gap: 0.5rem; margin-left: 0.7rem;">
+                  <button title="Commenter" style="background: none; border: none; cursor: pointer; color: #00c2cb; font-size: 1.1rem;"><i class="fas fa-comment"></i></button>
+                  <button title="Télécharger" style="background: none; border: none; cursor: pointer; color: #0071c2; font-size: 1.1rem;"><i class="fas fa-download"></i></button>
+                </span>
+              </div>
+            </div>
+            
+            <!-- Livre 5 -->
+            <div class="book-item">
+              <div class="book-item-cover" style="background-image: url('https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+              <div class="book-item-content">
+                <h3 class="book-item-title">Design d'interactions mobiles : Touch et gestuel</h3>
+                <span class="book-item-author">Par Laura Chen & Nicolas Martin</span>
+                <p class="book-item-description">Un ouvrage complet sur la conception d'interfaces tactiles et gestuelles pour les applications mobiles, avec de nombreux exemples pratiques et études de cas.</p>
+                <a href="#" class="resource-link" style="display: inline-flex; align-items: center; gap: 0.5rem;">Consulter <i class="fas fa-external-link-alt"></i></a>
+                <span style="display: inline-flex; align-items: center; gap: 0.5rem; margin-left: 0.7rem;">
+                  <button title="Commenter" style="background: none; border: none; cursor: pointer; color: #00c2cb; font-size: 1.1rem;"><i class="fas fa-comment"></i></button>
+                  <button title="Télécharger" style="background: none; border: none; cursor: pointer; color: #0071c2; font-size: 1.1rem;"><i class="fas fa-download"></i></button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Colonne droite : Outils de conception -->
+        <div class="tools-column">
+          <style>
+            /* Styles pour réduire la taille des outils de conception */
+            .tool-item {
+              max-height: 130px;
+              overflow: hidden;
+              margin-bottom: 10px;
+            }
+            
+            .tool-item-logo {
+              max-height: 40px;
+              width: auto;
+            }
+            
+            /* Styles pour section Outils de développement */
+            .dev-tools-header {
+              margin-top: 1.5rem;
+              margin-bottom: 1rem;
+            }
+            
+            .dev-tool-item {
+              display: flex;
+              align-items: center;
+              background: white;
+              border-radius: 12px;
+              overflow: hidden;
+              box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+              transition: all 0.3s ease;
+              padding: 0.5rem 0.75rem;
+              margin-bottom: 8px;
+              min-height: 70px;
+            }
+            
+            .dev-tool-item:hover {
+              transform: translateY(-3px);
+              box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            }
+            
+            .dev-tool-logo {
+              width: 40px;
+              height: 40px;
+              margin-right: 1rem;
+              object-fit: contain;
+            }
+            
+            .dev-tool-content {
+              flex: 1;
+            }
+            
+            .dev-tool-title {
+              font-size: 1rem;
+              font-weight: 600;
+              margin-bottom: 0.3rem;
+              color: #333;
+            }
+            
+            .dev-tool-description {
+              font-size: 0.8rem;
+              color: #666;
+              margin-bottom: 0.5rem;
+              line-height: 1.4;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+            }
+          </style>
+          
+          <h2 class="column-title">Outils de conception</h2>
+          <div class="tool-list">
+            <!-- Outil 1 : Figma -->
+            <div class="tool-item">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg" alt="Figma Logo" class="tool-item-logo">
+              <div class="tool-item-content">
+                <h3 class="tool-item-title">Figma</h3>
+                <p class="tool-item-description">Un outil de conception d'interfaces puissant, basé sur le cloud, qui permet de créer, prototyper et collaborer en temps réel sur des projets de design.</p>
+                <a href="https://www.figma.com/" target="_blank" class="resource-link">Explorer <i class="fas fa-external-link-alt"></i></a>
+              </div>
+            </div>
+            
+            <!-- Outil 2 : Balsamiq -->
+            <div class="tool-item">
+              <img src="balsamiq_logo.png" alt="Balsamiq Logo" class="tool-item-logo">
+              <div class="tool-item-content">
+                <h3 class="tool-item-title">Balsamiq</h3>
+                <p class="tool-item-description">Un outil de wireframing rapide et facile à utiliser qui permet de créer rapidement des maquettes basse fidélité pour vos projets d'interfaces.</p>
+                <a href="https://balsamiq.com/" target="_blank" class="resource-link">Explorer <i class="fas fa-external-link-alt"></i></a>
+              </div>
+            </div>
+            
+            <!-- Outil 3 : Adobe XD -->
+            <div class="tool-item">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/c/c2/Adobe_XD_CC_icon.svg" alt="Adobe XD Logo" class="tool-item-logo">
+              <div class="tool-item-content">
+                <h3 class="tool-item-title">Adobe XD</h3>
+                <p class="tool-item-description">Un outil complet pour la conception et le prototypage d'expériences utilisateur pour les sites web et les applications mobiles. Fait partie de la suite Adobe Creative Cloud.</p>
+                <a href="https://www.adobe.com/products/xd.html" target="_blank" class="resource-link">Explorer <i class="fas fa-external-link-alt"></i></a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Outils de développement -->
+          <h2 class="column-title">Outils de développement</h2>
+          
+          <!-- Outil 1 : Visual Studio Code -->
+          <div class="dev-tool-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg" alt="VS Code Logo" class="dev-tool-logo">
+            <div class="dev-tool-content">
+              <h3 class="dev-tool-title">Visual Studio Code</h3>
+              <p class="dev-tool-description">Un éditeur de code source léger mais puissant qui prend en charge le développement web et dispose d'une multitude d'extensions.</p>
+              <a href="https://code.visualstudio.com/" target="_blank" class="resource-link">Explorer <i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          
+          <!-- Outil 2 : GitHub -->
+          <div class="dev-tool-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub Logo" class="dev-tool-logo">
+            <div class="dev-tool-content">
+              <h3 class="dev-tool-title">GitHub</h3>
+              <p class="dev-tool-description">Une plateforme d'hébergement de code et de collaboration qui permet aux développeurs de travailler ensemble sur des projets.</p>
+              <a href="https://github.com/" target="_blank" class="resource-link">Explorer <i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          
+          <!-- Outil 3 : Stack Overflow -->
+          <div class="dev-tool-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Stack_Overflow_icon.svg" alt="Stack Overflow Logo" class="dev-tool-logo">
+            <div class="dev-tool-content">
+              <h3 class="dev-tool-title">Stack Overflow</h3>
+              <p class="dev-tool-description">Une communauté de développeurs pour poser des questions et trouver des solutions aux problèmes de programmation.</p>
+              <a href="https://stackoverflow.com/" target="_blank" class="resource-link">Explorer <i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <!-- Outil 4 : Postman -->
+          <div class="dev-tool-item">
+            <img src="https://seeklogo.com/images/P/postman-logo-0087CA0D15-seeklogo.com.png" alt="Postman Logo" class="dev-tool-logo">
+            <div class="dev-tool-content">
+              <h3 class="dev-tool-title">Postman</h3>
+              <p class="dev-tool-description">Un outil essentiel pour tester, documenter et automatiser les API. Idéal pour les développeurs backend et frontend.</p>
+              <a href="https://www.postman.com/" target="_blank" class="resource-link">Explorer <i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section Bibliothèque d'Assets -->
+      <div class="assets-section">
+        <div class="assets-header">
+          <h2 class="column-title">Bibliothèque d'Assets</h2>
+          <div class="assets-actions">
+            <button class="add-asset-btn">
+              <i class="fas fa-plus"></i>
+              Ajouter un asset
+            </button>
+            <div class="search-box">
+              <input type="text" placeholder="Rechercher un asset...">
+              <i class="fas fa-search"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filtres et tags -->
+        <div class="assets-filters">
+          <div class="filter-tags">
+            <span class="filter-tag active">Tous</span>
+            <span class="filter-tag">Templates</span>
+            <span class="filter-tag">Icônes</span>
+            <span class="filter-tag">Images</span>
+            <span class="filter-tag">Widgets</span>
+          </div>
+          <div class="sort-options">
+            <select>
+              <option>Plus récents</option>
+              <option>Plus populaires</option>
+              <option>Plus commentés</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Grille d'assets -->
+        <div class="assets-grid">
+          <!-- Template 1 -->
+          <div class="asset-card" data-category="template">
+            <div class="asset-preview">
+              <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Template Mobile App">
+              <div class="asset-actions">
+                <button class="action-btn" title="Télécharger">
+                  <i class="fas fa-download"></i>
+                </button>
+                <button class="action-btn" title="Commenter">
+                  <i class="fas fa-comment"></i>
+                </button>
+                <button class="action-btn" title="Partager">
+                  <i class="fas fa-share-alt"></i>
+                </button>
+              </div>
+            </div>
+            <div class="asset-info">
+              <h3>Template Mobile App</h3>
+              <p class="asset-description">Structure de base pour applications mobiles</p>
+              <div class="asset-meta">
+                <span class="asset-author">
+                  <i class="fas fa-user"></i>
+                  Jean Dupont
+                </span>
+                <span class="asset-date">
+                  <i class="fas fa-calendar"></i>
+                  15 mars 2024
+                </span>
+              </div>
+              <div class="asset-tags">
+                <span class="tag">mobile</span>
+                <span class="tag">app</span>
+                <span class="tag">template</span>
+              </div>
+              <div class="asset-stats">
+                <span><i class="fas fa-download"></i> 245</span>
+                <span><i class="fas fa-comment"></i> 12</span>
+                <span><i class="fas fa-heart"></i> 45</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Icône 1 -->
+          <div class="asset-card" data-category="icon">
+            <div class="asset-preview">
+              <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Pack UI Icons">
+              <div class="asset-actions">
+                <button class="action-btn" title="Télécharger">
+                  <i class="fas fa-download"></i>
+                </button>
+                <button class="action-btn" title="Commenter">
+                  <i class="fas fa-comment"></i>
+                </button>
+                <button class="action-btn" title="Partager">
+                  <i class="fas fa-share-alt"></i>
+                </button>
+              </div>
+            </div>
+            <div class="asset-info">
+              <h3>Pack UI Icons</h3>
+              <p class="asset-description">Icônes pour interfaces utilisateur</p>
+              <div class="asset-meta">
+                <span class="asset-author">
+                  <i class="fas fa-user"></i>
+                  Marie Martin
+                </span>
+                <span class="asset-date">
+                  <i class="fas fa-calendar"></i>
+                  10 mars 2024
+                </span>
+              </div>
+              <div class="asset-tags">
+                <span class="tag">icons</span>
+                <span class="tag">ui</span>
+                <span class="tag">design</span>
+              </div>
+              <div class="asset-stats">
+                <span><i class="fas fa-download"></i> 189</span>
+                <span><i class="fas fa-comment"></i> 8</span>
+                <span><i class="fas fa-heart"></i> 32</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Image 1 -->
+          <div class="asset-card" data-category="image">
+            <div class="asset-preview">
+              <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="UI Mockups">
+              <div class="asset-actions">
+                <button class="action-btn" title="Télécharger">
+                  <i class="fas fa-download"></i>
+                </button>
+                <button class="action-btn" title="Commenter">
+                  <i class="fas fa-comment"></i>
+                </button>
+                <button class="action-btn" title="Partager">
+                  <i class="fas fa-share-alt"></i>
+                </button>
+              </div>
+            </div>
+            <div class="asset-info">
+              <h3>UI Mockups</h3>
+              <p class="asset-description">Images de maquettes d'interface</p>
+              <div class="asset-meta">
+                <span class="asset-author">
+                  <i class="fas fa-user"></i>
+                  Pierre Durand
+                </span>
+                <span class="asset-date">
+                  <i class="fas fa-calendar"></i>
+                  5 mars 2024
+                </span>
+              </div>
+              <div class="asset-tags">
+                <span class="tag">mockup</span>
+                <span class="tag">ui</span>
+                <span class="tag">design</span>
+              </div>
+              <div class="asset-stats">
+                <span><i class="fas fa-download"></i> 312</span>
+                <span><i class="fas fa-comment"></i> 15</span>
+                <span><i class="fas fa-heart"></i> 67</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Widget 1 -->
+          <!-- SUPPRIMÉ: Carte Graphiques (widget) -->
+        </div>
+
+        <!-- Modal pour ajouter un asset -->
+        <div class="add-asset-modal">
+          <div class="modal-content">
+            <h3>Ajouter un nouvel asset</h3>
+            <form class="asset-form">
+              <div class="form-group">
+                <label>Titre</label>
+                <input type="text" required>
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <textarea required></textarea>
+              </div>
+              <div class="form-group">
+                <label>Catégorie</label>
+                <select required>
+                  <option value="">Sélectionner une catégorie</option>
+                  <option value="template">Template</option>
+                  <option value="icon">Icône</option>
+                  <option value="image">Image</option>
+                  <option value="widget">Widget</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Tags</label>
+                <input type="text" placeholder="Séparer les tags par des virgules">
+              </div>
+              <div class="form-group">
+                <label>Fichier</label>
+                <input type="file" required>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="submit-btn">Publier</button>
+                <button type="button" class="cancel-btn">Annuler</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <style>
+        /* Styles pour la bibliothèque d'assets interactive */
+        .assets-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 2rem;
+        }
+
+        .assets-actions {
+          display: flex;
+          gap: 1rem;
+        }
+
+        .add-asset-btn {
+          background: var(--primary);
+          color: white;
+          border: none;
+          padding: 0.8rem 1.5rem;
+          border-radius: 30px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          transition: all 0.3s ease;
+        }
+
+        .add-asset-btn:hover {
+          background: var(--primary-dark);
+          transform: translateY(-2px);
+        }
+
+        .search-box {
+          position: relative;
+          width: 300px;
+        }
+
+        .search-box input {
+          width: 100%;
+          padding: 0.8rem 1rem 0.8rem 2.5rem;
+          border: 2px solid var(--border);
+          border-radius: 30px;
+          font-size: 1rem;
+        }
+
+        .search-box i {
+          position: absolute;
+          left: 1rem;
+          top: 50%;
+          transform: translateY(-50%);
+          color: var(--text-medium);
+        }
+
+        .assets-filters {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 2rem;
+        }
+
+        .filter-tags {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+        }
+
+        .filter-tag {
+          padding: 0.5rem 1rem;
+          border-radius: 20px;
+          background: var(--background-alt);
+          color: var(--text-medium);
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .filter-tag:hover, .filter-tag.active {
+          background: var(--primary);
+          color: white;
+        }
+
+        .sort-options select {
+          padding: 0.5rem 1rem;
+          border: 2px solid var(--border);
+          border-radius: 20px;
+          background: white;
+          color: var(--text-dark);
+        }
+
+        .assets-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+          gap: 2rem;
+        }
+
+        .asset-card {
+          background: white;
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 5px 15px var(--shadow);
+          transition: all 0.3s ease;
+        }
+
+        .asset-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 8px 20px var(--shadow);
+        }
+
+        .asset-preview {
+          position: relative;
+          height: 200px;
+          overflow: hidden;
+        }
+
+        .asset-preview img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .asset-actions {
+          position: absolute;
+          top: 1rem;
+          right: 1rem;
+          display: flex;
+          gap: 0.5rem;
+        }
+
+        .action-btn {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.9);
+          border: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+          background: var(--primary);
+          color: white;
+        }
+
+        .asset-info {
+          padding: 1.5rem;
+        }
+
+        .asset-info h3 {
+          margin: 0 0 0.5rem;
+          color: var(--text-dark);
+        }
+
+        .asset-description {
+          color: var(--text-medium);
+          margin-bottom: 1rem;
+        }
+
+        .asset-meta {
+          display: flex;
+          gap: 1rem;
+          margin-bottom: 1rem;
+          font-size: 0.9rem;
+          color: var(--text-medium);
+        }
+
+        .asset-meta i {
+          margin-right: 0.3rem;
+          color: var(--primary);
+        }
+
+        .asset-tags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin-bottom: 1rem;
+        }
+
+        .tag {
+          padding: 0.3rem 0.8rem;
+          background: var(--background-alt);
+          border-radius: 15px;
+          font-size: 0.8rem;
+          color: var(--text-medium);
+        }
+
+        .asset-stats {
+          display: flex;
+          gap: 1rem;
+          color: var(--text-medium);
+          font-size: 0.9rem;
+        }
+
+        .asset-stats i {
+          margin-right: 0.3rem;
+          color: var(--primary);
+        }
+
+        /* Modal styles */
+        .add-asset-modal {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+        }
+
+        .modal-content {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: white;
+          padding: 1.2rem 1.2rem 1.5rem 1.2rem;
+          border-radius: 12px;
+          width: 95%;
+          max-width: 400px;
+        }
+
+        .asset-form {
+          display: flex;
+          flex-direction: column;
+          gap: 0.7rem;
+        }
+
+        .form-group label {
+          font-weight: 500;
+          color: var(--text-dark);
+          font-size: 0.98rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+          padding: 0.5rem 0.7rem;
+          border: 2px solid var(--border);
+          border-radius: 8px;
+          font-size: 0.97rem;
+        }
+
+        .form-actions {
+          display: flex;
+          gap: 0.7rem;
+          justify-content: flex-end;
+          margin-top: 0.7rem;
+        }
+
+        .submit-btn, .cancel-btn {
+          padding: 0.5rem 1.1rem;
+          border-radius: 8px;
+          font-size: 0.97rem;
+        }
+
+        @media (max-width: 768px) {
+          .assets-header {
+            flex-direction: column;
+            gap: 1rem;
+          }
+
+          .assets-actions {
+            width: 100%;
+            flex-direction: column;
+          }
+
+          .search-box {
+            width: 100%;
+          }
+
+          .assets-filters {
+            flex-direction: column;
+            gap: 1rem;
+          }
+
+          .filter-tags {
+            width: 100%;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+          }
+
+          .sort-options {
+            width: 100%;
+          }
+
+          .sort-options select {
+            width: 100%;
+          }
+        }
+      </style>
+
+      <script>
+        // Script pour la gestion des assets
+        document.addEventListener('DOMContentLoaded', function() {
+          // Gestion des filtres
+          const filterTags = document.querySelectorAll('.filter-tag');
+          const assetCards = document.querySelectorAll('.asset-card');
+
+          filterTags.forEach(tag => {
+            tag.addEventListener('click', function() {
+              // Enlever la classe active de tous les tags
+              filterTags.forEach(t => t.classList.remove('active'));
+              // Ajouter la classe active au tag cliqué
+              this.classList.add('active');
+
+              const category = this.textContent.toLowerCase();
+              
+              // Filtrer les assets
+              assetCards.forEach(card => {
+                if (category === 'tous' || card.getAttribute('data-category') === category) {
+                  card.style.display = 'block';
+                } else {
+                  card.style.display = 'none';
+                }
+              });
+            });
+          });
+
+          // Gestion de la recherche
+          const searchInput = document.querySelector('.search-box input');
+          searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            
+            assetCards.forEach(card => {
+              const title = card.querySelector('h3').textContent.toLowerCase();
+              const description = card.querySelector('.asset-description').textContent.toLowerCase();
+              
+              if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                card.style.display = 'block';
+              } else {
+                card.style.display = 'none';
+              }
+            });
+          });
+
+          // Gestion du modal d'ajout d'asset
+          const addAssetBtn = document.querySelector('.add-asset-btn');
+          const modal = document.querySelector('.add-asset-modal');
+          const cancelBtn = document.querySelector('.cancel-btn');
+
+          addAssetBtn.addEventListener('click', function() {
+            modal.style.display = 'block';
+          });
+
+          cancelBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+          });
+
+          // Fermer le modal en cliquant en dehors
+          window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+              modal.style.display = 'none';
+            }
+          });
+
+          // Gestion du formulaire d'ajout d'asset
+          const assetForm = document.querySelector('.asset-form');
+          assetForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Ici, vous pouvez ajouter la logique pour envoyer les données au serveur
+            modal.style.display = 'none';
+            // Réinitialiser le formulaire
+            assetForm.reset();
+          });
+        });
+      </script>
+    </section>
+    
+    <!-- Section Newsletter -->
+    <section class="newsletter-section">
+      <h2 class="newsletter-title">Restez informé</h2>
+      <p class="newsletter-description">Inscrivez-vous à notre newsletter pour recevoir les dernières ressources, articles et actualités dans le domaine de l'IHM directement dans votre boîte mail.</p>
+      <form class="newsletter-form">
+        <input type="email" class="newsletter-input" placeholder="Votre adresse email" required>
+        <button type="submit" class="newsletter-button">S'inscrire</button>
+      </form>
+    </section>
+    
+  </div>
+  
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <div class="logo">
+            <div class="logo-circle">IHM</div>
+            <span>IHM Technologies</span>
+          </div>
+          <p>Explorez le monde de l'Interface Homme-Machine et découvrez comment elle façonne notre avenir numérique.</p>
+          <div class="newsletter">
+            <input type="email" placeholder="Votre email" />
+            <button><i class="fas fa-paper-plane"></i></button>
+          </div>
+        </div>
+        
+        <div class="footer-links">
+          <h4>Liens rapides</h4>
+          <div class="links-grid">
+            <ul>
+              <li><a href="index.html">Accueil</a></li>
+              <li><a href="ressources.html">Ressources</a></li>
+              <li><a href="design.html">Design</a></li>
+              <li><a href="cours.html">Cours</a></li>
+              <li><a href="evenements.html">Événements</a></li>
+            </ul>
+            <ul>
+              <li><a href="concepts.html">Concepts</a></li>
+              <li><a href="forum.html">Forum</a></li>
+              <li><a href="contact.html">Contact</a></li>
+              <li><a href="connexion.html">Connexion</a></li>
+              <li><a href="#">Inscription</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="footer-contact">
+          <h4>Contact</h4>
+          <ul class="contact-list">
+            <li><i class="fas fa-map-marker-alt"></i> 123 Avenue de l'Innovation, 75001 Paris</li>
+            <li><i class="fas fa-phone"></i> +33 1 23 45 67 89</li>
+            <li><i class="fas fa-envelope"></i> contact@ihm-explorer.com</li>
+          </ul>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <div class="copyright">© 2025 IHM Technologies. Tous droits réservés.</div>
+        <div class="legal-links">
+          <a href="#">Mentions légales</a>
+          <a href="#">Politique de confidentialité</a>
+          <a href="#">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script général -->
+  <script src="script.js"></script>
+  
+  <!-- Script spécifique pour les filtres de ressources -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Filtrage des ressources
+      const tabButtons = document.querySelectorAll('.tab-button');
+      const resourceCards = document.querySelectorAll('.resource-card');
+      
+      tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Enlever la classe active de tous les boutons
+          tabButtons.forEach(btn => btn.classList.remove('active'));
+          // Ajouter la classe active au bouton cliqué
+          this.classList.add('active');
+          
+          // Récupérer la catégorie à filtrer
+          const filter = this.getAttribute('data-filter');
+          
+          // Filtrer les ressources
+          resourceCards.forEach(card => {
+            if (filter === 'all' || card.getAttribute('data-category') === filter) {
+              card.style.display = 'block';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Gérer le basculement du thème
+      const themeSwitcher = document.querySelector('.theme-toggle');
+      let themeIcon = document.getElementById('theme-icon');
+  
+      // Charger le thème sauvegardé
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+        if (themeIcon) {
+          themeIcon.classList.remove('fa-moon');
+          themeIcon.classList.add('fa-sun');
+        }
+      } else {
+        // S'assurer que l'icône est correcte en mode clair
+        if (themeIcon) {
+          themeIcon.classList.remove('fa-sun');
+          themeIcon.classList.add('fa-moon');
+        }
+      }
+  
+      // 2. Mettre à jour le style du hero selon le thème actuel
+      function updateHeroStyle() {
+        const isDarkTheme = document.body.classList.contains('dark-theme');
+        
+        // Sélecteur pour toutes les classes hero possibles
+        const heroSection = document.querySelector('.hero-wave') || 
+                            document.querySelector('.hero-forum') || 
+                            document.querySelector('.hero-design') || 
+                            document.querySelector('.hero-courses');
+        
+        if (heroSection) {
+          if (isDarkTheme) {
+            heroSection.style.background = '#121a24';
+            heroSection.style.color = '#e0e0e0';
+          } else {
+            // Restaurer le style d'origine en fonction de la classe
+            if (heroSection.classList.contains('hero-forum')) {
+              heroSection.style.background = 'linear-gradient(135deg, #f1f8fd, #e0f1fc)';
+            } else {
+              heroSection.style.background = '#E5F2F8';
+            }
+            heroSection.style.color = '#333';
+          }
+        }
+      }
+      
+      // Appliquer le style du hero au chargement
+      updateHeroStyle();
+      
+      // 3. Fonction de basculement du thème
+      function toggleTheme() {
+        document.body.classList.toggle('dark-theme');
+        
+        // Récupérer une référence fraîche à l'icône
+        themeIcon = document.getElementById('theme-icon');
+        
+        if (document.body.classList.contains('dark-theme')) {
+          if (themeIcon) {
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+          }
+          localStorage.setItem('theme', 'dark');
+        } else {
+          if (themeIcon) {
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+          }
+          localStorage.setItem('theme', 'light');
+        }
+        
+        // Mettre à jour le style du hero après le changement de thème
+        updateHeroStyle();
+      }
+      
+      // 4. Ajouter l'écouteur d'événement pour le bouton de thème
+      if (themeSwitcher) {
+        // Supprimer tous les écouteurs d'événements précédents (important)
+        const newThemeSwitcher = themeSwitcher.cloneNode(true);
+        themeSwitcher.parentNode.replaceChild(newThemeSwitcher, themeSwitcher);
+        
+        // Ajouter le nouvel écouteur d'événement
+        newThemeSwitcher.addEventListener('click', toggleTheme);
+      }
+    });
+  </script>
+  <script src="chatbot.js"></script>
+  <script src="auth.js"></script>
+</body>
+</html>

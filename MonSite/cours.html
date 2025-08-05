@@ -1,0 +1,2230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cours et Exercices - IHM Explorer</title>
+  <link rel="stylesheet" href="auth.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* Variables CSS globales */
+    :root {
+      --primary: #00BCD4;
+      --primary-dark: #0097A7;
+      --secondary: #3F51B5;
+      --secondary-dark: #303F9F;
+      --background: #ffffff;
+      --background-alt: #f8f9fa;
+      --text-dark: #333333;
+      --text-medium: #555555;
+      --text-light: #777777;
+      --border: #e0e0e0;
+      --shadow: rgba(0, 0, 0, 0.05);
+      --shadow-strong: rgba(0, 0, 0, 0.1);
+      --radius: 6px;
+      --radius-lg: 12px;
+      --transition: 0.3s ease;
+    }
+
+    /* Styles spécifiques à la page cours */
+    .hero-courses {
+      background: #E5F2F8;
+      padding: 6rem 0 2rem;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      color: #333;
+    }
+
+    /* Effet brillant animé */
+    .hero-courses::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      animation: shine 3s infinite linear;
+      transform: skewX(-20deg);
+    }
+
+    @keyframes shine {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    /* Grandes bulles décoratives */
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(0, 194, 203, 0.2), rgba(0, 113, 194, 0.25));
+      border: 1px solid rgba(0, 194, 203, 0.1);
+      z-index: 1;
+      box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(2px);
+    }
+
+    .bubble-1 {
+      width: 180px;
+      height: 180px;
+      top: 50px;
+      left: 50px;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .bubble-2 {
+      width: 120px;
+      height: 120px;
+      top: 120px;
+      right: 80px;
+      animation: float 6s ease-in-out infinite;
+      animation-delay: 1s;
+    }
+
+    .bubble-3 {
+      width: 100px;
+      height: 100px;
+      bottom: 120px;
+      left: 25%;
+      animation: float 7s ease-in-out infinite;
+      animation-delay: 2s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(-20px) translateX(10px); }
+    }
+
+    .courses-title {
+      position: relative;
+      z-index: 5;
+      margin-bottom: 1.5rem;
+    }
+
+    .courses-title h1 {
+      font-size: 3.5rem;
+      color: #0071c2 !important;
+      text-shadow: 0 0 15px rgba(0, 194, 203, 0.3) !important;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      letter-spacing: -1px;
+    }
+
+    .badge-courses {
+      display: inline-block;
+      background-color: rgba(0, 188, 212, 0.1);
+      color: var(--primary);
+      padding: 0.5rem 1.2rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      position: relative;
+      overflow: hidden;
+      transform: translateY(-20px);
+      opacity: 0;
+      animation: slide-down 0.6s forwards 0.3s;
+    }
+
+    .badge-shine {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+      animation: badge-shine 3s infinite;
+    }
+
+    @keyframes badge-shine {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    @keyframes slide-down {
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .search-container {
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      position: relative;
+      z-index: 5;
+    }
+
+    .search-box {
+      display: flex;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      border-radius: 50px;
+      overflow: hidden;
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: 1rem 1.5rem;
+      border: none;
+      font-size: 1rem;
+      outline: none;
+      background: #fff;
+    }
+
+    .search-box button {
+      width: 60px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border: none;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .search-box button:hover {
+      background: linear-gradient(135deg, var(--primary-dark), var(--secondary-dark));
+    }
+
+    /* Filtrage */
+    .filter-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      position: relative;
+      z-index: 5;
+    }
+
+    .filter-select {
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      border: 1px solid var(--border, #ddd);
+      font-size: 1rem;
+      background: #fff;
+      color: var(--text-light, #333);
+      transition: border-color 0.2s;
+    }
+
+    .filter-select:focus {
+      border-color: var(--primary, #00bcd4);
+      outline: none;
+    }
+
+    /* Grille des cours */
+    .courses-section {
+      padding: 3rem 0;
+      background-color: white;
+      position: relative;
+    }
+
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .course-card {
+      background-color: var(--background);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 8px 24px var(--shadow);
+      transition: all var(--transition);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
+      transform: translateY(30px);
+      opacity: 0;
+      animation: card-appear 0.8s forwards;
+    }
+
+    @keyframes card-appear {
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .course-card:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .course-card:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    .course-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px var(--shadow-strong);
+    }
+
+    .course-image {
+      position: relative;
+      padding-top: 56.25%;
+      overflow: hidden;
+    }
+
+    .course-image img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: all var(--transition);
+    }
+
+    .course-card:hover .course-image img {
+      transform: scale(1.05);
+    }
+
+    .course-difficulty {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: var(--radius);
+      font-size: 0.8rem;
+      font-weight: 500;
+      z-index: 2;
+    }
+
+    .difficulty-beginner {
+      background-color: rgba(76, 175, 80, 0.9);
+      color: white;
+      box-shadow: 0 2px 10px rgba(76, 175, 80, 0.3);
+    }
+
+    .difficulty-intermediate {
+      background-color: rgba(255, 152, 0, 0.9);
+      color: white;
+      box-shadow: 0 2px 10px rgba(255, 152, 0, 0.3);
+    }
+
+    .difficulty-advanced {
+      background-color: rgba(244, 67, 54, 0.9);
+      color: white;
+      box-shadow: 0 2px 10px rgba(244, 67, 54, 0.3);
+    }
+
+    .course-duration {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: var(--radius);
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 500;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .course-content {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .course-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.8rem;
+      color: var(--text-dark);
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .course-description {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-bottom: 1.2rem;
+      flex-grow: 1;
+    }
+
+    .course-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .course-instructor {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .instructor-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: var(--secondary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .instructor-name {
+      font-size: 0.85rem;
+      color: var(--text-medium);
+      font-weight: 500;
+    }
+
+    .course-rating {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      color: #FFC107;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .course-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .course-enroll {
+      flex: 1;
+      padding: 0.6rem 1rem;
+      border-radius: var(--radius);
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: white;
+      font-weight: 500;
+      font-size: 0.9rem;
+      text-align: center;
+      transition: all var(--transition);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 188, 212, 0.2);
+    }
+
+    .course-enroll:hover {
+      background: linear-gradient(90deg, var(--primary-dark), var(--secondary-dark));
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 188, 212, 0.3);
+    }
+
+    .course-preview {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1rem;
+      border-radius: var(--radius);
+      background-color: rgba(0, 188, 212, 0.1);
+      color: var(--primary);
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: all var(--transition);
+      border: 1px solid rgba(0, 188, 212, 0.2);
+      cursor: pointer;
+    }
+
+    .course-preview:hover {
+      background-color: rgba(0, 188, 212, 0.15);
+      transform: translateY(-2px);
+    }
+
+    /* Pagination */
+    .courses-pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 3rem;
+    }
+
+    .page-item {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background-color: var(--background);
+      color: var(--text-medium);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition);
+      border: 1px solid var(--border);
+    }
+
+    .page-item:hover {
+      background-color: rgba(0, 188, 212, 0.1);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .page-item.active {
+      background-color: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 4px 10px rgba(0, 188, 212, 0.2);
+    }
+
+    .page-arrow {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background-color: var(--background);
+      color: var(--text-medium);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition);
+      border: 1px solid var(--border);
+    }
+
+    .page-arrow:hover {
+      background-color: rgba(0, 188, 212, 0.1);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .page-arrow.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background-color: var(--background-alt);
+    }
+
+    /* Section des exercices */
+    .exercises-section {
+      padding: 4rem 0;
+      background-color: var(--background-alt);
+      position: relative;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .section-header h2 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-header h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 3px;
+    }
+
+    .section-header p {
+      max-width: 700px;
+      margin: 0 auto;
+      color: var(--text-light);
+    }
+
+    /* Styles pour la disposition en deux colonnes */
+    .exercises-flex-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 0 1.5rem;
+    }
+
+    .exercises-column {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .column-title {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--primary);
+      color: var(--text-dark);
+    }
+
+    .exercise-tasks-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .exercise-task-section {
+      background-color: rgba(0, 188, 212, 0.05);
+      padding: 1rem;
+      border-radius: var(--radius);
+      border-left: 3px solid var(--primary);
+    }
+
+    .exercise-task-section.solution {
+      background-color: rgba(63, 81, 181, 0.05);
+      border-left: 3px solid var(--secondary);
+    }
+
+    .exercise-task-section h4 {
+      margin-top: 0;
+      margin-bottom: 0.8rem;
+      color: var(--primary);
+      font-size: 1.1rem;
+    }
+
+    .exercise-task-section.solution h4 {
+      color: var(--secondary);
+    }
+
+    /* Styles originaux adaptés */
+    .exercises-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .exercise-item {
+      background-color: var(--background);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 5px 15px var(--shadow);
+      margin-bottom: 1.5rem;
+      transform: translateY(30px);
+      opacity: 0;
+      animation: card-appear 0.8s forwards;
+    }
+
+    .exercise-item:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .exercise-item:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    .exercise-item:nth-child(4) {
+      animation-delay: 0.6s;
+    }
+
+    .exercise-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 1.5rem;
+      cursor: pointer;
+      transition: all var(--transition);
+      border-left: 4px solid var(--primary);
+    }
+
+    .exercise-header:hover {
+      background-color: rgba(0, 188, 212, 0.05);
+    }
+
+    .exercise-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin: 0;
+    }
+
+    .exercise-toggle {
+      background: none;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition);
+      background-color: rgba(0, 188, 212, 0.1);
+      color: var(--primary);
+    }
+
+    .exercise-toggle:hover {
+      background-color: rgba(0, 188, 212, 0.2);
+    }
+
+    .exercise-content {
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      opacity: 0;
+    }
+
+    .exercise-content.active {
+      padding: 1.5rem;
+      max-height: 1000px;
+      opacity: 1;
+      border-top: 1px solid var(--border);
+    }
+
+    .exercise-description {
+      margin-bottom: 1.2rem;
+      color: var(--text-medium);
+      line-height: 1.6;
+    }
+
+    .exercise-tasks {
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+
+    .exercise-tasks li {
+      margin-bottom: 0.8rem;
+      position: relative;
+      padding-left: 1.5rem;
+      color: var(--text-medium);
+    }
+
+    .exercise-tasks li::before {
+      content: "\f00c";
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      color: var(--primary);
+      position: absolute;
+      left: -1.5rem;
+      top: 0.2rem;
+      font-size: 0.9rem;
+    }
+
+    .exercise-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius);
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: white;
+      font-weight: 500;
+      margin-top: 1rem;
+      cursor: pointer;
+      transition: all var(--transition);
+      border: none;
+      box-shadow: 0 4px 15px rgba(0, 188, 212, 0.2);
+    }
+
+    .exercise-button:hover {
+      background: linear-gradient(90deg, var(--primary-dark), var(--secondary-dark));
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 188, 212, 0.3);
+    }
+
+    /* Section Design Exercises */
+    .design-exercises-section {
+      padding: 4rem 0;
+      background-color: #f8faff;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+    
+    .design-exercises-section .section-heading {
+      text-align: center;
+      margin-bottom: 0.8rem;
+      font-size: 2.2rem;
+      color: var(--text-dark);
+      position: relative;
+      display: inline-block;
+    }
+    
+    .design-exercises-section .section-heading::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 3px;
+    }
+    
+    .design-exercises-section .section-subheading {
+      text-align: center;
+      max-width: 700px;
+      margin: 1.5rem auto;
+      color: var(--text-medium);
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    
+    .design-exercises-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      animation: shine 3s infinite linear;
+      transform: skewX(-20deg);
+      pointer-events: none;
+    }
+    
+    .design-exercises-container {
+      display: flex;
+      justify-content: center;
+      gap: 1.2rem;
+      padding: 1rem 0.5rem 1.5rem;
+      margin: 2rem -0.5rem 0;
+      flex-wrap: wrap;
+    }
+    
+    .design-exercises-container::-webkit-scrollbar {
+      height: 8px;
+    }
+    
+    .design-exercises-container::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 10px;
+    }
+    
+    .design-exercises-container::-webkit-scrollbar-thumb {
+      background: rgba(0, 188, 212, 0.3);
+      border-radius: 10px;
+    }
+    
+    .design-exercise-card {
+      flex: 0 0 180px;
+      background: white;
+      border-radius: 15px;
+      padding: 1.2rem 1rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      border: 1px solid rgba(0, 188, 212, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .design-exercise-card::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, transparent 50%, rgba(0, 188, 212, 0.1) 50%);
+      z-index: 1;
+    }
+    
+    .design-exercise-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+      border-color: rgba(0, 188, 212, 0.3);
+    }
+    
+    .exercise-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      transition: all 0.3s;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+    }
+    
+    .exercise-icon::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shine 2s infinite;
+    }
+    
+    @keyframes shine {
+      0% {
+        left: -100%;
+      }
+      20% {
+        left: 100%;
+      }
+      100% {
+        left: 100%;
+      }
+    }
+    
+    .design-exercise-card:hover .exercise-icon {
+      transform: scale(1.1);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .exercise-icon i {
+      font-size: 1.8rem;
+    }
+    
+    .exercise-title {
+      color: var(--secondary-dark);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .exercise-title::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width 0.3s ease;
+    }
+    
+    .design-exercise-card:hover .exercise-title::after {
+      width: 70%;
+    }
+    
+    .exercise-desc {
+      color: var(--text-medium);
+      font-size: 0.85rem;
+      line-height: 1.4;
+      margin-bottom: 1rem;
+      flex-grow: 1;
+    }
+    
+    .exercise-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: none;
+      padding: 0.4rem 0.9rem;
+      border-radius: 30px;
+      background: rgba(0, 188, 212, 0.1);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid rgba(0, 188, 212, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .exercise-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s;
+    }
+    
+    .exercise-link:hover {
+      background: rgba(0, 188, 212, 0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 188, 212, 0.15);
+    }
+    
+    .exercise-link:hover::before {
+      transform: translateX(100%);
+    }
+    
+    .exercise-link i {
+      transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    
+    .exercise-link:hover i {
+      transform: translateX(4px) scale(1.2);
+    }
+    
+    @media (max-width: 768px) {
+      .design-exercises-container {
+        padding-bottom: 1.5rem;
+      }
+      
+      .design-exercise-card {
+        flex: 0 0 220px;
+      }
+    }
+    
+    /* Section newsletter */
+    .newsletter-section {
+      padding: 4rem 0;
+      background: linear-gradient(135deg, rgba(0, 188, 212, 0.1), rgba(63, 81, 181, 0.1));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .newsletter-container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      padding: 0 1.5rem;
+    }
+
+    .newsletter-header {
+      margin-bottom: 2rem;
+    }
+
+    .newsletter-header h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--text-dark);
+    }
+
+    .newsletter-header p {
+      color: var(--text-medium);
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      padding: 0 1.5rem;
+      height: 50px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background-color: var(--background);
+      font-size: 1rem;
+      transition: all var(--transition);
+    }
+
+    .newsletter-form input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.1);
+    }
+
+    .newsletter-form button {
+      padding: 0 1.5rem;
+      height: 50px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: white;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition);
+      box-shadow: 0 4px 15px rgba(0, 188, 212, 0.2);
+    }
+
+    .newsletter-form button:hover {
+      background: linear-gradient(90deg, var(--primary-dark), var(--secondary-dark));
+      box-shadow: 0 6px 20px rgba(0, 188, 212, 0.3);
+    }
+
+    .newsletter-note {
+      font-size: 0.8rem;
+      color: var(--text-light);
+    }
+
+    /* Arrière-plan de la newsletter avec cercles */
+    .newsletter-circle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.5;
+      filter: blur(50px);
+    }
+
+    .newsletter-circle-1 {
+      width: 300px;
+      height: 300px;
+      background-color: rgba(0, 188, 212, 0.2);
+      top: -150px;
+      left: -100px;
+    }
+
+    .newsletter-circle-2 {
+      width: 200px;
+      height: 200px;
+      background-color: rgba(63, 81, 181, 0.2);
+      bottom: -100px;
+      right: -50px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-courses {
+        padding: 5rem 0 1.5rem;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .courses-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .filter-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .newsletter-form {
+        flex-direction: column;
+      }
+
+      .newsletter-form button {
+        width: 100%;
+      }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .courses-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .hero-title span {
+      color: #00c2cb;
+      text-shadow: 0 0 10px rgba(0, 193, 203, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header avec navigation -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-circle">IHM</div>
+      <span>IHM Technologies</span>
+    </div>
+    <nav class="nav">
+      <a href="index.html">Accueil</a>
+      <a href="concepts.html">Concepts</a>
+      <a href="ressources.html">Ressources</a>
+      <a href="design.html">Design</a>
+      <a href="cours.html" class="active">Cours</a>
+      <a href="evenements.html">Événements</a>
+      <a href="forum.html">Forum</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <button class="theme-toggle" aria-label="Basculer mode sombre">
+        <i class="fas fa-moon" id="theme-icon"></i>
+      </button>
+      <a href="connexion.html" class="login-btn">
+        <i class="fas fa-user"></i>
+        <span>Connexion</span>
+      </a>
+      <button class="menu-toggle" aria-label="Menu mobile">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Menu mobile -->
+  <div class="mobile-menu">
+    <div class="mobile-menu-header">
+      <div class="logo">
+        <div class="logo-circle">IHM</div>
+        <span>IHM Technologies</span>
+      </div>
+      <button class="close-menu">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <nav class="mobile-nav">
+      <a href="index.html">Accueil</a>
+      <a href="concepts.html">Concepts</a>
+      <a href="ressources.html">Ressources</a>
+      <a href="design.html">Design</a>
+      <a href="cours.html" class="active">Cours</a>
+      <a href="evenements.html">Événements</a>
+      <a href="forum.html">Forum</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="mobile-actions">
+      <a href="connexion.html" class="btn outline-btn">
+        <i class="fas fa-user"></i>
+        <span>Connexion</span>
+      </a>
+      <div class="mobile-social">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay pour menu mobile -->
+  <div class="overlay"></div>
+
+  <!-- Hero section avec stats -->
+  <section class="hero-courses">
+    <div class="bubble bubble-1"></div>
+    <div class="bubble bubble-2"></div>
+    <div class="bubble bubble-3"></div>
+
+    <div class="container">
+      <div class="courses-title">
+        <!-- <span class="badge-courses">Formation IHM <div class="badge-shine"></div></span> -->
+        <h1>Nos cours et exercices</h1>
+        <p>Développez vos compétences en Interface Homme-Machine avec nos cours structurés et interactifs.</p>
+      </div>
+
+      <div class="stats" id="stats">
+        <div class="stat">
+          <span class="stat-number" data-value="25" data-suffix="+">0+</span>
+          <span class="stat-label">Cours Disponibles</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number" data-value="15000" data-suffix="+">0+</span>
+          <span class="stat-label">Étudiants</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number" data-value="48" data-suffix="/50">0/50</span>
+          <span class="stat-label">Note Moyenne</span>
+        </div>
+      </div>
+
+      <div class="search-container">
+        <div class="search-box">
+          <input type="text" id="search-input" placeholder="Rechercher un cours..." />
+          <button id="search-button" type="submit"><i class="fas fa-search"></i></button>
+        </div>
+      </div>
+
+      <div class="filter-container" style="gap: 1.5rem; flex-wrap: wrap;">
+        <div>
+          <label for="niveau-filter" style="font-weight:500; margin-right:0.5rem;">Niveau</label>
+          <select class="filter-select" id="niveau-filter">
+            <option value="">Niveau</option>
+            <option value="beginner">Débutant</option>
+            <option value="intermediate">Intermédiaire</option>
+            <option value="advanced">Avancé</option>
+          </select>
+      </div>
+        <div>
+          <label for="categorie-filter" style="font-weight:500; margin-right:0.5rem;">Catégorie</label>
+          <select id="categorie-filter" class="filter-select">
+            <option value="all">Toutes</option>
+            <option value="prog-graphique">Programmation graphique</option>
+            <option value="design">Design</option>
+            <option value="tests">Tests utilisateurs</option>
+            <!-- Ajoute d'autres catégories si besoin -->
+          </select>
+    </div>
+        <div>
+          <label for="duree-filter" style="font-weight:500; margin-right:0.5rem;">Durée</label>
+          <select id="duree-filter" class="filter-select">
+            <option value="all">Toutes</option>
+            <option value="short">Courte (&lt; 3h)</option>
+            <option value="medium">Moyenne (3-5h)</option>
+            <option value="long">Longue (&gt; 5h)</option>
+          </select>
+        </div>
+        <div>
+          <label for="sort-filter" style="font-weight:500; margin-right:0.5rem;">Trier par</label>
+          <select id="sort-filter" class="filter-select">
+            <option value="recent">Récents</option>
+            <option value="popular">Populaires</option>
+            <option value="duration">Durée</option>
+            <option value="rating">Note</option>
+          </select>
+            </div>
+            </div>
+          </div>
+  </section>
+
+  <!-- Section des cours -->
+  <section class="courses-section">
+    <div class="courses-grid" id="courses-container">
+      <!-- Les cartes de cours seront générées par JS -->
+    </div>
+
+    <div class="courses-pagination">
+      <button class="page-arrow" id="prev-page" onclick="changePage('prev')">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button class="page-item" id="page-1" onclick="changePage(1)">1</button>
+      <button class="page-item" id="page-2" onclick="changePage(2)">2</button>
+      <button class="page-item" id="page-3" onclick="changePage(3)">3</button>
+      <button class="page-arrow" id="next-page" onclick="changePage('next')">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  </section>
+
+  <!-- Section des exercices pratiques -->
+  <section class="exercises-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Exercices pratiques</h2>
+        <p>Appliquez vos connaissances théoriques et développez vos compétences en IHM grâce à ces exercices pratiques.</p>
+      </div>
+
+      <div class="exercises-flex-container">
+        <!-- Colonne des TPs - gauche -->
+        <div class="exercises-column">
+          <h3 class="column-title">Travaux Pratiques</h3>
+        <!-- Exercice 1 -->
+        <div class="exercise-item">
+          <div class="exercise-header" id="exercise-1-header">
+            <h3 class="exercise-title">TP 1 - Canvas Hello World</h3>
+            <button class="exercise-toggle" aria-controls="exercise-1-content" aria-expanded="false">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <div class="exercise-content" id="exercise-1-content">
+            <p class="exercise-description">
+              Ce TP vous introduit à Canvas HTML5 et aux bases de la programmation graphique en JavaScript. Vous apprendrez à dessiner des formes simples, manipuler les couleurs et comprendre le système de coordonnées.
+            </p>
+            <ul class="exercise-tasks">
+              <li>Créer un canevas HTML5 et le configurer</li>
+              <li>Dessiner des formes géométriques de base (cercles, rectangles, lignes)</li>
+              <li>Manipuler les couleurs, les dégradés et les styles de lignes</li>
+              <li>Implémenter une animation simple avec requestAnimationFrame</li>
+            </ul>
+              <a href="https://www.lirmm.fr/~mountaz/Ens/Ihm/Tp/Canvas/index.htm" target="_blank" class="exercise-button">
+              <i class="fas fa-external-link-alt"></i>
+              <span>Accéder à l'exercice</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Exercice 2 -->
+        <div class="exercise-item">
+          <div class="exercise-header" id="exercise-2-header">
+            <h3 class="exercise-title">TP 2 - Canvas, édition de courbes</h3>
+            <button class="exercise-toggle" aria-controls="exercise-2-content" aria-expanded="false">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <div class="exercise-content" id="exercise-2-content">
+            <p class="exercise-description">
+              Cet exercice approfondit l'utilisation de Canvas pour créer un petit éditeur de courbes interactif. Vous apprendrez à gérer les points de contrôle et à implémenter différents types de courbes.
+            </p>
+            <ul class="exercise-tasks">
+              <li>Créer un système de points de contrôle interactifs</li>
+              <li>Implémenter une courbe de Bézier à partir des points</li>
+              <li>Ajouter la fonctionnalité d'ajout/suppression de points</li>
+              <li>Développer un système de sélection et de manipulation des points</li>
+              <li>Gérer l'historique (annuler/refaire des actions)</li>
+            </ul>
+              <a href="https://www.lirmm.fr/~mountaz/Ens/Ihm/Tp/CanvasEvents/index.htm" target="_blank" class="exercise-button">
+              <i class="fas fa-external-link-alt"></i>
+              <span>Accéder à l'exercice</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Exercice 3 -->
+        <div class="exercise-item">
+          <div class="exercise-header" id="exercise-3-header">
+            <h3 class="exercise-title">TP 3 - Mise en page</h3>
+            <button class="exercise-toggle" aria-controls="exercise-3-content" aria-expanded="false">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <div class="exercise-content" id="exercise-3-content">
+            <p class="exercise-description">
+              Ce TP se concentre sur les principes de design et de mise en page pour créer des interfaces utilisateur intuitives et esthétiques à l'aide de HTML et CSS modernes.
+            </p>
+            <ul class="exercise-tasks">
+              <li>Utiliser CSS Grid et Flexbox pour des mises en page complexes</li>
+              <li>Créer des designs réactifs avec les requêtes média</li>
+              <li>Implémenter des animations et transitions CSS subtiles</li>
+              <li>Appliquer les principes de design UX pour améliorer l'utilisabilité</li>
+            </ul>
+              <a href="https://www.lirmm.fr/~mountaz/Ens/Ihm/Tp/MiseEnPage/" target="_blank" class="exercise-button">
+              <i class="fas fa-external-link-alt"></i>
+              <span>Accéder à l'exercice</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Exercice 4 -->
+        <div class="exercise-item">
+          <div class="exercise-header" id="exercise-4-header">
+              <h3 class="exercise-title">TP 4 - Gestion des évènements - Javascript</h3>
+            <button class="exercise-toggle" aria-controls="exercise-4-content" aria-expanded="false">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <div class="exercise-content" id="exercise-4-content">
+            <p class="exercise-description">
+                Ce TP vous permet d'approfondir la gestion des événements en JavaScript pour créer des interfaces réactives et interactives. Vous apprendrez à capturer et traiter différents types d'événements utilisateur.
+            </p>
+            <ul class="exercise-tasks">
+                <li>Comprendre le modèle d'événements du DOM</li>
+                <li>Implémenter des gestionnaires d'événements pour diverses interactions</li>
+                <li>Maîtriser la propagation des événements (bubbling et capturing)</li>
+                <li>Créer des interfaces réactives avec feedback utilisateur</li>
+                <li>Optimiser la performance des gestionnaires d'événements</li>
+            </ul>
+              <a href="https://www.lirmm.fr/~mountaz/Ens/Ihm/Tp/Evenements/index.htm" target="_blank" class="exercise-button">
+              <i class="fas fa-external-link-alt"></i>
+              <span>Accéder à l'exercice</span>
+            </a>
+          </div>
+        </div>
+
+          <!-- Exercice 5 -->
+          <div class="exercise-item">
+            <div class="exercise-header" id="exercise-5-header">
+              <h3 class="exercise-title">TP 5 - Canvas - Traceur</h3>
+              <button class="exercise-toggle" aria-controls="exercise-5-content" aria-expanded="false">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="exercise-content" id="exercise-5-content">
+              <p class="exercise-description">
+                Dans ce TP pratique, vous développerez un outil de tracé interactif avec Canvas. Vous apprendrez à implémenter des fonctionnalités avancées comme le dessin en temps réel et les transformations graphiques.
+              </p>
+              <ul class="exercise-tasks">
+                <li>Créer un système de tracé avec interaction à la souris</li>
+                <li>Implémenter différents outils de dessin (ligne, rectangle, ellipse)</li>
+                <li>Ajouter des options de style (couleur, épaisseur, style de ligne)</li>
+                <li>Gérer un système d'annulation/rétablissement d'actions</li>
+                <li>Implémenter l'export et le chargement de dessins</li>
+              </ul>
+              <a href="https://www.lirmm.fr/~mountaz/Ens/Ihm/Tp/CanvasTraceur/index.htm" target="_blank" class="exercise-button">
+                <i class="fas fa-external-link-alt"></i>
+                <span>Accéder à l'exercice</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Colonne des exercices avec corrections - droite -->
+        <div class="exercises-column">
+          <h3 class="column-title">Corrections des TPs</h3>
+
+          <!-- Correction TP 1 -->
+          <div class="exercise-item">
+            <div class="exercise-header" id="correction-1-header">
+              <h3 class="exercise-title">Correction TP 1 - Canvas Hello World</h3>
+              <button class="exercise-toggle" aria-controls="correction-1-content" aria-expanded="false">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="exercise-content" id="correction-1-content">
+              <p class="exercise-description">
+                Voici la correction détaillée du TP 1 sur Canvas. Vous trouverez ici les solutions et explications pour chaque partie de l'exercice.
+              </p>
+              <a href="https://www.lirmm.fr/~mountaz/Ens/Ihm/Tp/Canvas/sol/" target="_blank" class="exercise-button">
+                <i class="fas fa-external-link-alt"></i>
+                <span>Accéder à la correction</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Correction TP 2 -->
+          <div class="exercise-item">
+            <div class="exercise-header" id="correction-2-header">
+              <h3 class="exercise-title">Correction TP 2 - Canvas, édition de courbes</h3>
+              <button class="exercise-toggle" aria-controls="correction-2-content" aria-expanded="false">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="exercise-content" id="correction-2-content">
+              <p class="exercise-description">
+                Solution complète pour l'éditeur de courbes avec gestion des points de contrôle et des courbes de Bézier.
+              </p>
+              <div class="correction-links">
+                <a href="https://www.lirmm.fr/~mountaz/Ens/Ihm/Tp/CanvasEvents/sol/src-1-2/" target="_blank" class="exercise-button">
+                  <i class="fas fa-external-link-alt"></i>
+                  <span>Correction TP2 Exercice 2 début</span>
+                </a>
+                <a href="https://www.lirmm.fr/~mountaz/Ens/Ihm/Tp/CanvasEvents/sol/src-2-2/" target="_blank" class="exercise-button" style="margin-top: 10px;">
+                  <i class="fas fa-external-link-alt"></i>
+                  <span>Correction TP2 Exercice 2 fin</span>
+                </a>
+                <a href="https://www.lirmm.fr/~mountaz/Ens/Ihm/Tp/CanvasEvents/sol/src-3/" target="_blank" class="exercise-button" style="margin-top: 10px;">
+                  <i class="fas fa-external-link-alt"></i>
+                  <span>Correction TP2 Exercice 3</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Correction TP 3 -->
+          <div class="exercise-item">
+            <div class="exercise-header" id="correction-3-header">
+              <h3 class="exercise-title">Correction TP 3 - Mise en page</h3>
+              <button class="exercise-toggle" aria-controls="correction-3-content" aria-expanded="false">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="exercise-content" id="correction-3-content">
+              <p class="exercise-description">
+                Solution pour la mise en page responsive utilisant CSS Grid et Flexbox.
+              </p>
+              <a href="https://www.lirmm.fr/~mountaz/Ens/Ihm/Tp/MiseEnPage/sol/" target="_blank" class="exercise-button">
+                <i class="fas fa-external-link-alt"></i>
+                <span>Accéder à la correction</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Correction TP 4 -->
+          <div class="exercise-item">
+            <div class="exercise-header" id="correction-4-header">
+              <h3 class="exercise-title">Correction TP 4 - Gestion des évènements</h3>
+              <button class="exercise-toggle" aria-controls="correction-4-content" aria-expanded="false">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="exercise-content" id="correction-4-content">
+              <p class="exercise-description">
+                Solution pour la gestion des événements JavaScript avec gestionnaire d'état et historique.
+              </p>
+              <a href="https://www.lirmm.fr/~mountaz/Ens/Ihm/Tp/Evenements/sol/" target="_blank" class="exercise-button">
+                <i class="fas fa-external-link-alt"></i>
+                <span>Accéder à la correction</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Correction TP 5 -->
+          <div class="exercise-item">
+            <div class="exercise-header" id="correction-5-header">
+              <h3 class="exercise-title">Correction TP 5 - Canvas - Traceur</h3>
+              <button class="exercise-toggle" aria-controls="correction-5-content" aria-expanded="false">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="exercise-content" id="correction-5-content">
+              <p class="exercise-description">
+                Solution complète pour l'outil de tracé avec gestion des outils et export.
+              </p>
+              <a href="https://www.lirmm.fr/~mountaz/Ens/Ihm/Tp/CanvasTraceur/sol/" target="_blank" class="exercise-button">
+                <i class="fas fa-external-link-alt"></i>
+                <span>Accéder à la correction</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Exercices de conception -->
+  <section class="design-exercises-section">
+    <div class="container">
+      <h2 class="section-heading">Exercices de conception</h2>
+      <p class="section-subheading">Mettez en pratique vos connaissances IHM avec ces exercices de conception pour différents contextes d'application.</p>
+      
+      <div class="design-exercises-container">
+        <!-- Exercice 1 -->
+        <div class="design-exercise-card">
+          <div class="exercise-icon">
+            <i class="fas fa-map-marked-alt"></i>
+          </div>
+          <h3 class="exercise-title">Carte électorale</h3>
+          <p class="exercise-desc">Conception d'une interface de visualisation de données géospatiales électorales.</p>
+        <div class="exercise-actions" style="display: flex; gap: 0.5rem; margin-bottom: 0.8rem;">
+          <a href="#" class="exercise-action" style="font-size: 0.8rem; color: #3F51B5; display: flex; align-items: center; gap: 0.3rem;">
+            <i class="fas fa-question-circle"></i> Demander explication
+          </a>
+          <a href="#" class="exercise-action" style="font-size: 0.8rem; color: #00BCD4; display: flex; align-items: center; gap: 0.3rem;">
+            <i class="fas fa-comment-dots"></i> Demander avis
+          </a>
+        </div>
+        <a href="https://www.lirmm.fr/~mountaz/Ens/Ihm/Td/geomatique.htm" target="_blank" class="exercise-link">
+          Voir l'exercice <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+      
+      <!-- Exercice 2 -->
+      <div class="design-exercise-card">
+        <div class="exercise-icon">
+          <i class="fas fa-chart-pie"></i>
+        </div>
+        <h3 class="exercise-title">Comparaison de données</h3>
+        <p class="exercise-desc">Création d'un tableau de bord pour la visualisation de données multi-dimensionnelles.</p>
+        <div class="exercise-actions" style="display: flex; gap: 0.5rem; margin-bottom: 0.8rem;">
+          <a href="#" class="exercise-action" style="font-size: 0.8rem; color: #3F51B5; display: flex; align-items: center; gap: 0.3rem;">
+            <i class="fas fa-question-circle"></i> Demander explication
+          </a>
+          <a href="#" class="exercise-action" style="font-size: 0.8rem; color: #00BCD4; display: flex; align-items: center; gap: 0.3rem;">
+            <i class="fas fa-comment-dots"></i> Demander avis
+          </a>
+        </div>
+        <a href="https://www.lirmm.fr/~mountaz/Ens/Ihm/Td/dashboard-light.htm" target="_blank" class="exercise-link">
+          Voir l'exercice <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+      
+      <!-- Exercice 3 -->
+      <div class="design-exercise-card">
+        <div class="exercise-icon">
+          <i class="fas fa-network-wired"></i>
+        </div>
+        <h3 class="exercise-title">Objets connectés</h3>
+        <p class="exercise-desc">Interface d'interaction avec un ensemble d'objets connectés dans un environnement intelligent.</p>
+        <div class="exercise-actions" style="display: flex; gap: 0.5rem; margin-bottom: 0.8rem;">
+          <a href="#" class="exercise-action" style="font-size: 0.8rem; color: #3F51B5; display: flex; align-items: center; gap: 0.3rem;">
+            <i class="fas fa-question-circle"></i> Demander explication
+          </a>
+          <a href="#" class="exercise-action" style="font-size: 0.8rem; color: #00BCD4; display: flex; align-items: center; gap: 0.3rem;">
+            <i class="fas fa-comment-dots"></i> Demander avis
+          </a>
+        </div>
+        <a href="https://www.lirmm.fr/~mountaz/Ens/Ihm/Td/ubiquitous.htm" target="_blank" class="exercise-link">
+          Voir l'exercice <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+      
+      <!-- Exercice 4 -->
+      <div class="design-exercise-card">
+        <div class="exercise-icon">
+          <i class="fas fa-code"></i>
+        </div>
+        <h3 class="exercise-title">Éditeur CSS Light</h3>
+        <p class="exercise-desc">Conception d'un éditeur CSS simplifié pour la mise en forme de pages web.</p>
+        <div class="exercise-actions" style="display: flex; gap: 0.5rem; margin-bottom: 0.8rem;">
+          <a href="#" class="exercise-action" style="font-size: 0.8rem; color: #3F51B5; display: flex; align-items: center; gap: 0.3rem;">
+            <i class="fas fa-question-circle"></i> Demander explication
+          </a>
+          <a href="#" class="exercise-action" style="font-size: 0.8rem; color: #00BCD4; display: flex; align-items: center; gap: 0.3rem;">
+            <i class="fas fa-comment-dots"></i> Demander avis
+          </a>
+        </div>
+        <a href="https://www.lirmm.fr/~mountaz/Ens/Ihm/Td/web-page.htm" target="_blank" class="exercise-link">
+          Voir l'exercice <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+      
+      <!-- Exercice 5 -->
+      <div class="design-exercise-card">
+        <div class="exercise-icon">
+          <i class="fas fa-pencil-ruler"></i>
+        </div>
+        <h3 class="exercise-title">Éditeur de maquette</h3>
+        <p class="exercise-desc">Création d'un outil de conception de maquettes mixtes et de storyboard pour applications.</p>
+        <div class="exercise-actions" style="display: flex; gap: 0.5rem; margin-bottom: 0.8rem;">
+          <a href="#" class="exercise-action" style="font-size: 0.8rem; color: #3F51B5; display: flex; align-items: center; gap: 0.3rem;">
+            <i class="fas fa-question-circle"></i> Demander explication
+          </a>
+          <a href="#" class="exercise-action" style="font-size: 0.8rem; color: #00BCD4; display: flex; align-items: center; gap: 0.3rem;">
+            <i class="fas fa-comment-dots"></i> Demander avis
+          </a>
+        </div>
+        <a href="https://www.lirmm.fr/~mountaz/Ens/Ihm/Td/maquettage.htm" target="_blank" class="exercise-link">
+          Voir l'exercice <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+      
+      <!-- Exercice 6 -->
+      <div class="design-exercise-card">
+        <div class="exercise-icon">
+          <i class="fas fa-calendar-alt"></i>
+        </div>
+        <h3 class="exercise-title">Édition d'emploi du temps</h3>
+        <p class="exercise-desc">Interface pour l'édition concertée et collaborative d'emplois du temps.</p>
+        <div class="exercise-actions" style="display: flex; gap: 0.5rem; margin-bottom: 0.8rem;">
+          <a href="#" class="exercise-action" style="font-size: 0.8rem; color: #3F51B5; display: flex; align-items: center; gap: 0.3rem;">
+            <i class="fas fa-question-circle"></i> Demander explication
+          </a>
+          <a href="#" class="exercise-action" style="font-size: 0.8rem; color: #00BCD4; display: flex; align-items: center; gap: 0.3rem;">
+            <i class="fas fa-comment-dots"></i> Demander avis
+          </a>
+        </div>
+        <a href="https://www.lirmm.fr/~mountaz/Ens/Ihm/Td/edt.htm" target="_blank" class="exercise-link">
+          Voir l'exercice <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- Section newsletter -->
+  <section class="newsletter-section">
+    <div class="newsletter-circle newsletter-circle-1"></div>
+    <div class="newsletter-circle newsletter-circle-2"></div>
+
+    <div class="container">
+      <div class="newsletter-container">
+        <div class="newsletter-header">
+          <h2>Restez informé</h2>
+          <p>Abonnez-vous à notre newsletter pour recevoir des mises à jour sur les nouveaux cours, exercices et ressources.</p>
+        </div>
+
+        <form class="newsletter-form">
+          <input type="email" placeholder="Votre adresse email" required>
+          <button type="submit">S'abonner</button>
+        </form>
+
+        <p class="newsletter-note">Nous respectons votre vie privée et ne partagerons jamais vos informations.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <div class="logo">
+            <div class="logo-circle">IHM</div>
+            <span>IHM Technologies</span>
+          </div>
+          <p>Explorez le monde de l'Interface Homme-Machine et découvrez comment elle façonne notre avenir numérique.</p>
+          <div class="newsletter">
+            <input type="email" placeholder="Votre email" />
+            <button><i class="fas fa-paper-plane"></i></button>
+          </div>
+        </div>
+
+        <div class="footer-links">
+          <h4>Liens rapides</h4>
+          <div class="links-grid">
+            <ul>
+              <li><a href="index.html">Accueil</a></li>
+              <li><a href="ressources.html">Ressources</a></li>
+              <li><a href="design.html">Design</a></li>
+              <li><a href="cours.html">Cours</a></li>
+              <li><a href="evenements.html">Événements</a></li>
+            </ul>
+            <ul>
+              <li><a href="concepts.html">Concepts</a></li>
+              <li><a href="forum.html">Forum</a></li>
+              <li><a href="contact.html">Contact</a></li>
+              <li><a href="connexion.html">Connexion</a></li>
+              <li><a href="#">Inscription</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-contact">
+          <h4>Contact</h4>
+          <ul class="contact-list">
+            <li><i class="fas fa-map-marker-alt"></i> 123 Avenue de l'Innovation, 75001 Paris</li>
+            <li><i class="fas fa-phone"></i> +33 1 23 45 67 89</li>
+            <li><i class="fas fa-envelope"></i> contact@ihm-explorer.com</li>
+          </ul>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="copyright">© 2025 IHM Technologies. Tous droits réservés.</div>
+        <div class="legal-links">
+          <a href="#">Mentions légales</a>
+          <a href="#">Politique de confidentialité</a>
+          <a href="#">Conditions d'utilisation</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // Définition des cours
+    const courses = [
+      {
+        id: 1,
+        title: "Introduction à la Programmation Graphique et Interaction",
+        description: "Ce cours présente les fondamentaux de la programmation graphique et des interactions dans les interfaces, avec un focus sur Canvas HTML5 et JavaScript.",
+        image: "https://images.unsplash.com/photo-1507721999472-8ed4421c4af2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80",
+        difficulty: "beginner",
+        difficultyLabel: "Débutant",
+        duration: "3h00",
+        durationType: "medium",
+        instructor: "Mountaz Hascoët",
+        rating: 4.9,
+        category: "prog",
+        pdfLink: "https://www.lirmm.fr/~mountaz/Ens/Ihm/Cours/intro-prog-graphique-interaction-2024-2025.pdf",
+        date: "2023-04-15"
+      },
+      {
+        id: 2,
+        title: "Édition de Courbes en Programmation Graphique",
+        description: "Apprenez les techniques d'édition de courbes et les modèles mathématiques sous-jacents pour créer des interfaces de dessin et d'édition vectorielle.",
+        image: "https://images.unsplash.com/photo-1568185518838-3300c90c9170?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80",
+        difficulty: "intermediate",
+        difficultyLabel: "Intermédiaire",
+        duration: "4h00",
+        durationType: "medium",
+        instructor: "Mountaz Hascoët",
+        rating: 4.7,
+        category: "prog",
+        pdfLink: "https://www.lirmm.fr/~mountaz/Ens/Ihm/Cours/edition-de-courbes-2024-2025-1.pdf",
+        date: "2023-05-20"
+      },
+      {
+        id: 3,
+        title: "Principes de Design d'Interface (Partie 1)",
+        description: "Découvrez les principes fondamentaux du design d'interface qui guident la création d'interfaces intuitives, efficaces et agréables à utiliser.",
+        image: "https://images.unsplash.com/photo-1516905041604-7935af78f572?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80",
+        difficulty: "intermediate",
+        difficultyLabel: "Intermédiaire",
+        duration: "3h30",
+        durationType: "medium",
+        instructor: "Mountaz Hascoët",
+        rating: 4.8,
+        category: "design",
+        pdfLink: "https://www.lirmm.fr/~mountaz/Ens/Ihm/Cours/design-1.pdf",
+        date: "2023-03-10"
+      },
+      {
+        id: 4,
+        title: "Principes de Design d'Interface (Partie 2)",
+        description: "Approfondissez vos connaissances en design d'interface avec des concepts avancés, des études de cas et des méthodologies d'évaluation.",
+        image: "https://images.unsplash.com/photo-1557683304-673a23048d34?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80",
+        difficulty: "advanced",
+        difficultyLabel: "Avancé",
+        duration: "4h00",
+        durationType: "medium",
+        instructor: "Mountaz Hascoët",
+        rating: 4.6,
+        category: "design",
+        pdfLink: "https://www.lirmm.fr/~mountaz/Ens/Ihm/Cours/design-2.pdf",
+        date: "2023-04-05"
+      },
+      {
+        id: 5,
+        title: "Visualisation d'Informations",
+        description: "Explorez les techniques et principes de visualisation des données pour communiquer efficacement des informations complexes de manière intuitive.",
+        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80",
+        difficulty: "intermediate",
+        difficultyLabel: "Intermédiaire",
+        duration: "3h00",
+        durationType: "medium",
+        instructor: "Mountaz Hascoët",
+        rating: 4.5,
+        category: "design",
+        pdfLink: "https://www.lirmm.fr/~mountaz/Ens/Ihm/Cours/visu.pdf",
+        date: "2023-06-15"
+      },
+      {
+        id: 6,
+        title: "Codage Graphique et Couleur (Partie 1)",
+        description: "Comprenez les fondamentaux du codage graphique et l'utilisation efficace de la couleur dans les interfaces utilisateur.",
+        image: "https://images.unsplash.com/photo-1525909002-1b05e0c869d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80",
+        difficulty: "intermediate",
+        difficultyLabel: "Intermédiaire",
+        duration: "2h30",
+        durationType: "short",
+        instructor: "Mountaz Hascoët",
+        rating: 4.4,
+        category: "design",
+        pdfLink: "https://www.lirmm.fr/~mountaz/Ens/Ihm/Cours/codageCouleur-1.pdf",
+        date: "2023-07-20"
+      },
+      {
+        id: 7,
+        title: "Codage Graphique et Couleur (Partie 2)",
+        description: "Approfondissez vos connaissances sur l'application de la couleur dans la conception d'interfaces avec des principes avancés et études de cas.",
+        image: "https://images.unsplash.com/photo-1460411794035-42aac080490a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80",
+        difficulty: "advanced",
+        difficultyLabel: "Avancé",
+        duration: "3h00",
+        durationType: "medium",
+        instructor: "Mountaz Hascoët",
+        rating: 4.3,
+        category: "design",
+        pdfLink: "https://www.lirmm.fr/~mountaz/Ens/Ihm/Cours/codageCouleur-2.pdf",
+        date: "2023-08-10"
+      },
+      {
+        id: 8,
+        title: "Evaluation des Interfaces Homme-Machine",
+        description: "Découvrez les méthodes et techniques pour évaluer l'efficacité, l'utilisabilité et l'expérience utilisateur des interfaces.",
+        image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80",
+        difficulty: "intermediate",
+        difficultyLabel: "Intermédiaire",
+        duration: "4h00",
+        durationType: "medium",
+        instructor: "Mountaz Hascoët",
+        rating: 4.7,
+        category: "evaluation",
+        pdfLink: "https://www.lirmm.fr/~mountaz/Ens/Ihm/Cours/design-2.pdf",
+        date: "2023-09-05"
+      },
+      {
+        id: 9,
+        title: "Accessibilité dans la Conception d'Interfaces",
+        description: "Apprenez à concevoir des interfaces accessibles à tous les utilisateurs, y compris ceux ayant des déficiences visuelles, auditives ou motrices.",
+        image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80",
+        difficulty: "intermediate",
+        difficultyLabel: "Intermédiaire",
+        duration: "3h30",
+        durationType: "medium",
+        instructor: "Mountaz Hascoët",
+        rating: 4.8,
+        category: "accessibilite",
+        pdfLink: "https://www.lirmm.fr/~mountaz/Ens/Ihm/Cours/design-2.pdf",
+        date: "2023-10-15"
+      }
+    ];
+
+    // Variables pour la pagination
+    let currentPage = 1;
+    const itemsPerPage = 3;
+    let totalPages = Math.ceil(courses.length / itemsPerPage);
+    let filteredCourses = [...courses];
+
+    // Fonction pour générer une carte de cours
+    function createCourseCard(course) {
+      return `
+        <div class="course-card">
+          <div class="course-image">
+            <img src="${course.image}" alt="${course.title}">
+            <span class="course-difficulty difficulty-${course.difficulty}">${course.difficultyLabel}</span>
+            <span class="course-duration"><i class="far fa-clock"></i> ${course.duration}</span>
+          </div>
+          <div class="course-content">
+            <h3 class="course-title">${course.title}</h3>
+            <p class="course-description">${course.description}</p>
+            <div class="course-meta">
+              <div class="course-instructor">
+                <div class="instructor-avatar">MM</div>
+                <span class="instructor-name">${course.instructor}</span>
+              </div>
+              <div class="course-rating">
+                <i class="fas fa-star"></i>
+                <span>${course.rating}</span>
+              </div>
+            </div>
+            <div class="course-actions">
+              <a href="${course.pdfLink}" target="_blank" class="course-enroll">Télécharger le PDF</a>
+              <a href="${course.pdfLink}" target="_blank" class="course-preview">
+                <i class="fas fa-eye"></i>
+                <span>Aperçu</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Fonction pour filtrer les cours
+    function filterCourses() {
+      const searchText = document.getElementById('search-input').value.toLowerCase();
+      const niveauFilter = document.getElementById('niveau-filter').value;
+      const dureeFilter = document.getElementById('duree-filter').value;
+      const categorieFilter = document.getElementById('categorie-filter').value;
+      const sortFilter = document.getElementById('sort-filter').value;
+
+      console.log("Filtrage avec:", {
+        niveau: niveauFilter,
+        duree: dureeFilter,
+        categorie: categorieFilter,
+        tri: sortFilter
+      });
+
+      // Filtrer par texte, niveau, durée et catégorie
+      filteredCourses = courses.filter(course => {
+        // Filtrage par recherche textuelle
+        const matchesSearch = searchText === '' || 
+          course.title.toLowerCase().includes(searchText) || 
+          course.description.toLowerCase().includes(searchText);
+
+        // Filtrage par niveau
+        const matchesNiveau = niveauFilter === '' || course.difficulty === niveauFilter;
+
+        // Filtrage par durée  
+        const matchesDuree = dureeFilter === 'all' || dureeFilter === '' || course.durationType === dureeFilter;
+
+        // Filtrage par catégorie avec correspondance
+        let matchesCategorie = true;
+        if (categorieFilter !== 'all' && categorieFilter !== '') {
+          if (categorieFilter === 'prog-graphique') {
+            matchesCategorie = course.category === 'prog';
+          } else if (categorieFilter === 'tests') {
+            matchesCategorie = course.category === 'evaluation';
+          } else {
+            matchesCategorie = course.category === categorieFilter;
+          }
+        }
+
+        // Affichage pour le débogage
+        if (course.id === 1) {
+          console.log("Cours 1:", {
+            matchesNiveau, 
+            matchesDuree, 
+            matchesCategorie
+          });
+        }
+
+        return matchesSearch && matchesNiveau && matchesDuree && matchesCategorie;
+      });
+
+      // Trier les résultats
+      if (sortFilter === 'recent') {
+        filteredCourses.sort((a, b) => new Date(b.date) - new Date(a.date));
+      } else if (sortFilter === 'popular' || sortFilter === 'rating') {
+        filteredCourses.sort((a, b) => b.rating - a.rating);
+      }
+
+      // Mettre à jour la pagination
+      totalPages = Math.ceil(filteredCourses.length / itemsPerPage);
+      if (currentPage > totalPages) {
+        currentPage = totalPages > 0 ? 1 : 0;
+      }
+
+      // Afficher les cours filtrés
+      displayCourses(currentPage);
+      updatePagination(currentPage);
+    }
+
+    // Fonction pour afficher les cours de la page actuelle
+    function displayCourses(page) {
+      const coursesContainer = document.getElementById('courses-container');
+      coursesContainer.innerHTML = '';
+
+      if (filteredCourses.length === 0) {
+        coursesContainer.innerHTML = `
+          <div class="no-results" style="grid-column: 1 / -1; text-align: center; padding: 3rem 0;">
+            <i class="fas fa-search" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+            <h3>Aucun cours ne correspond à votre recherche</h3>
+            <p>Essayez de modifier vos critères de recherche ou réinitialisez les filtres.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const startIndex = (page - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, filteredCourses.length);
+
+      for (let i = startIndex; i < endIndex; i++) {
+        coursesContainer.innerHTML += createCourseCard(filteredCourses[i]);
+      }
+    }
+
+    // Fonction pour mettre à jour la pagination
+    function updatePagination(page) {
+      // Masquer la pagination s'il n'y a pas de résultats
+      const paginationContainer = document.querySelector('.courses-pagination');
+      if (filteredCourses.length === 0) {
+        paginationContainer.style.display = 'none';
+        return;
+      } else {
+        paginationContainer.style.display = 'flex';
+      }
+
+      // Mettre à jour les nombres de pages
+      const paginationNumbers = document.querySelectorAll('.page-item');
+      if (totalPages <= 3) {
+        // Si moins de 3 pages, afficher seulement les pages disponibles
+        paginationNumbers.forEach((button, index) => {
+          if (index < totalPages) {
+            button.style.display = 'flex';
+            button.textContent = index + 1;
+            button.classList.toggle('active', index + 1 === page);
+            button.onclick = function() { changePage(index + 1); };
+          } else {
+            button.style.display = 'none';
+          }
+        });
+      } else {
+        // Si plus de 3 pages, ajuster dynamiquement
+        paginationNumbers.forEach((button, index) => {
+          button.style.display = 'flex';
+
+          let pageNumber;
+          if (page <= 2) {
+            pageNumber = index + 1;
+          } else if (page >= totalPages - 1) {
+            pageNumber = totalPages - 2 + index;
+          } else {
+            pageNumber = page - 1 + index;
+          }
+
+          button.textContent = pageNumber;
+          button.onclick = function() { changePage(pageNumber); };
+          button.classList.toggle('active', pageNumber === page);
+        });
+      }
+
+      // Mettre à jour l'état des boutons de navigation
+      document.getElementById('prev-page').disabled = (page === 1);
+      document.getElementById('prev-page').classList.toggle('disabled', page === 1);
+
+      document.getElementById('next-page').disabled = (page === totalPages || totalPages === 0);
+      document.getElementById('next-page').classList.toggle('disabled', page === totalPages || totalPages === 0);
+    }
+
+    // Fonction pour changer de page
+    function changePage(action) {
+      if (action === 'prev') {
+        if (currentPage > 1) currentPage--;
+      } else if (action === 'next') {
+        if (currentPage < totalPages) currentPage++;
+      } else if (typeof action === 'number' && action >= 1 && action <= totalPages) {
+        currentPage = action;
+      }
+
+      displayCourses(currentPage);
+      updatePagination(currentPage);
+
+      // Faire défiler jusqu'au début de la section des cours
+      document.querySelector('.courses-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Animation des statistiques
+    function animateStats() {
+      const stats = document.querySelectorAll('.stat-number');
+
+      stats.forEach(stat => {
+        const finalValue = parseInt(stat.dataset.value);
+        const suffix = stat.dataset.suffix;
+        const duration = 2000;
+        const startTime = performance.now();
+
+        function updateCounter(timestamp) {
+          const runtime = timestamp - startTime;
+          const relativeProgress = runtime / duration;
+
+          if(relativeProgress < 1) {
+            const currentValue = Math.round(easeOutCubic(relativeProgress) * finalValue);
+            stat.textContent = formatNumber(currentValue) + suffix;
+            requestAnimationFrame(updateCounter);
+          } else {
+            stat.textContent = formatNumber(finalValue) + suffix;
+          }
+        }
+
+        requestAnimationFrame(updateCounter);
+      });
+    }
+
+    function easeOutCubic(x) {
+      return 1 - Math.pow(1 - x, 3);
+    }
+
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialiser l'affichage des cours
+      displayCourses(1);
+      updatePagination(1);
+
+      // Animation des statistiques
+      const statsSection = document.getElementById('stats');
+      if (statsSection) {
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              animateStats();
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.3 });
+
+        observer.observe(statsSection);
+      }
+
+      // Ajouter les événements de filtrage
+      document.getElementById('search-button').addEventListener('click', filterCourses);
+      document.getElementById('search-input').addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+          filterCourses();
+        }
+      });
+
+      document.getElementById('niveau-filter').addEventListener('change', filterCourses);
+      document.getElementById('duree-filter').addEventListener('change', filterCourses);
+      document.getElementById('categorie-filter').addEventListener('change', filterCourses);
+      document.getElementById('sort-filter').addEventListener('change', filterCourses);
+
+      // Gestion des exercices/TP
+      document.querySelectorAll('.exercise-toggle').forEach(button => {
+        button.addEventListener('click', function() {
+          const contentId = this.getAttribute('aria-controls');
+          const content = document.getElementById(contentId);
+          const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+          // Changer l'état du bouton
+          this.setAttribute('aria-expanded', !isExpanded);
+
+          // Changer l'icône
+          const icon = this.querySelector('i');
+          if(isExpanded) {
+            icon.classList.remove('fa-minus');
+            icon.classList.add('fa-plus');
+          } else {
+            icon.classList.remove('fa-plus');
+            icon.classList.add('fa-minus');
+          }
+
+          // Afficher/masquer le contenu
+          content.classList.toggle('active');
+        });
+      });
+
+      // Initialisation: cliquer sur le premier header d'exercice pour l'ouvrir
+      document.querySelector('.exercise-header').click();
+    });
+  </script>
+  <script>
+    // Adaptation du hero au thème sombre
+    document.addEventListener('DOMContentLoaded', () => {
+      // Fonction pour mettre à jour le style du hero selon le thème
+      function updateHeroStyle() {
+        const isDarkTheme = document.body.classList.contains('dark-theme');
+        const heroSection = document.querySelector('.hero-courses');
+        
+        if (heroSection) {
+          if (isDarkTheme) {
+            heroSection.style.background = '#121a24';
+            heroSection.style.color = '#e0e0e0';
+          } else {
+            heroSection.style.background = '#E5F2F8';
+            heroSection.style.color = '#333';
+          }
+        }
+      }
+      
+      // Appliquer au chargement de la page
+      updateHeroStyle();
+      
+      // Observer les changements de thème
+      const themeSwitcher = document.querySelector('.theme-toggle');
+      if (themeSwitcher) {
+        themeSwitcher.addEventListener('click', updateHeroStyle);
+      }
+    });
+  </script>
+  <script src="chatbot.js"></script>
+  <script src="auth.js"></script>
+</body>
+</html>

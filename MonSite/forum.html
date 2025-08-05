@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Forum - IHM Explorer</title>
+  <link rel="stylesheet" href="auth.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="auth.js" defer></script>
+  <style>
+    /* Styles spécifiques à la page forum */
+    .hero-forum {
+      background: linear-gradient(135deg, #f1f8fd, #e0f1fc);
+      padding: 6rem 0 10rem;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      color: #333;
+      min-height: 280px;
+    }
+    
+    /* Effet brillant animé */
+    .hero-forum::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      animation: shine 3s infinite linear;
+      transform: skewX(-20deg);
+    }
+    
+    @keyframes shine {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    .hero-forum::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 180px;
+      background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg"><path fill="white" d="M0,160 C80,200 160,240 240,240 C320,240 400,200 480,200 C560,200 640,240 720,240 C800,240 880,200 960,180 C1040,160 1120,160 1200,180 C1280,200 1360,240 1440,240 L1440,320 L0,320 Z"></path></svg>') no-repeat bottom;
+      background-size: cover;
+    }
+
+    .hero-title {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+      z-index: 2;
+    }
+
+    .hero-description {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+      opacity: 0.9;
+    }
+    
+    /* Grandes bulles décoratives */
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(0, 194, 203, 0.2), rgba(0, 113, 194, 0.25));
+      border: 1px solid rgba(0, 194, 203, 0.1);
+      z-index: 1;
+      box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(2px);
+    }
+    
+    .bubble-1 {
+      width: 180px;
+      height: 180px;
+      top: 50px;
+      left: 50px;
+      animation: float 8s ease-in-out infinite;
+    }
+    
+    .bubble-2 {
+      width: 120px;
+      height: 120px;
+      top: 180px;
+      right: 80px;
+      animation: float 6s ease-in-out infinite;
+      animation-delay: 1s;
+    }
+    
+    .bubble-3 {
+      width: 100px;
+      height: 100px;
+      bottom: 140px;
+      left: 100px;
+      animation: float 7s ease-in-out infinite;
+      animation-delay: 2s;
+    }
+    
+    .bubble-4 {
+      width: 150px;
+      height: 150px;
+      bottom: 100px;
+      right: 130px;
+      animation: float 9s ease-in-out infinite;
+      animation-delay: 3s;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-20px) rotate(5deg);
+      }
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+    }
+
+    .forum-container {
+      max-width: 1200px;
+      margin: -3rem auto 0;
+      padding: 0 2rem 3rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Style pour les catégories et discussions */
+    .forum-layout {
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      gap: 2rem;
+    }
+
+    .forum-sidebar {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0, 113, 194, 0.1);
+      padding: 2rem;
+      height: fit-content;
+      position: sticky;
+      top: 2rem;
+    }
+
+    .sidebar-title {
+      font-size: 1.3rem;
+      color: #333;
+      margin: 0 0 1.5rem;
+      position: relative;
+      padding-bottom: 0.8rem;
+    }
+
+    .sidebar-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: linear-gradient(135deg, #00c2cb, #0071c2);
+      border-radius: 3px;
+    }
+
+    .category-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .category-item {
+      margin-bottom: 1rem;
+    }
+
+    .category-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .category-link {
+      display: flex;
+      align-items: center;
+      color: #666;
+      text-decoration: none;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      font-weight: 500;
+    }
+
+    .category-link:hover,
+    .category-link.active {
+      color: #0071c2;
+      background: rgba(0, 194, 203, 0.1);
+    }
+
+    .category-link i {
+      margin-right: 1rem;
+      font-size: 1.2rem;
+      color: #00c2cb;
+    }
+
+    .category-link .count {
+      margin-left: auto;
+      background: linear-gradient(135deg, #00c2cb, #0071c2);
+      color: white;
+      padding: 0.3rem 0.7rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .category-link.active .count {
+      background: white;
+      color: #0071c2;
+    }
+
+    .search-form {
+      display: flex;
+      margin-bottom: 2rem;
+    }
+
+    .search-input {
+      flex: 1;
+      border: 1px solid #ddd;
+      border-right: none;
+      padding: 0.8rem 1rem;
+      border-radius: 8px 0 0 8px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus {
+      border-color: #00c2cb;
+    }
+
+    .search-btn {
+      background: linear-gradient(135deg, #00c2cb, #0071c2);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      border-radius: 0 8px 8px 0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .search-btn:hover {
+      background: linear-gradient(135deg, #00aebb, #005ea2);
+    }
+
+    .forum-main {
+      flex: 1;
+    }
+
+    .forum-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .forum-title {
+      font-size: 2rem;
+      margin: 0;
+      color: #333;
+    }
+
+    .new-topic-btn {
+      background: linear-gradient(135deg, #00c2cb, #0071c2);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0, 113, 194, 0.2);
+    }
+
+    .new-topic-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0, 113, 194, 0.3);
+    }
+
+    .new-topic-btn i {
+      margin-right: 0.5rem;
+    }
+
+    .topics-list {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0, 113, 194, 0.1);
+      overflow: hidden;
+    }
+
+    .topic-item {
+      border-bottom: 1px solid #eee;
+      transition: all 0.2s ease;
+    }
+
+    .topic-item:last-child {
+      border-bottom: none;
+    }
+
+    .topic-item:hover {
+      background: rgba(0, 194, 203, 0.03);
+    }
+
+    .topic-link {
+      display: flex;
+      padding: 1.5rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .topic-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-right: 1.5rem;
+      flex-shrink: 0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .topic-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .topic-content {
+      flex: 1;
+    }
+
+    .topic-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem;
+      color: #333;
+    }
+
+    .topic-meta {
+      display: flex;
+      align-items: center;
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    .topic-meta span {
+      display: flex;
+      align-items: center;
+      margin-right: 1.5rem;
+    }
+
+    .topic-meta i {
+      margin-right: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .topic-summary {
+      margin-top: 0.5rem;
+      color: #666;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .topic-tags {
+      display: flex;
+      margin-top: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .topic-tag {
+      display: inline-block;
+      padding: 0.3rem 0.7rem;
+      background: rgba(0, 194, 203, 0.08);
+      color: #0071c2;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .topic-stats {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+    }
+
+    .topic-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-left: 1.5rem;
+    }
+
+    .stat-value {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: #888;
+    }
+
+    .featured-tag {
+      background: linear-gradient(135deg, #ff7b00, #ff9a00);
+      color: white;
+      font-weight: 500;
+    }
+
+    .new-tag {
+      background: linear-gradient(135deg, #0cce6b, #00a896);
+      color: white;
+      font-weight: 500;
+    }
+
+    .hot-tag {
+      background: linear-gradient(135deg, #ff4757, #ff6b81);
+      color: white;
+      font-weight: 500;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    .page-item {
+      margin: 0 0.3rem;
+    }
+
+    .page-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid #ddd;
+      color: #666;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .page-link:hover {
+      background: rgba(0, 194, 203, 0.1);
+      border-color: #00c2cb;
+      color: #0071c2;
+    }
+
+    .page-link.active {
+      background: linear-gradient(135deg, #00c2cb, #0071c2);
+      border-color: #0071c2;
+      color: white;
+    }
+
+    .online-users {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0, 113, 194, 0.1);
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .online-title {
+      font-size: 1.1rem;
+      color: #333;
+      margin: 0 0 1rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .online-title i {
+      color: #4CAF50;
+      margin-right: 0.5rem;
+    }
+
+    .users-avatars {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .user-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .user-avatar.online::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 10px;
+      height: 10px;
+      background: #4CAF50;
+      border: 2px solid white;
+      border-radius: 50%;
+    }
+
+    .forum-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 113, 194, 0.08);
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 113, 194, 0.15);
+    }
+
+    .stat-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(0, 194, 203, 0.1), rgba(0, 113, 194, 0.1));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+    }
+
+    .stat-icon i {
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, #00c2cb, #0071c2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .stat-info {
+      flex: 1;
+    }
+
+    .stat-count {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 0 0 0.2rem;
+      color: #333;
+    }
+
+    .stat-desc {
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    .popular-tags {
+      margin-top: 2rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0, 113, 194, 0.1);
+      padding: 1.5rem;
+    }
+
+    .popular-tags-list {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+      gap: 0.5rem;
+    }
+
+    .tag-item {
+      padding: 0.5rem 1rem;
+      background: rgba(0, 194, 203, 0.08);
+      color: #0071c2;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+
+    .tag-item:hover {
+      background: rgba(0, 194, 203, 0.15);
+    }
+
+    .tag-count {
+      margin-left: 0.5rem;
+      background: white;
+      color: #0071c2;
+      padding: 0.1rem 0.5rem;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .post-preview {
+      margin: 0.5rem 0 0;
+      padding: 1rem;
+      background: rgba(0, 194, 203, 0.05);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #666;
+      position: relative;
+    }
+
+    .post-preview::before {
+      content: '"';
+      position: absolute;
+      top: 0;
+      left: 0.5rem;
+      font-size: 2rem;
+      color: rgba(0, 194, 203, 0.2);
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .forum-layout {
+        grid-template-columns: 1fr;
+      }
+      
+      .forum-sidebar {
+        position: static;
+        margin-bottom: 2rem;
+      }
+
+      .forum-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.4rem;
+      }
+      
+      .topic-link {
+        flex-direction: column;
+      }
+      
+      .topic-avatar {
+        margin-right: 0;
+        margin-bottom: 1rem;
+      }
+      
+      .topic-stats {
+        margin-left: 0;
+        margin-top: 1rem;
+      }
+
+      .forum-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header avec navigation -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-circle">IHM</div>
+      <span>IHM Technologies</span>
+    </div>
+    <nav class="nav">
+      <a href="index.html">Accueil</a>
+      <a href="concepts.html">Concepts</a>
+      <a href="ressources.html">Ressources</a>
+      <a href="design.html">Design</a>
+      <a href="cours.html">Cours</a>
+      <a href="evenements.html">Événements</a>
+      <a href="forum.html" class="active">Forum</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <button class="theme-toggle" aria-label="Basculer mode sombre">
+        <i class="fas fa-moon" id="theme-icon"></i>
+      </button>
+      <div class="user-avatar-container" style="display: none;">
+        <div class="user-avatar">
+          <!-- L avatar de l utilisateur sera inséré ici par auth.js -->
+        </div>
+        <div class="user-menu">
+          <div class="user-info">
+            <div class="user-name">Nom d utilisateur</div>
+            <div class="user-email">email@exemple.com</div>
+          </div>
+          <div class="menu-divider"></div>
+          <button id="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            Déconnexion
+          </button>
+        </div>
+      </div>
+      <a href="connexion.html" class="login-btn">
+        <i class="fas fa-user"></i>
+        <span>Connexion</span>
+      </a>
+      <button class="menu-toggle" aria-label="Menu mobile">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Menu mobile -->
+  <div class="mobile-menu">
+    <div class="mobile-menu-header">
+      <div class="logo">
+        <div class="logo-circle">IHM</div>
+        <span>IHM Technologies</span>
+      </div>
+      <button class="mobile-menu-close">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <nav class="mobile-nav">
+      <a href="index.html">Accueil</a>
+      <a href="concepts.html">Concepts</a>
+      <a href="ressources.html">Ressources</a>
+      <a href="design.html">Design</a>
+      <a href="evenements.html">Événements</a>
+      <a href="cours.html">Cours</a>
+      <a href="forum.html" class="active">Forum</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="mobile-menu-footer">
+      <a href="connexion.html" class="login-btn">
+        <i class="fas fa-user"></i>
+        <span>Connexion</span>
+      </a>
+    </div>
+  </div>
+  
+  <!-- Overlay pour menu mobile -->
+  <div class="overlay"></div>
+
+  <!-- Section Hero avec vague -->
+  <section class="hero-forum">
+    <!-- Bulles décoratives -->
+    <div class="bubble bubble-1"></div>
+    <div class="bubble bubble-2"></div>
+    <div class="bubble bubble-3"></div>
+    <div class="bubble bubble-4"></div>
+    
+    <h1 class="hero-title">Forum de <span style="color: #0071c2;">Discussion</span></h1>
+    <p class="hero-description">Échangez avec la communauté, posez vos questions et partagez vos connaissances sur les interfaces homme-machine.</p>
+  </section>
+
+  <!-- Contenu principal -->
+  <div class="forum-container">
+    
+    <!-- Statistiques du forum -->
+    <div class="forum-stats">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-info">
+          <h3 class="stat-count">3,742</h3>
+          <p class="stat-desc">Membres actifs</p>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-comments"></i>
+        </div>
+        <div class="stat-info">
+          <h3 class="stat-count">12,586</h3>
+          <p class="stat-desc">Messages</p>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-clipboard-list"></i>
+        </div>
+        <div class="stat-info">
+          <h3 class="stat-count">1,456</h3>
+          <p class="stat-desc">Sujets</p>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="stat-info">
+          <h3 class="stat-count">+28%</h3>
+          <p class="stat-desc">Activité ce mois</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Barre de recherche -->
+    <form class="search-form">
+      <input type="text" class="search-input" placeholder="Rechercher dans le forum...">
+      <button type="submit" class="search-btn"><i class="fas fa-search"></i></button>
+    </form>
+    
+    <div class="forum-layout">
+      <!-- Sidebar avec catégories -->
+      <div class="forum-sidebar">
+        <h2 class="sidebar-title">Catégories</h2>
+        <ul class="category-list">
+          <li class="category-item">
+            <a href="#" class="category-link active">
+              <i class="fas fa-home"></i>
+              Toutes les discussions
+              <span class="count">156</span>
+            </a>
+          </li>
+          <li class="category-item">
+            <a href="#" class="category-link">
+              <i class="fas fa-graduation-cap"></i>
+              Principes de l'IHM
+              <span class="count">42</span>
+            </a>
+          </li>
+          <li class="category-item">
+            <a href="#" class="category-link">
+              <i class="fas fa-paint-brush"></i>
+              Design & UX
+              <span class="count">37</span>
+            </a>
+          </li>
+          <li class="category-item">
+            <a href="#" class="category-link">
+              <i class="fas fa-code"></i>
+              Développement
+              <span class="count">29</span>
+            </a>
+          </li>
+          <li class="category-item">
+            <a href="#" class="category-link">
+              <i class="fas fa-vial"></i>
+              Tests utilisateurs
+              <span class="count">18</span>
+            </a>
+          </li>
+          <li class="category-item">
+            <a href="#" class="category-link">
+              <i class="fas fa-universal-access"></i>
+              Accessibilité
+              <span class="count">14</span>
+            </a>
+          </li>
+          <li class="category-item">
+            <a href="#" class="category-link">
+              <i class="fas fa-vr-cardboard"></i>
+              Réalité virtuelle/augmentée
+              <span class="count">12</span>
+            </a>
+          </li>
+          <li class="category-item">
+            <a href="#" class="category-link">
+              <i class="fas fa-robot"></i>
+              IA & Interfaces
+              <span class="count">11</span>
+            </a>
+          </li>
+          <li class="category-item">
+            <a href="#" class="category-link">
+              <i class="fas fa-briefcase"></i>
+              Opportunités
+              <span class="count">9</span>
+            </a>
+          </li>
+          <li class="category-item">
+            <a href="#" class="category-link">
+              <i class="fas fa-coffee"></i>
+              Général
+              <span class="count">7</span>
+            </a>
+          </li>
+        </ul>
+        
+        <div class="popular-tags">
+          <h3 class="sidebar-title">Tags populaires</h3>
+          <div class="popular-tags-list">
+            <a href="#" class="tag-item">UX Design <span class="tag-count">87</span></a>
+            <a href="#" class="tag-item">Accessibilité <span class="tag-count">64</span></a>
+            <a href="#" class="tag-item">Mobile <span class="tag-count">58</span></a>
+            <a href="#" class="tag-item">Responsive <span class="tag-count">42</span></a>
+            <a href="#" class="tag-item">React <span class="tag-count">38</span></a>
+            <a href="#" class="tag-item">UI <span class="tag-count">36</span></a>
+            <a href="#" class="tag-item">Usabilité <span class="tag-count">31</span></a>
+            <a href="#" class="tag-item">Wireframes <span class="tag-count">28</span></a>
+            <a href="#" class="tag-item">Prototypage <span class="tag-count">26</span></a>
+          </div>
+        </div>
+        
+        <div class="online-users">
+          <h3 class="online-title"><i class="fas fa-circle"></i> Utilisateurs en ligne (12)</h3>
+          <div class="users-avatars">
+            <a href="#" class="user-avatar online" title="Antoine Dupont">
+              <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="Antoine D.">
+            </a>
+            <a href="#" class="user-avatar online" title="Marie Laurent">
+              <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Marie L.">
+            </a>
+            <a href="#" class="user-avatar" title="Julien Thibault">
+              <img src="https://randomuser.me/api/portraits/men/33.jpg" alt="Julien T.">
+            </a>
+            <a href="#" class="user-avatar online" title="Sophie Petit">
+              <img src="https://randomuser.me/api/portraits/women/29.jpg" alt="Sophie P.">
+            </a>
+            <a href="#" class="user-avatar" title="Thomas Moreau">
+              <img src="https://randomuser.me/api/portraits/men/54.jpg" alt="Thomas M.">
+            </a>
+            <a href="#" class="user-avatar online" title="Camille Faure">
+              <img src="https://randomuser.me/api/portraits/women/17.jpg" alt="Camille F.">
+            </a>
+            <a href="#" class="user-avatar online" title="Lucas Blanc">
+              <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Lucas B.">
+            </a>
+            <a href="#" class="user-avatar" title="Léa Richard">
+              <img src="https://randomuser.me/api/portraits/women/63.jpg" alt="Léa R.">
+            </a>
+            <a href="#" class="user-avatar online" title="Nicolas Simon">
+              <img src="https://randomuser.me/api/portraits/men/76.jpg" alt="Nicolas S.">
+            </a>
+            <a href="#" class="user-avatar" title="Emma Vidal">
+              <img src="https://randomuser.me/api/portraits/women/89.jpg" alt="Emma V.">
+            </a>
+            <a href="#" class="user-avatar online" title="Baptiste Durand">
+              <img src="https://randomuser.me/api/portraits/men/62.jpg" alt="Baptiste D.">
+            </a>
+            <a href="#" class="user-avatar online" title="Clara Martin">
+              <img src="https://randomuser.me/api/portraits/women/36.jpg" alt="Clara M.">
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Liste des sujets -->
+      <div class="forum-main">
+        <div class="forum-header">
+          <h2 class="forum-title">Discussions récentes</h2>
+          <button class="new-topic-btn"><i class="fas fa-plus"></i> Nouveau sujet</button>
+        </div>
+        
+        <div class="topics-list">
+          <!-- Sujet 1 - Featured -->
+          <div class="topic-item">
+            <a href="#" class="topic-link">
+              <div class="topic-avatar">
+                <img src="https://randomuser.me/api/portraits/women/29.jpg" alt="Sophie P.">
+              </div>
+              <div class="topic-content">
+                <h3 class="topic-title">Comment intégrer l'accessibilité dès la phase de conception ?</h3>
+                <div class="topic-meta">
+                  <span><i class="fas fa-user"></i> Par Sophie P.</span>
+                  <span><i class="fas fa-folder"></i> Accessibilité</span>
+                  <span><i class="fas fa-clock"></i> Il y a 2 heures</span>
+                </div>
+                <div class="topic-summary">
+                  Je travaille sur un projet où l'accessibilité doit être une priorité dès le départ. Quelles sont les meilleures pratiques pour intégrer ces considérations dans les wireframes et prototypes initiaux ?
+                </div>
+                <div class="post-preview">
+                  "Je recommande de commencer par les Standards WCAG 2.1 niveau AA, et surtout d'impliquer des utilisateurs ayant des besoins divers dès les premières phases de conception..."
+                </div>
+                <div class="topic-tags">
+                  <span class="topic-tag featured-tag">À la une</span>
+                  <span class="topic-tag">Accessibilité</span>
+                  <span class="topic-tag">Conception</span>
+                  <span class="topic-tag">WCAG</span>
+                </div>
+              </div>
+              <div class="topic-stats">
+                <div class="topic-stat">
+                  <div class="stat-value">24</div>
+                  <div class="stat-label">Réponses</div>
+                </div>
+                <div class="topic-stat">
+                  <div class="stat-value">183</div>
+                  <div class="stat-label">Vues</div>
+                </div>
+              </div>
+            </a>
+          </div>
+          
+          <!-- Sujet 2 - Hot -->
+          <div class="topic-item">
+            <a href="#" class="topic-link">
+              <div class="topic-avatar">
+                <img src="https://randomuser.me/api/portraits/men/54.jpg" alt="Thomas M.">
+              </div>
+              <div class="topic-content">
+                <h3 class="topic-title">Tendances UX/UI à surveiller en 2025</h3>
+                <div class="topic-meta">
+                  <span><i class="fas fa-user"></i> Par Thomas M.</span>
+                  <span><i class="fas fa-folder"></i> Design & UX</span>
+                  <span><i class="fas fa-clock"></i> Hier</span>
+                </div>
+                <div class="topic-summary">
+                  Avec l'IA qui devient de plus en plus présente, quelles sont les tendances d'interfaces que nous devrions surveiller cette année ? Je pense notamment aux interfaces conversationnelles et aux micro-interactions.
+                </div>
+                <div class="topic-tags">
+                  <span class="topic-tag hot-tag">Populaire</span>
+                  <span class="topic-tag">Tendances</span>
+                  <span class="topic-tag">IA</span>
+                  <span class="topic-tag">Interfaces</span>
+                </div>
+              </div>
+              <div class="topic-stats">
+                <div class="topic-stat">
+                  <div class="stat-value">46</div>
+                  <div class="stat-label">Réponses</div>
+                </div>
+                <div class="topic-stat">
+                  <div class="stat-value">512</div>
+                  <div class="stat-label">Vues</div>
+                </div>
+              </div>
+            </a>
+          </div>
+          
+          <!-- Sujet 3 -->
+          <div class="topic-item">
+            <a href="#" class="topic-link">
+              <div class="topic-avatar">
+                <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="Antoine D.">
+              </div>
+              <div class="topic-content">
+                <h3 class="topic-title">React vs Vue vs Angular pour les interfaces complexes</h3>
+                <div class="topic-meta">
+                  <span><i class="fas fa-user"></i> Par Antoine D.</span>
+                  <span><i class="fas fa-folder"></i> Développement</span>
+                  <span><i class="fas fa-clock"></i> 2 jours</span>
+                </div>
+                <div class="topic-summary">
+                  Notre équipe doit choisir un framework pour une application médicale avec des visualisations de données complexes et de nombreux contrôles interactifs. Quels sont vos retours d'expérience ?
+                </div>
+                <div class="topic-tags">
+                  <span class="topic-tag">React</span>
+                  <span class="topic-tag">Vue</span>
+                  <span class="topic-tag">Angular</span>
+                  <span class="topic-tag">Frameworks</span>
+                </div>
+              </div>
+              <div class="topic-stats">
+                <div class="topic-stat">
+                  <div class="stat-value">38</div>
+                  <div class="stat-label">Réponses</div>
+                </div>
+                <div class="topic-stat">
+                  <div class="stat-value">407</div>
+                  <div class="stat-label">Vues</div>
+                </div>
+              </div>
+            </a>
+          </div>
+          
+          <!-- Sujet 4 - New -->
+          <div class="topic-item">
+            <a href="#" class="topic-link">
+              <div class="topic-avatar">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Marie L.">
+              </div>
+              <div class="topic-content">
+                <h3 class="topic-title">Méthodes efficaces pour les tests utilisateurs à distance</h3>
+                <div class="topic-meta">
+                  <span><i class="fas fa-user"></i> Par Marie L.</span>
+                  <span><i class="fas fa-folder"></i> Tests utilisateurs</span>
+                  <span><i class="fas fa-clock"></i> 3 jours</span>
+                </div>
+                <div class="topic-summary">
+                  Avec le passage au télétravail, notre équipe cherche les meilleures méthodes et outils pour mener des tests utilisateurs à distance qui soient aussi efficaces qu'en présentiel.
+                </div>
+                <div class="topic-tags">
+                  <span class="topic-tag new-tag">Nouveau</span>
+                  <span class="topic-tag">Tests</span>
+                  <span class="topic-tag">Remote</span>
+                  <span class="topic-tag">Méthodologie</span>
+                </div>
+              </div>
+              <div class="topic-stats">
+                <div class="topic-stat">
+                  <div class="stat-value">19</div>
+                  <div class="stat-label">Réponses</div>
+                </div>
+                <div class="topic-stat">
+                  <div class="stat-value">256</div>
+                  <div class="stat-label">Vues</div>
+                </div>
+              </div>
+            </a>
+          </div>
+          
+          <!-- Sujet 5 -->
+          <div class="topic-item">
+            <a href="#" class="topic-link">
+              <div class="topic-avatar">
+                <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Lucas B.">
+              </div>
+              <div class="topic-content">
+                <h3 class="topic-title">Conception d'interfaces pour les appareils pliables</h3>
+                <div class="topic-meta">
+                  <span><i class="fas fa-user"></i> Par Lucas B.</span>
+                  <span><i class="fas fa-folder"></i> Design & UX</span>
+                  <span><i class="fas fa-clock"></i> 5 jours</span>
+                </div>
+                <div class="topic-summary">
+                  Avec l'augmentation des appareils à écrans pliables sur le marché, quelles sont les considérations spécifiques pour concevoir des interfaces qui tirent parti de ces nouvelles formes d'écran ?
+                </div>
+                <div class="topic-tags">
+                  <span class="topic-tag">Mobile</span>
+                  <span class="topic-tag">Pliables</span>
+                  <span class="topic-tag">Responsive</span>
+                </div>
+              </div>
+              <div class="topic-stats">
+                <div class="topic-stat">
+                  <div class="stat-value">27</div>
+                  <div class="stat-label">Réponses</div>
+                </div>
+                <div class="topic-stat">
+                  <div class="stat-value">318</div>
+                  <div class="stat-label">Vues</div>
+                </div>
+              </div>
+            </a>
+          </div>
+          
+          <!-- Sujet 6 -->
+          <div class="topic-item">
+            <a href="#" class="topic-link">
+              <div class="topic-avatar">
+                <img src="https://randomuser.me/api/portraits/men/76.jpg" alt="Nicolas S.">
+              </div>
+              <div class="topic-content">
+                <h3 class="topic-title">Les principes de Gestalt appliqués aux interfaces modernes</h3>
+                <div class="topic-meta">
+                  <span><i class="fas fa-user"></i> Par Nicolas S.</span>
+                  <span><i class="fas fa-folder"></i> Principes de l'IHM</span>
+                  <span><i class="fas fa-clock"></i> 1 semaine</span>
+                </div>
+                <div class="topic-summary">
+                  Comment appliquons-nous les principes classiques de Gestalt dans les interfaces numériques modernes ? Proximité, similitude, fermeture... ces principes sont-ils toujours pertinents ?
+                </div>
+                <div class="topic-tags">
+                  <span class="topic-tag">Gestalt</span>
+                  <span class="topic-tag">Principes</span>
+                  <span class="topic-tag">Psychologie</span>
+                </div>
+              </div>
+              <div class="topic-stats">
+                <div class="topic-stat">
+                  <div class="stat-value">32</div>
+                  <div class="stat-label">Réponses</div>
+                </div>
+                <div class="topic-stat">
+                  <div class="stat-value">285</div>
+                  <div class="stat-label">Vues</div>
+                </div>
+              </div>
+            </a>
+          </div>
+          
+          <!-- Sujet 7 -->
+          <div class="topic-item">
+            <a href="#" class="topic-link">
+              <div class="topic-avatar">
+                <img src="https://randomuser.me/api/portraits/women/17.jpg" alt="Camille F.">
+              </div>
+              <div class="topic-content">
+                <h3 class="topic-title">Interfaces haptiques : état de l'art et applications</h3>
+                <div class="topic-meta">
+                  <span><i class="fas fa-user"></i> Par Camille F.</span>
+                  <span><i class="fas fa-folder"></i> Réalité virtuelle/augmentée</span>
+                  <span><i class="fas fa-clock"></i> 1 semaine</span>
+                </div>
+                <div class="topic-summary">
+                  Je m'intéresse aux interfaces haptiques et leurs applications en VR/AR. Quels sont les dispositifs les plus prometteurs et quelles sont les meilleures pratiques pour concevoir des interactions tactiles ?
+                </div>
+                <div class="topic-tags">
+                  <span class="topic-tag">Haptique</span>
+                  <span class="topic-tag">VR/AR</span>
+                  <span class="topic-tag">Interactions</span>
+                </div>
+              </div>
+              <div class="topic-stats">
+                <div class="topic-stat">
+                  <div class="stat-value">16</div>
+                  <div class="stat-label">Réponses</div>
+                </div>
+                <div class="topic-stat">
+                  <div class="stat-value">197</div>
+                  <div class="stat-label">Vues</div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="pagination">
+          <div class="page-item">
+            <a href="#" class="page-link"><i class="fas fa-chevron-left"></i></a>
+          </div>
+          <div class="page-item">
+            <a href="#" class="page-link active">1</a>
+          </div>
+          <div class="page-item">
+            <a href="#" class="page-link">2</a>
+          </div>
+          <div class="page-item">
+            <a href="#" class="page-link">3</a>
+          </div>
+          <div class="page-item">
+            <a href="#" class="page-link">4</a>
+          </div>
+          <div class="page-item">
+            <a href="#" class="page-link">5</a>
+          </div>
+          <div class="page-item">
+            <a href="#" class="page-link"><i class="fas fa-chevron-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Section Groupes de discussion -->
+    <section class="group-section" style="margin-top: 3rem;">
+      <h2 class="forum-title" style="margin-bottom: 1.5rem;">Groupes de discussion</h2>
+      <div class="group-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+        <!-- Groupe 1 -->
+        <div class="group-card" style="background: #fff; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); padding: 1.5rem; display: flex; flex-direction: column; height: 100%;">
+          <img src="https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&w=400&q=80" alt="UX Designers" style="width: 100%; height: 90px; object-fit: cover; border-radius: 10px 10px 0 0; margin-bottom: 1rem;">
+          <h3 class="group-name">UX Designers France</h3>
+          <p class="group-description">Communauté francophone d'experts et passionnés d'expérience utilisateur. Partagez vos projets et apprenez ensemble.</p>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
+            <span style="color: #0071c2; font-weight: 500;"><i class="fas fa-user-friends"></i> 1243 membres</span>
+            <button style="background: linear-gradient(135deg, #00c2cb, #0071c2); color: #fff; border: none; border-radius: 20px; padding: 0.5rem 1.2rem; font-weight: 500; cursor: pointer;">Rejoindre</button>
+          </div>
+        </div>
+        <!-- Groupe 2 -->
+        <div class="group-card" style="background: #fff; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); padding: 1.5rem; display: flex; flex-direction: column; height: 100%;">
+          <img src="https://images.pexels.com/photos/1181355/pexels-photo-1181355.jpeg?auto=compress&w=400&q=80" alt="Accessibilité Web" style="width: 100%; height: 90px; object-fit: cover; border-radius: 10px 10px 0 0; margin-bottom: 1rem;">
+          <h3 class="group-name">Accessibilité Web</h3>
+          <p class="group-description">Groupe dédié à l'amélioration de l'accessibilité numérique pour tous. Partagez vos connaissances et bonnes pratiques.</p>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
+            <span style="color: #0071c2; font-weight: 500;"><i class="fas fa-user-friends"></i> 623 membres</span>
+            <button style="background: linear-gradient(135deg, #00c2cb, #0071c2); color: #fff; border: none; border-radius: 20px; padding: 0.5rem 1.2rem; font-weight: 500; cursor: pointer;">Rejoindre</button>
+          </div>
+        </div>
+        <!-- Groupe 3 -->
+        <div class="group-card" style="background: #fff; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); padding: 1.5rem; display: flex; flex-direction: column; height: 100%;">
+          <img src="https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&w=400&q=80" alt="Front-End Devs" style="width: 100%; height: 90px; object-fit: cover; border-radius: 10px 10px 0 0; margin-bottom: 1rem;">
+          <h3 class="group-name">Front-End Devs</h3>
+          <p class="group-description">Communauté de développeurs front-end, discussions sur HTML, CSS, JavaScript et frameworks modernes.</p>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
+            <span style="color: #0071c2; font-weight: 500;"><i class="fas fa-user-friends"></i> 1489 membres</span>
+            <button style="background: linear-gradient(135deg, #00c2cb, #0071c2); color: #fff; border: none; border-radius: 20px; padding: 0.5rem 1.2rem; font-weight: 500; cursor: pointer;">Rejoindre</button>
+          </div>
+        </div>
+        <!-- Groupe 4 -->
+        <div class="group-card" style="background: #fff; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); padding: 1.5rem; display: flex; flex-direction: column; height: 100%;">
+          <img src="https://images.pexels.com/photos/1181676/pexels-photo-1181676.jpeg?auto=compress&w=400&q=80" alt="Étudiants IHM" style="width: 100%; height: 90px; object-fit: cover; border-radius: 10px 10px 0 0; margin-bottom: 1rem;">
+          <h3 class="group-name">Étudiants IHM</h3>
+          <p class="group-description">Groupe pour les étudiants en IHM. Entraide sur les projets, partage de ressources et conseils pour débuter.</p>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
+            <span style="color: #0071c2; font-weight: 500;"><i class="fas fa-user-friends"></i> 412 membres</span>
+            <button style="background: linear-gradient(135deg, #00c2cb, #0071c2); color: #fff; border: none; border-radius: 20px; padding: 0.5rem 1.2rem; font-weight: 500; cursor: pointer;">Rejoindre</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Communications -->
+    <section class="communications-section" style="margin-top: 3rem;">
+      <h2 class="forum-title" style="margin-bottom: 1.5rem;">Communications</h2>
+      <div class="communications-container" style="display: grid; grid-template-columns: 300px 1fr; gap: 1.5rem; border-radius: 12px; overflow: hidden; border: 1px solid #e0e0e0; box-shadow: 0 8px 20px rgba(0,113,194,0.05);">
+        <!-- Sidebar contacts -->
+        <div class="contacts-sidebar" style="background: #f8fafc; padding: 1.2rem; display: flex; flex-direction: column;">
+          <div class="contacts-header" style="margin-bottom: 1rem;">
+            <input type="text" placeholder="Rechercher un contact..." style="width: 100%; padding: 0.6rem 1rem; border-radius: 20px; border: 1px solid #ddd;">
+          </div>
+          <div class="contacts-list" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.7rem;">
+            <div class="contact-item" style="display: flex; align-items: center; gap: 0.8rem; padding: 0.6rem 0.3rem; border-radius: 8px; cursor: pointer; background: #fff;">
+              <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Marie L." style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover;">
+              <div>
+                <div style="font-weight: 500; color: #222;">Marie Laurent</div>
+                <div style="font-size: 0.85rem; color: #888;">En ligne</div>
+              </div>
+            </div>
+            <div class="contact-item" style="display: flex; align-items: center; gap: 0.8rem; padding: 0.6rem 0.3rem; border-radius: 8px; cursor: pointer; background: #fff;">
+              <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="Antoine D." style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover;">
+              <div>
+                <div style="font-weight: 500; color: #222;">Antoine Dupont</div>
+                <div style="font-size: 0.85rem; color: #888;">En ligne</div>
+              </div>
+            </div>
+            <div class="contact-item" style="display: flex; align-items: center; gap: 0.8rem; padding: 0.6rem 0.3rem; border-radius: 8px; cursor: pointer; background: #fff;">
+              <img src="https://randomuser.me/api/portraits/women/29.jpg" alt="Sophie P." style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover;">
+              <div>
+                <div style="font-weight: 500; color: #222;">Sophie Petit</div>
+                <div style="font-size: 0.85rem; color: #888;">En ligne</div>
+              </div>
+            </div>
+            <div class="contact-item" style="display: flex; align-items: center; gap: 0.8rem; padding: 0.6rem 0.3rem; border-radius: 8px; cursor: pointer; background: #fff;">
+              <img src="https://randomuser.me/api/portraits/men/33.jpg" alt="Julien T." style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover;">
+              <div>
+                <div style="font-weight: 500; color: #222;">Julien Thibault</div>
+                <div style="font-size: 0.85rem; color: #888;">Hors ligne</div>
+              </div>
+            </div>
+            <div class="contact-item" style="display: flex; align-items: center; gap: 0.8rem; padding: 0.6rem 0.3rem; border-radius: 8px; cursor: pointer; background: #fff;">
+              <img src="https://randomuser.me/api/portraits/women/17.jpg" alt="Camille F." style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover;">
+              <div>
+                <div style="font-weight: 500; color: #222;">Camille Faure</div>
+                <div style="font-size: 0.85rem; color: #888;">En ligne</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Zone de chat -->
+        <div class="chat-area" style="background: #fff; display: flex; flex-direction: column; height: 600px; border-radius: 0 12px 12px 0;">
+          <div class="chat-header" style="display: flex; align-items: center; padding: 1rem 1.5rem; border-bottom: 1px solid #eee;">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Marie L." style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; margin-right: 1rem;">
+            <div style="font-weight: 600; color: #222;">Marie Laurent</div>
+            <span style="font-size: 0.85rem; color: #4CAF50; margin-left: 1rem;">En ligne</span>
+          </div>
+          <div class="chat-messages" style="flex: 1; overflow-y: auto; padding: 1.2rem; display: flex; flex-direction: column; gap: 1rem;">
+            <div style="align-self: flex-start; background: #f1f8fd; padding: 0.7rem 1rem; border-radius: 0 12px 12px 12px; max-width: 70%;">
+              Bonjour ! Je viens de regarder ton projet sur les interfaces tactiles. J'ai quelques idées à te partager.
+            </div>
+            <div style="align-self: flex-end; background: linear-gradient(135deg, #00c2cb, #0071c2); color: #fff; padding: 0.7rem 1rem; border-radius: 12px 0 12px 12px; max-width: 70%;">
+              Super ! J'adorerais avoir ton retour, surtout sur la partie des gestes de navigation que j'ai implémentée.
+            </div>
+            <div style="align-self: flex-start; background: #f1f8fd; padding: 0.7rem 1rem; border-radius: 0 12px 12px 12px; max-width: 70%;">
+              Oui, je peux t'aider avec ton projet. J'ai travaillé sur des interfaces similaires l'année dernière. Les gestes multitouches sont particulièrement intéressants.
+            </div>
+            <!-- Indicateur de saisie -->
+            <div style="align-self: flex-start; display: flex; align-items: center; gap: 8px; margin-top: 0.5rem; padding-left: 46px;">
+              <div style="display: flex; gap: 3px;">
+                <span style="width: 8px; height: 8px; border-radius: 50%; background: #00c2cb; opacity: 0.6; animation: typingAnimation 1.4s infinite ease-in-out both;"></span>
+                <span style="width: 8px; height: 8px; border-radius: 50%; background: #00c2cb; opacity: 0.6; animation: typingAnimation 1.4s infinite ease-in-out 0.2s both;"></span>
+                <span style="width: 8px; height: 8px; border-radius: 50%; background: #00c2cb; opacity: 0.6; animation: typingAnimation 1.4s infinite ease-in-out 0.4s both;"></span>
+              </div>
+              <span style="font-size: 0.8rem; color: #888;">Marie est en train d'écrire...</span>
+            </div>
+          </div>
+          <style>
+            @keyframes typingAnimation {
+              0%, 80%, 100% { transform: scale(0.6); }
+              40% { transform: scale(1); }
+            }
+          </style>
+          <div class="chat-input-area" style="padding: 1rem 1.5rem; border-top: 1px solid #eee; display: flex; gap: 0.8rem; align-items: center;">
+            <input type="text" placeholder="Écrivez votre message..." style="flex: 1; border: 1px solid #ddd; border-radius: 20px; padding: 0.7rem 1rem; font-size: 0.95rem;">
+            <button style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #00c2cb, #0071c2); border: none; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer;"><i class="fas fa-paper-plane"></i></button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <div class="logo">
+            <div class="logo-circle">IHM</div>
+            <span>IHM Technologies</span>
+          </div>
+          <p>Explorez le monde de l'Interface Homme-Machine et découvrez comment elle façonne notre avenir numérique.</p>
+          <div class="newsletter">
+            <input type="email" placeholder="Votre email" />
+            <button><i class="fas fa-paper-plane"></i></button>
+          </div>
+        </div>
+        
+        <div class="footer-links">
+          <h4>Liens rapides</h4>
+          <div class="links-grid">
+            <ul>
+              <li><a href="index.html">Accueil</a></li>
+              <li><a href="ressources.html">Ressources</a></li>
+              <li><a href="design.html">Design</a></li>
+              <li><a href="cours.html">Cours</a></li>
+              <li><a href="evenements.html">Événements</a></li>
+            </ul>
+            <ul>
+              <li><a href="concepts.html">Concepts</a></li>
+              <li><a href="forum.html">Forum</a></li>
+              <li><a href="contact.html">Contact</a></li>
+              <li><a href="connexion.html">Connexion</a></li>
+              <li><a href="#">Inscription</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="footer-contact">
+          <h4>Contact</h4>
+          <ul class="contact-list">
+            <li><i class="fas fa-map-marker-alt"></i> 123 Avenue de l'Innovation, 75001 Paris</li>
+            <li><i class="fas fa-phone"></i> +33 1 23 45 67 89</li>
+            <li><i class="fas fa-envelope"></i> contact@ihm-explorer.com</li>
+          </ul>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <div class="copyright">© 2025 IHM Technologies. Tous droits réservés.</div>
+        <div class="legal-links">
+          <a href="#">Mentions légales</a>
+          <a href="#">Politique de confidentialité</a>
+          <a href="#">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer> 
+  <!-- Scripts -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Gérer le basculement du thème
+      const themeSwitcher = document.querySelector('.theme-toggle');
+      let themeIcon = document.getElementById('theme-icon');
+  
+      // Charger le thème sauvegardé
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+        if (themeIcon) {
+          themeIcon.classList.remove('fa-moon');
+          themeIcon.classList.add('fa-sun');
+        }
+      } else {
+        // S'assurer que l'icône est correcte en mode clair
+        if (themeIcon) {
+          themeIcon.classList.remove('fa-sun');
+          themeIcon.classList.add('fa-moon');
+        }
+      }
+  
+      // 2. Mettre à jour le style du hero selon le thème actuel
+      function updateHeroStyle() {
+        const isDarkTheme = document.body.classList.contains('dark-theme');
+        
+        // Sélecteur pour toutes les classes hero possibles
+        const heroSection = document.querySelector('.hero-wave') || 
+                            document.querySelector('.hero-forum') || 
+                            document.querySelector('.hero-design') || 
+                            document.querySelector('.hero-courses');
+        
+        if (heroSection) {
+          if (isDarkTheme) {
+            heroSection.style.background = '#121a24';
+            heroSection.style.color = '#e0e0e0';
+          } else {
+            // Restaurer le style d'origine en fonction de la classe
+            if (heroSection.classList.contains('hero-forum')) {
+              heroSection.style.background = 'linear-gradient(135deg, #f1f8fd, #e0f1fc)';
+            } else {
+              heroSection.style.background = '#E5F2F8';
+            }
+            heroSection.style.color = '#333';
+          }
+        }
+      }
+      
+      // Appliquer le style du hero au chargement
+      updateHeroStyle();
+      
+      // 3. Fonction de basculement du thème
+      function toggleTheme() {
+        document.body.classList.toggle('dark-theme');
+        
+        // Récupérer une référence fraîche à l'icône
+        themeIcon = document.getElementById('theme-icon');
+        
+        if (document.body.classList.contains('dark-theme')) {
+          if (themeIcon) {
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+          }
+          localStorage.setItem('theme', 'dark');
+        } else {
+          if (themeIcon) {
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+          }
+          localStorage.setItem('theme', 'light');
+        }
+        
+        // Mettre à jour le style du hero après le changement de thème
+        updateHeroStyle();
+      }
+      
+      // 4. Ajouter l'écouteur d'événement pour le bouton de thème
+      if (themeSwitcher) {
+        // Supprimer tous les écouteurs d'événements précédents (important)
+        const newThemeSwitcher = themeSwitcher.cloneNode(true);
+        themeSwitcher.parentNode.replaceChild(newThemeSwitcher, themeSwitcher);
+        
+        // Ajouter le nouvel écouteur d'événement
+        newThemeSwitcher.addEventListener('click', toggleTheme);
+      }
+    });
+  </script>
+  <script src="script.js"></script>
+  <script src="chatbot.js"></script>
+  <script src="auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IHM Explorer - Événements</title>
+  <link rel="stylesheet" href="auth.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="evenements.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* Variables globales */
+    :root {
+      /* Couleurs de base */
+      --primary: #00bcd4;
+      --primary-dark: #0097a7;
+      --primary-light: #b2ebf2;
+      --secondary: #3f51b5;
+      --secondary-dark: #303f9f;
+      --secondary-light: #c5cae9;
+      --accent: #ff4081;
+      --accent-dark: #c60055;
+      --red: #f44336;
+      --purple: #9c27b0;
+      --blue: #2196f3;
+      --green: #4caf50;
+      
+      /* Thème clair */
+      --text-dark-light: #333;
+      --text-light-light: #666;
+      --text-lighter-light: #999;
+      --background-light: #fff;
+      --background-alt-light: #f8f9fa;
+      --border-light: #e0e0e0;
+      --shadow-light: rgba(0, 0, 0, 0.1);
+      --shadow-strong-light: rgba(0, 0, 0, 0.15);
+      
+      /* Thème sombre */
+      --text-dark-dark: #e0e0e0;
+      --text-light-dark: #b0b0b0;
+      --text-lighter-dark: #808080;
+      --background-dark: #121212;
+      --background-alt-dark: #1e1e1e;
+      --border-dark: #2a2a2a;
+      --shadow-dark: rgba(0, 0, 0, 0.25);
+      --shadow-strong-dark: rgba(0, 0, 0, 0.35);
+      
+      /* Variables dynamiques initialisées avec thème clair par défaut */
+      --text-dark: var(--text-dark-light);
+      --text-light: var(--text-light-light);
+      --text-lighter: var(--text-lighter-light);
+      --background: var(--background-light);
+      --background-alt: var(--background-alt-light);
+      --border: var(--border-light);
+      --shadow: var(--shadow-light);
+      --shadow-strong: var(--shadow-strong-light);
+      
+      /* Couleurs spécifiques pour la section hero */
+      --hero-background: #121212;
+      --hero-text: #e0e0e0;
+      --hero-light: #b0b0b0;
+      
+      /* Autres variables */
+      --radius: 8px;
+      --radius-lg: 12px;
+      --transition: 0.3s ease;
+    }
+
+    /* Reset et styles de base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background-color: var(--background);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+      position: relative;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body.dark-theme {
+      --text-dark: var(--text-dark-dark);
+      --text-light: var(--text-light-dark);
+      --text-lighter: var(--text-lighter-dark);
+      --background: var(--background-dark);
+      --background-alt: var(--background-alt-dark);
+      --border: var(--border-dark);
+      --shadow: var(--shadow-dark);
+      --shadow-strong: var(--shadow-strong-dark);
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: color 0.3s ease;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Utilitaires */
+    .section-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .section-hidden {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .section-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .gradient-text {
+      position: relative;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+      animation: text-shimmer 6s infinite linear;
+      background-size: 200% 100%;
+    }
+
+    .gradient-text::after {
+      content: 'Événements';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, transparent 0%, transparent 40%, rgba(255, 255, 255, 0.6) 50%, transparent 60%, transparent 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: text-shine 5s infinite;
+      background-size: 200% 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    @keyframes text-shimmer {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    @keyframes text-shine {
+      0% { background-position: -100% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    /* ===== STYLES SPÉCIFIQUES À LA PAGE ÉVÉNEMENTS ===== */
+    
+    /* Hero section événements */
+    .hero-events {
+      min-height: 60vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 10rem 0 6rem;
+      background-color: var(--background);
+      color: var(--text-dark);
+    }
+    
+    .animated-banner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      overflow: hidden;
+    }
+    
+    /* Bulles avancées avec effet de brillance */
+    .bubbles-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, 
+        rgba(0, 188, 212, 0.6), 
+        rgba(0, 188, 212, 0.2) 60%, 
+        rgba(0, 188, 212, 0.1) 80%);
+      backdrop-filter: blur(2px);
+      box-shadow: 
+        inset 0 0 20px rgba(255, 255, 255, 0.5),
+        0 0 10px rgba(0, 188, 212, 0.3);
+      animation: float-bubble 15s linear infinite;
+      opacity: 0.8;
+    }
+    
+    .bubble::after {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: 15%;
+      width: 30%;
+      height: 30%;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.6);
+      filter: blur(3px);
+    }
+    
+    .bubble-1 {
+      width: 150px;
+      height: 150px;
+      top: 20%;
+      left: 10%;
+      animation-duration: 25s;
+    }
+    
+    .bubble-2 {
+      width: 100px;
+      height: 100px;
+      top: 50%;
+      left: 20%;
+      animation-delay: 2s;
+      animation-duration: 18s;
+      background: radial-gradient(circle at 30% 30%, 
+        rgba(63, 81, 181, 0.6), 
+        rgba(63, 81, 181, 0.2) 60%, 
+        rgba(63, 81, 181, 0.1) 80%);
+      box-shadow: 
+        inset 0 0 20px rgba(255, 255, 255, 0.5),
+        0 0 10px rgba(63, 81, 181, 0.3);
+    }
+    
+    .bubble-3 {
+      width: 80px;
+      height: 80px;
+      top: 70%;
+      left: 70%;
+      animation-delay: 4s;
+      animation-duration: 20s;
+    }
+    
+    .bubble-4 {
+      width: 120px;
+      height: 120px;
+      top: 30%;
+      left: 80%;
+      animation-delay: 1s;
+      animation-duration: 22s;
+      background: radial-gradient(circle at 30% 30%, 
+        rgba(63, 81, 181, 0.6), 
+        rgba(63, 81, 181, 0.2) 60%, 
+        rgba(63, 81, 181, 0.1) 80%);
+      box-shadow: 
+        inset 0 0 20px rgba(255, 255, 255, 0.5),
+        0 0 10px rgba(63, 81, 181, 0.3);
+    }
+    
+    .bubble-5 {
+      width: 200px;
+      height: 200px;
+      top: 60%;
+      left: 40%;
+      animation-delay: 3s;
+      animation-duration: 28s;
+      opacity: 0.6;
+    }
+    
+    .bubble-6 {
+      width: 70px;
+      height: 70px;
+      top: 20%;
+      left: 50%;
+      animation-delay: 5s;
+      animation-duration: 15s;
+      background: radial-gradient(circle at 30% 30%, 
+        rgba(63, 81, 181, 0.6), 
+        rgba(63, 81, 181, 0.2) 60%, 
+        rgba(63, 81, 181, 0.1) 80%);
+      box-shadow: 
+        inset 0 0 20px rgba(255, 255, 255, 0.5),
+        0 0 10px rgba(63, 81, 181, 0.3);
+    }
+    
+    @keyframes float-bubble {
+      0% {
+        transform: translate(0, 0) rotate(0);
+        opacity: 0.8;
+      }
+      25% {
+        transform: translate(-20px, -30px) rotate(10deg);
+        opacity: 0.9;
+      }
+      50% {
+        transform: translate(20px, -60px) rotate(-5deg);
+        opacity: 0.7;
+      }
+      75% {
+        transform: translate(-10px, -90px) rotate(10deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translate(0, -120px) rotate(0);
+        opacity: 0;
+      }
+    }
+    
+    /* Effets de brillance supplémentaires */
+    .shine-effect {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0) 0%, 
+        rgba(255, 255, 255, 0.05) 25%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        rgba(255, 255, 255, 0.05) 75%, 
+        rgba(255, 255, 255, 0) 100%);
+      background-size: 200% 200%;
+      animation: shine-move 8s ease-in-out infinite;
+      pointer-events: none;
+    }
+    
+    @keyframes shine-move {
+      0% { background-position: -100% -100%; }
+      50% { background-position: 100% 100%; }
+      100% { background-position: -100% -100%; }
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      max-width: 900px;
+      padding: 0 1.5rem;
+    }
+    
+    @keyframes shine-effect {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+    
+    .hero-events h1 {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    
+    .hero-events p {
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      color: var(--text-light);
+    }
+    
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .hero-stat {
+      background: rgba(0, 188, 212, 0.05);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      text-align: center;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      border: 1px solid rgba(0, 188, 212, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .hero-stat:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      border-color: var(--primary);
+    }
+    
+    .hero-stat .number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    
+    .hero-stat .label {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+    
+    /* Events Section */
+    .events-section {
+      padding: 5rem 0;
+      position: relative;
+    }
+    
+    .section-head {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 2px;
+    }
+    
+    .section-description {
+      color: var(--text-light);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    
+    /* Filtres d'événements */
+    .events-filter {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 3rem;
+    }
+    
+    .filter-item {
+      padding: 0.7rem 1.2rem;
+      border-radius: 30px;
+      background: var(--background-alt);
+      color: var(--text-light);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid var(--border);
+    }
+    
+    .filter-item:hover, .filter-item.active {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 188, 212, 0.2);
+    }
+    
+    /* Grille des évènements */
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    
+    .event-card {
+      background: var(--background);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 10px 25px var(--shadow);
+      transition: all 0.3s ease;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      border: 1px solid var(--border);
+    }
+    
+    .event-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      border-color: var(--primary-light);
+    }
+    
+    .event-header {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .event-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: all 0.5s ease;
+    }
+    
+    .event-card:hover .event-image {
+      transform: scale(1.1);
+    }
+    
+    .event-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7));
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      color: white;
+    }
+    
+    .event-category {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: var(--primary);
+      color: white;
+      z-index: 2;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .event-date {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      width: 60px;
+      height: 70px;
+      background: white;
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      z-index: 2;
+    }
+    
+    .event-date::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: var(--primary);
+    }
+    
+    .event-day {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      line-height: 1;
+    }
+    
+    .event-month {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      color: var(--text-light);
+      font-weight: 600;
+    }
+    
+    .event-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: white;
+    }
+    
+    .event-details {
+      padding: 1.5rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .event-location, .event-time {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0.7rem;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+    
+    .event-description {
+      margin: 1rem 0;
+      color: var(--text-light);
+      flex-grow: 1;
+    }
+    
+    .event-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .event-price {
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .event-price.free {
+      color: var(--green);
+    }
+    
+    .btn-register {
+      padding: 0.6rem 1.2rem;
+      background: var(--primary);
+      color: white;
+      border-radius: var(--radius);
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-register:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+    }
+    
+    /* Featured Event */
+    .featured-event {
+      margin-bottom: 5rem;
+      position: relative;
+    }
+    
+    .featured-card {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      background: var(--background);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 15px 30px var(--shadow);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    @media (min-width: 992px) {
+      .featured-card {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    
+    .featured-image {
+      position: relative;
+      height: 300px;
+      overflow: hidden;
+    }
+    
+    @media (min-width: 992px) {
+      .featured-image {
+        height: auto;
+      }
+    }
+    
+    .featured-image img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .featured-content {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .featured-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      width: fit-content;
+    }
+    
+    .featured-badge i {
+      color: var(--primary);
+    }
+    
+    .featured-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text-dark);
+    }
+    
+    .featured-meta {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-light);
+    }
+    
+    .meta-item i {
+      color: var(--primary);
+    }
+    
+    .featured-description {
+      margin-bottom: 2rem;
+      color: var(--text-light);
+    }
+    
+    .featured-actions {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    /* Événements liés à l'IHM */
+    .ihm-events {
+      padding: 5rem 0;
+      position: relative;
+      background: var(--background-alt);
+    }
+    
+    .technologies-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1rem;
+      margin: 3rem 0;
+    }
+    
+    .technology-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background: var(--background);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px var(--shadow);
+    }
+    
+    .technology-item:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 20px var(--shadow-strong);
+    }
+    
+    .technology-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+    
+    .technology-name {
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+    
+    .cta-section {
+      padding: 5rem 0;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .cta-container {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    
+    .cta-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+    
+    .cta-description {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+    
+    .cta-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
+    
+    .cta-btn {
+      padding: 1rem 2rem;
+      background: white;
+      color: var(--primary);
+      font-weight: 600;
+      border-radius: var(--radius);
+      transition: all 0.3s ease;
+      border: 2px solid white;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .cta-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .cta-btn.outline {
+      background: transparent;
+      color: white;
+    }
+    
+    .cta-circles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .cta-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .cta-circle-1 {
+      width: 300px;
+      height: 300px;
+      top: -100px;
+      right: -100px;
+    }
+    
+    .cta-circle-2 {
+      width: 200px;
+      height: 200px;
+      bottom: -50px;
+      left: -50px;
+    }
+    
+    .cta-circle-3 {
+      width: 150px;
+      height: 150px;
+      top: 50%;
+      left: 30%;
+      transform: translateY(-50%);
+    }
+    
+    .loading-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.3rem;
+      margin-top: 2rem;
+    }
+    
+    .loading-dot {
+      width: 0.8rem;
+      height: 0.8rem;
+      background-color: var(--border);
+      border-radius: 50%;
+      animation: loading 1.5s infinite ease-in-out;
+    }
+    
+    .loading-dot:nth-child(1) {
+      animation-delay: 0s;
+      background-color: var(--primary);
+    }
+    
+    .loading-dot:nth-child(2) {
+      animation-delay: 0.2s;
+      background-color: var(--secondary);
+    }
+    
+    .loading-dot:nth-child(3) {
+      animation-delay: 0.4s;
+      background-color: var(--accent);
+    }
+    
+    @keyframes loading {
+      0%, 100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+      }
+      50% {
+        transform: scale(1.2);
+        opacity: 1;
+      }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-events h1 {
+        font-size: 2.2rem;
+      }
+      
+      .hero-stats {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+      
+      .hero-stat {
+        width: 100%;
+        max-width: 300px;
+      }
+      
+      .featured-title {
+        font-size: 1.5rem;
+      }
+      
+      .featured-meta {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      
+      .cta-title {
+        font-size: 2rem;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .events-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .technologies-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .hero-events {
+        padding: 8rem 0 4rem;
+      }
+      
+      .featured-card {
+        padding: 0;
+      }
+      
+      .featured-content {
+        padding: 1.5rem;
+      }
+    }
+
+    .online-trainings-section .section-title {
+      text-align: center !important;
+      display: block;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header avec navigation -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-circle">IHM</div>
+      <span>IHM Technologies</span>
+    </div>
+    <nav class="nav">
+      <a href="index.html">Accueil</a>
+      <a href="concepts.html">Concepts</a>
+      <a href="ressources.html">Ressources</a>
+      <a href="design.html">Design</a>
+      <a href="cours.html">Cours</a>
+      <a href="evenements.html" class="active">Événements</a>
+      <a href="forum.html">Forum</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <button class="theme-toggle" aria-label="Basculer mode sombre">
+        <i class="fas fa-moon" id="theme-icon"></i>
+      </button>
+      <a href="connexion.html" class="login-btn">
+        <i class="fas fa-user"></i>
+        <span>Connexion</span>
+      </a>
+      <button class="menu-toggle" aria-label="Menu mobile">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Menu mobile (affiché uniquement sur mobile) -->
+  <div class="mobile-menu">
+    <div class="mobile-menu-header">
+      <div class="logo">
+        <div class="logo-circle">IHM</div>
+        <span>IHM Technologies</span>
+      </div>
+      <button class="close-menu">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <nav class="mobile-nav">
+      <a href="index.html">Accueil</a>
+      <a href="concepts.html">Concepts</a>
+      <a href="ressources.html">Ressources</a>
+      <a href="design.html">Design</a>
+      <a href="cours.html">Cours</a>
+      <a href="evenements.html" class="active">Événements</a>
+      <a href="forum.html">Forum</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="mobile-actions">
+      <a href="connexion.html" class="btn outline-btn">
+        <i class="fas fa-user"></i>
+        <span>Connexion</span>
+      </a>
+      <div class="mobile-social">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay pour menu mobile -->
+  <div class="overlay"></div>
+
+  <!-- Hero Section Événements -->
+  <section class="hero-events section-hidden">
+    <div class="animated-banner">
+      <!-- Bulles avancées avec brillance -->
+      <div class="bubbles-container">
+        <div class="bubble bubble-1"></div>
+        <div class="bubble bubble-2"></div>
+        <div class="bubble bubble-3"></div>
+        <div class="bubble bubble-4"></div>
+        <div class="bubble bubble-5"></div>
+        <div class="bubble bubble-6"></div>
+      </div>
+      <!-- Effet de brillance global -->
+      <div class="shine-effect"></div>
+      <!-- Les vagues ont été supprimées -->
+    </div>
+    
+    <div class="hero-content">
+        <!-- Badge supprimé -->
+      <h1>Calendrier des <span class="gradient-text">Événements</span></h1>
+      <p>Participez aux conférences, hackathons, ateliers et rencontres autour des interfaces homme-machine et des nouvelles technologies d'interaction.</p>
+      
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="number">48</span>
+          <span class="label">Événements programmés en 2025</span>
+        </div>
+        <div class="hero-stat">
+          <span class="number">15+</span>
+          <span class="label">Villes en France</span>
+        </div>
+        <div class="hero-stat">
+          <span class="number">5000+</span>
+          <span class="label">Participants chaque année</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Événement mis en avant -->
+  <section class="featured-event section-container section-hidden">
+    <div class="featured-card">
+      <div class="featured-image">
+        <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Hackathon 18 Juin">
+      </div>
+      <div class="featured-content">
+        <div class="featured-badge">
+          <i class="fas fa-star"></i>
+          Événement à la une
+        </div>
+        <h2 class="featured-title">IHM Summit 2025: L'avenir des interfaces multimodales</h2>
+        <div class="featured-meta">
+          <div class="meta-item">
+            <i class="fas fa-calendar-alt"></i>
+            <span>12-15 Juin 2025</span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Palais des Congrès, Paris</span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-users"></i>
+            <span>1200+ participants</span>
+          </div>
+        </div>
+        <p class="featured-description">Rejoignez le plus grand sommet européen dédié aux interfaces homme-machine. Quatre jours de conférences, d'ateliers et de networking avec les meilleurs experts internationaux pour explorer les dernières innovations en matière d'interactions multimodales, d'intelligence artificielle et d'expérience utilisateur.</p>
+        <div class="featured-actions">
+          <a href="#" class="btn primary">
+            <i class="fas fa-ticket-alt"></i>
+            Réserver ma place
+          </a>
+          <a href="#" class="btn outline-btn">
+            <i class="fas fa-info-circle"></i>
+            En savoir plus
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Section Événements -->
+  <section class="events-section section-hidden">
+    <div class="section-container">
+      <div class="section-head">
+        <h2 class="section-title">Prochains Événements</h2>
+        <p class="section-description">Découvrez les événements à venir et réservez votre place dès maintenant</p>
+      </div>
+      
+      <!-- Filtres -->
+      <div class="events-filter">
+        <button class="filter-item active" data-filter="all">Tous</button>
+        <button class="filter-item" data-filter="conference">Conférences</button>
+        <button class="filter-item" data-filter="workshop">Ateliers</button>
+        <button class="filter-item" data-filter="hackathon">Hackathons</button>
+        <button class="filter-item" data-filter="seminar">Séminaires</button>
+        <button class="filter-item" data-filter="webinar">Webinaires</button>
+      </div>
+      
+      <!-- Grille d'événements -->
+      <div class="events-grid">
+        <!-- Événement 1 -->
+        <div class="event-card" data-category="conference">
+          <div class="event-header">
+            <img src="https://images.unsplash.com/photo-1558636508-e0db3814bd1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="UX Conference" class="event-image">
+            <div class="event-overlay">
+              <h3 class="event-title">Conférence UX: L'art de la conception centrée utilisateur</h3>
+            </div>
+            <div class="event-category">Conférence</div>
+            <div class="event-date">
+              <span class="event-day">25</span>
+              <span class="event-month">MAI</span>
+            </div>
+          </div>
+          <div class="event-details">
+            <div class="event-location">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Centre des Congrès, Lyon</span>
+            </div>
+            <div class="event-time">
+              <i class="fas fa-clock"></i>
+              <span>9h00 - 18h00</span>
+            </div>
+            <p class="event-description">Une journée complète dédiée aux meilleures pratiques de conception centrée utilisateur avec des intervenants de renommée internationale.</p>
+          </div>
+          <div class="event-footer">
+            <div class="event-price">75€</div>
+            <a href="#" class="btn-register">
+              <i class="fas fa-ticket-alt"></i>
+              S'inscrire
+            </a>
+          </div>
+        </div>
+        
+        <!-- Événement 2 -->
+        <div class="event-card" data-category="workshop">
+          <div class="event-header">
+            <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Workshop AR/VR" class="event-image">
+            <div class="event-overlay">
+              <h3 class="event-title">Atelier pratique: Création d'interfaces en réalité virtuelle</h3>
+            </div>
+            <div class="event-category">Atelier</div>
+            <div class="event-date">
+              <span class="event-day">04</span>
+              <span class="event-month">JUIN</span>
+            </div>
+          </div>
+          <div class="event-details">
+            <div class="event-location">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Campus numérique, Bordeaux</span>
+            </div>
+            <div class="event-time">
+              <i class="fas fa-clock"></i>
+              <span>14h00 - 17h30</span>
+            </div>
+            <p class="event-description">Apprenez à concevoir et prototyper des interfaces immersives en réalité virtuelle. Places limitées à 25 participants.</p>
+          </div>
+          <div class="event-footer">
+            <div class="event-price">50€</div>
+            <a href="#" class="btn-register">
+              <i class="fas fa-ticket-alt"></i>
+              S'inscrire
+            </a>
+          </div>
+        </div>
+        
+        <!-- Événement 3 -->
+        <div class="event-card" data-category="webinar">
+          <div class="event-header">
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="AI Webinar" class="event-image">
+            <div class="event-overlay">
+              <h3 class="event-title">Webinaire: Intelligence artificielle et expérience utilisateur</h3>
+            </div>
+            <div class="event-category">Webinaire</div>
+            <div class="event-date">
+              <span class="event-day">12</span>
+              <span class="event-month">JUIN</span>
+            </div>
+          </div>
+          <div class="event-details">
+            <div class="event-location">
+              <i class="fas fa-globe"></i>
+              <span>En ligne</span>
+            </div>
+            <div class="event-time">
+              <i class="fas fa-clock"></i>
+              <span>11h00 - 12h30</span>
+            </div>
+            <p class="event-description">Comment l'IA transforme l'expérience utilisateur et quelles sont les dernières innovations dans ce domaine? Participez à notre webinaire interactif.</p>
+          </div>
+          <div class="event-footer">
+            <div class="event-price free">Gratuit</div>
+            <a href="#" class="btn-register">
+              <i class="fas fa-ticket-alt"></i>
+              S'inscrire
+            </a>
+          </div>
+        </div>
+        
+        <!-- Événement 4 -->
+        <div class="event-card" data-category="hackathon">
+          <div class="event-header">
+            <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Hackathon" class="event-image">
+            <div class="event-overlay">
+              <h3 class="event-title">HackIHM 2025: Interfaces du futur</h3>
+            </div>
+            <div class="event-category">Hackathon</div>
+            <div class="event-date">
+              <span class="event-day">18</span>
+              <span class="event-month">JUIN</span>
+            </div>
+          </div>
+          <div class="event-details">
+            <div class="event-location">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Station F, Paris</span>
+            </div>
+            <div class="event-time">
+              <i class="fas fa-clock"></i>
+              <span>36 heures</span>
+            </div>
+            <p class="event-description">Développez des interfaces innovantes lors de ce hackathon de 36 heures. Prix à gagner et opportunités de financement pour les meilleurs projets.</p>
+          </div>
+          <div class="event-footer">
+            <div class="event-price">175€</div>
+            <a href="#" class="btn-register">
+              <i class="fas fa-ticket-alt"></i>
+              S'inscrire
+            </a>
+          </div>
+        </div>
+        
+        <!-- Événement 5 -->
+        <div class="event-card" data-category="seminar">
+          <div class="event-header">
+            <img src="https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Accessibility Seminar" class="event-image">
+            <div class="event-overlay">
+              <h3 class="event-title">Séminaire: Accessibilité et inclusion numérique</h3>
+            </div>
+            <div class="event-category">Séminaire</div>
+            <div class="event-date">
+              <span class="event-day">22</span>
+              <span class="event-month">JUIN</span>
+            </div>
+          </div>
+          <div class="event-details">
+            <div class="event-location">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Université Numérique, Lille</span>
+            </div>
+            <div class="event-time">
+              <i class="fas fa-clock"></i>
+              <span>9h30 - 16h00</span>
+            </div>
+            <p class="event-description">Comment créer des interfaces accessibles à tous? Explorez les principes, normes et technologies d'accessibilité numérique lors de ce séminaire complet.</p>
+          </div>
+          <div class="event-footer">
+            <div class="event-price">100€</div>
+            <a href="#" class="btn-register">
+              <i class="fas fa-ticket-alt"></i>
+              S'inscrire
+            </a>
+          </div>
+        </div>
+        
+        <!-- Événement 6 -->
+        <div class="event-card" data-category="workshop">
+          <div class="event-header">
+            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Mobile UX Workshop" class="event-image">
+            <div class="event-overlay">
+              <h3 class="event-title">Atelier pratique: Optimisation UX pour appareils mobiles</h3>
+            </div>
+            <div class="event-category">Atelier</div>
+            <div class="event-date">
+              <span class="event-day">28</span>
+              <span class="event-month">JUIN</span>
+            </div>
+          </div>
+          <div class="event-details">
+            <div class="event-location">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Hub Innovation, Nantes</span>
+            </div>
+            <div class="event-time">
+              <i class="fas fa-clock"></i>
+              <span>10h00 - 16h00</span>
+            </div>
+            <p class="event-description">Maîtrisez les techniques de conception d'interfaces mobiles intuitives et performantes. Atelier pratique avec retours personnalisés sur vos projets.</p>
+          </div>
+          <div class="event-footer">
+            <div class="event-price">150€</div>
+            <a href="#" class="btn-register">
+              <i class="fas fa-ticket-alt"></i>
+              S'inscrire
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Indicateur de chargement -->
+      <div class="loading-dots">
+        <div class="loading-dot"></div>
+        <div class="loading-dot"></div>
+        <div class="loading-dot"></div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Section Formations en ligne certifiantes -->
+  <section class="online-trainings-section" style="background: #f8fbfd; border-radius: 16px; box-shadow: 0 8px 30px rgba(0,113,194,0.08); padding: 2.5rem 1.5rem; margin: 3rem 0 2.5rem 0; max-width: 1100px; margin-left: auto; margin-right: auto;">
+    <h2 class="section-title" style="text-align:center; color:#333; font-size:2rem; margin-bottom:2rem;">Formations en ligne certifiantes</h2>
+    <div class="training-boxes" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem;">
+      <!-- Box MOOC -->
+      <div class="training-box" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,113,194,0.07);">
+        <div class="box-image" style="height: 200px; overflow: hidden;">
+          <img src="https://images.pexels.com/photos/1181304/pexels-photo-1181304.jpeg?auto=compress&w=800&q=80" alt="MOOC" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div class="box-content" style="padding: 1.5rem;">
+          <h3 style="color:#0071c2; font-size:1.3rem; margin-bottom:1rem;">MOOC et Plateformes Académiques</h3>
+          <p style="color:#555; margin-bottom:1.5rem;">Formations en ligne ouvertes à tous sur les grandes plateformes académiques.</p>
+          <div style="display:flex; gap:0.5rem; margin-bottom:1.5rem; flex-wrap:wrap;">
+            <span class="tag" style="background:#e5f2f8; color:#00c2cb; border-radius:12px; padding:0.2rem 0.8rem; font-size:0.85rem;">FUN MOOC</span>
+            <span class="tag" style="background:#e5f2f8; color:#0071c2; border-radius:12px; padding:0.2rem 0.8rem; font-size:0.85rem;">OpenClassrooms</span>
+            <span class="tag" style="background:#e5f2f8; color:#00c2cb; border-radius:12px; padding:0.2rem 0.8rem; font-size:0.85rem;">edX</span>
+          </div>
+          <div style="display:flex; gap:0.7rem; align-items:center;">
+            <button style="background:#00c2cb; color:white; border:none; border-radius:20px; padding:0.4rem 1.1rem; font-size:0.95rem; cursor:pointer;">Explorer</button>
+            <button style="background:#0071c2; color:white; border:none; border-radius:20px; padding:0.4rem 1.1rem; font-size:0.95rem; cursor:pointer;">Suivre</button>
+            <button style="background:#00b894; color:white; border:none; border-radius:20px; padding:0.4rem 1.1rem; font-size:0.95rem; cursor:pointer;">Certification/Evaluation</button>
+          </div>
+        </div>
+      </div>
+      <!-- Box Certifications -->
+      <div class="training-box" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,113,194,0.07);">
+        <div class="box-image" style="height: 200px; overflow: hidden;">
+          <img src="https://images.pexels.com/photos/1181351/pexels-photo-1181351.jpeg?auto=compress&w=800&q=80" alt="Certifications" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div class="box-content" style="padding: 1.5rem;">
+          <h3 style="color:#0071c2; font-size:1.3rem; margin-bottom:1rem;">Certifications Professionnelles</h3>
+          <p style="color:#555; margin-bottom:1.5rem;">Accédez aux certifications reconnues en IHM, UX et UI proposées par les leaders du secteur.</p>
+          <div style="display:flex; gap:0.5rem; margin-bottom:1.5rem; flex-wrap:wrap;">
+            <span class="tag" style="background:#e5f2f8; color:#00c2cb; border-radius:12px; padding:0.2rem 0.8rem; font-size:0.85rem;">Google UX Design</span>
+            <span class="tag" style="background:#e5f2f8; color:#0071c2; border-radius:12px; padding:0.2rem 0.8rem; font-size:0.85rem;">Coursera</span>
+            <span class="tag" style="background:#e5f2f8; color:#00c2cb; border-radius:12px; padding:0.2rem 0.8rem; font-size:0.85rem;">IDF</span>
+          </div>
+          <div style="display:flex; gap:0.7rem; align-items:center;">
+            <button style="background:#00c2cb; color:white; border:none; border-radius:20px; padding:0.4rem 1.1rem; font-size:0.95rem; cursor:pointer;">Explorer</button>
+            <button style="background:#0071c2; color:white; border:none; border-radius:20px; padding:0.4rem 1.1rem; font-size:0.95rem; cursor:pointer;">Suivre</button>
+            <button style="background:#00b894; color:white; border:none; border-radius:20px; padding:0.4rem 1.1rem; font-size:0.95rem; cursor:pointer;">Certification/Evaluation</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Section technologies IHM -->
+  <section class="ihm-events section-hidden">
+    <div class="section-container">
+      <div class="section-head">
+        <h2 class="section-title">Technologies IHM</h2>
+        <p class="section-description">Explorez les événements par domaine technologique</p>
+      </div>
+      
+      <div class="technologies-grid">
+        
+        <div class="technology-item">
+          <div class="technology-icon">
+            <i class="fas fa-mobile-alt"></i>
+          </div>
+          <h3 class="technology-name">Mobile</h3>
+        </div>
+        
+        <div class="technology-item">
+          <div class="technology-icon">
+            <i class="fas fa-brain"></i>
+          </div>
+          <h3 class="technology-name">IA & ML</h3>
+        </div>
+        
+        <div class="technology-item">
+          <div class="technology-icon">
+            <i class="fas fa-universal-access"></i>
+          </div>
+          <h3 class="technology-name">Accessibilité</h3>
+        </div>
+        
+        <div class="technology-item">
+          <div class="technology-icon">
+            <i class="fas fa-robot"></i>
+          </div>
+          <h3 class="technology-name">Robotique</h3>
+        </div>
+        
+        <div class="technology-item">
+          <div class="technology-icon">
+            <i class="fas fa-hand-pointer"></i>
+          </div>
+          <h3 class="technology-name">Tactile</h3>
+        </div>
+        
+        <div class="technology-item">
+          <div class="technology-icon">
+            <i class="fas fa-microphone-alt"></i>
+          </div>
+          <h3 class="technology-name">Vocal</h3>
+        </div>
+        
+        <div class="technology-item">
+          <div class="technology-icon">
+            <i class="fas fa-glasses"></i>
+          </div>
+          <h3 class="technology-name">Réalité augmentée</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- CTA Section -->
+  <section class="cta-section section-hidden">
+    <div class="cta-circles">
+      <div class="cta-circle cta-circle-1"></div>
+      <div class="cta-circle cta-circle-2"></div>
+      <div class="cta-circle cta-circle-3"></div>
+    </div>
+    
+    <div class="cta-container">
+      <h2 class="cta-title">Vous organisez un événement IHM ?</h2>
+      <p class="cta-description">Faites connaître votre événement à notre communauté de plus de 50 000 experts et passionnés d'interfaces homme-machine.</p>
+      <div class="cta-buttons">
+        <a href="#" class="cta-btn">Proposer un événement</a>
+        <a href="#" class="cta-btn outline">Devenir partenaire</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <div class="logo">
+            <div class="logo-circle">IHM</div>
+            <span>IHM Technologies</span>
+          </div>
+          <p>Explorez le monde de l'Interface Homme-Machine et découvrez comment elle façonne notre avenir numérique.</p>
+          <div class="newsletter">
+            <input type="email" placeholder="Votre email" />
+            <button><i class="fas fa-paper-plane"></i></button>
+          </div>
+        </div>
+        
+        <div class="footer-links">
+          <h4>Liens rapides</h4>
+          <div class="links-grid">
+            <ul>
+              <li><a href="index.html">Accueil</a></li>
+              <li><a href="ressources.html">Ressources</a></li>
+              <li><a href="design.html">Design</a></li>
+              <li><a href="cours.html">Cours</a></li>
+              <li><a href="evenements.html">Événements</a></li>
+            </ul>
+            <ul>
+              <li><a href="concepts.html">Concepts</a></li>
+              <li><a href="forum.html">Forum</a></li>
+              <li><a href="contact.html">Contact</a></li>
+              <li><a href="connexion.html">Connexion</a></li>
+              <li><a href="#">Inscription</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="footer-contact">
+          <h4>Contact</h4>
+          <ul class="contact-list">
+            <li><i class="fas fa-map-marker-alt"></i> 123 Avenue de l'Innovation, 75001 Paris</li>
+            <li><i class="fas fa-phone"></i> +33 1 23 45 67 89</li>
+            <li><i class="fas fa-envelope"></i> contact@ihm-explorer.com</li>
+          </ul>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <div class="copyright">© 2025 IHM Technologies. Tous droits réservés.</div>
+        <div class="legal-links">
+          <a href="#">Mentions légales</a>
+          <a href="#">Politique de confidentialité</a>
+          <a href="#">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Éléments DOM
+      const themeSwitcher = document.querySelector('.theme-toggle');
+      const menuToggle = document.querySelector('.menu-toggle');
+      const closeMenu = document.querySelector('.close-menu');
+      const overlay = document.querySelector('.overlay');
+      const mobileMenu = document.querySelector('.mobile-menu');
+      const filterButtons = document.querySelectorAll('.filter-item');
+      const eventCards = document.querySelectorAll('.event-card');
+      
+      // Fonction pour basculer le thème
+      function toggleTheme() {
+        document.body.classList.toggle('dark-theme');
+        const themeIcon = document.getElementById('theme-icon');
+        
+        if (document.body.classList.contains('dark-theme')) {
+          themeIcon.classList.remove('fa-moon');
+          themeIcon.classList.add('fa-sun');
+          localStorage.setItem('theme', 'dark');
+        } else {
+          themeIcon.classList.remove('fa-sun');
+          themeIcon.classList.add('fa-moon');
+          localStorage.setItem('theme', 'light');
+        }
+      }
+      
+      // Charger le thème sauvegardé
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+        const themeIcon = document.getElementById('theme-icon');
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+      }
+      
+      // Filtres d'événements
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // Mise à jour des boutons actifs
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
+          
+          // Filtrage des événements
+          const filter = button.getAttribute('data-filter');
+          
+          eventCards.forEach(card => {
+            if (filter === 'all' || card.getAttribute('data-category') === filter) {
+              card.style.display = 'flex';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+      
+      // Menu mobile
+      menuToggle.addEventListener('click', () => {
+        mobileMenu.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+      
+      closeMenu.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+      
+      overlay.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+      
+      // Commutateur de thème
+      themeSwitcher.addEventListener('click', toggleTheme);
+      
+      // Animation au défilement
+      function handleScroll() {
+        const sections = document.querySelectorAll('.section-hidden');
+        const header = document.querySelector('.header');
+        
+        // Modifier le header au défilement
+        if (window.scrollY > 50) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+        
+        // Animer les sections au défilement
+        sections.forEach(section => {
+          const sectionTop = section.getBoundingClientRect().top;
+          const windowHeight = window.innerHeight;
+          
+          if (sectionTop < windowHeight * 0.85) {
+            section.classList.add('section-visible');
+          }
+        });
+      }
+      
+      // Observer les sections pour l'animation au défilement
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('section-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      // Observer les sections
+      const sections = document.querySelectorAll('.section-hidden');
+      sections.forEach(section => {
+        observer.observe(section);
+      });
+      
+      // Écouteur de défilement
+      window.addEventListener('scroll', handleScroll);
+      
+      // Déclencher manuellement pour animer les éléments visibles au chargement
+      handleScroll();
+      
+      // Simuler le chargement d'autres événements après un délai
+      setTimeout(() => {
+        document.querySelector('.loading-dots').style.display = 'none';
+      }, 3000);
+    });
+  </script>
+    <script src="chatbot.js"></script>
+  <script src="auth.js"></script>
+</body>
+</html>

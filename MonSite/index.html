@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IHM Explorer</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="auth.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .testimonials-section .section-title {
+      text-align: center !important;
+      width: 100%;
+      display: block;
+      color: #111;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header avec navigation -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-circle">IHM</div>
+      <span>IHM Technologies</span>
+    </div>
+    <nav class="nav">
+      <a href="index.html" class="active">Accueil</a>
+      <a href="concepts.html">Concepts</a>
+      <a href="ressources.html">Ressources</a>
+      <a href="design.html">Design</a>
+      <a href="cours.html">Cours</a>
+      <a href="evenements.html">Événements</a>
+      <a href="forum.html">Forum</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <button class="theme-toggle" aria-label="Basculer mode sombre">
+        <i class="fas fa-moon" id="theme-icon"></i>
+      </button>
+      <a href="connexion.html" class="login-btn">
+        <i class="fas fa-user"></i>
+        <span>Connexion</span>
+      </a>
+      <button class="menu-toggle" aria-label="Menu mobile">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Menu mobile (affiché uniquement sur mobile) -->
+  <div class="mobile-menu">
+    <div class="mobile-menu-header">
+      <div class="logo">
+        <div class="logo-circle">IHM</div>
+        <span>IHM Technologies</span>
+      </div>
+      <button class="close-menu">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <nav class="mobile-nav">
+      <a href="index.html" class="active">Accueil</a>
+      <a href="concepts.html">Concepts</a>
+      <a href="ressources.html">Ressources</a>
+      <a href="design.html">Design</a>
+      <a href="evenements.html">Événements</a>
+      <a href="cours.html">Cours</a>
+      <a href="forum.html">Forum</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="mobile-actions">
+      <a href="connexion.html" class="btn outline-btn">
+        <i class="fas fa-user"></i>
+        <span>Connexion</span>
+      </a>
+      <div class="mobile-social">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay pour menu mobile -->
+  <div class="overlay"></div>
+
+  <!-- Hero Section -->
+  <section class="hero section-hidden">
+    <!-- Nouveau fond animé -->
+    <div class="animated-background">
+      <div class="wave wave1"></div>
+      <div class="wave wave2"></div>
+      <div class="wave wave3"></div>
+      <div class="wave wave4"></div>
+      
+      <!-- Petites boules bleues -->
+      <div class="tiny-dots-container">
+        <div class="tiny-dot dot-blue-1"></div>
+        <div class="tiny-dot dot-blue-2"></div>
+        <div class="tiny-dot dot-blue-3"></div>
+        <div class="tiny-dot dot-blue-4"></div>
+        <div class="tiny-dot dot-blue-5"></div>
+        <div class="tiny-dot dot-blue-6"></div>
+        <div class="tiny-dot dot-blue-7"></div>
+        <div class="tiny-dot dot-blue-8"></div>
+        <div class="tiny-dot dot-blue-9"></div>
+        <div class="tiny-dot dot-blue-10"></div>
+        <div class="tiny-dot dot-blue-11"></div>
+        <div class="tiny-dot dot-blue-12"></div>
+        <div class="tiny-dot dot-blue-13"></div>
+        <div class="tiny-dot dot-blue-14"></div>
+        <div class="tiny-dot dot-blue-15"></div>
+      </div>
+    </div>
+
+    <div class="hero-content">
+      <span class="badge">Plateforme éducative <div class="badge-shine"></div></span>
+      <h1>Bienvenue sur <span class="gradient-text">IHM Explorer</span></h1>
+      <p>Découvrez ce qu'est l'Interface Homme-Machine et comment elle révolutionne notre façon d'interagir avec la technologie.</p>
+      <div class="buttons">
+        <button class="btn primary">Commencer l'exploration <i class="fas fa-arrow-right"></i></button>
+        <button class="btn primary">En savoir plus</button>
+      </div>
+      <div class="stats" id="stats">
+        <div class="stat">
+          <span class="stat-number" data-value="87" data-suffix="%">0%</span>
+          <span class="stat-label">Réussite</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number" data-value="50000">0</span>
+          <span class="stat-label">Utilisateurs</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number" data-value="95" data-suffix="%">0%</span>
+          <span class="stat-label">Satisfaction</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-decoration">
+      <!-- Éléments décoratifs -->
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+      <div class="dot dot-1"></div>
+      <div class="dot dot-2"></div>
+      <div class="dot dot-3"></div>
+      <div class="dot dot-4"></div>
+      
+      <!-- Éléments décoratifs pour mode clair -->
+      <div class="floating-bubble bubble-1"></div>
+      <div class="floating-bubble bubble-2"></div>
+      <div class="floating-bubble bubble-3"></div>
+      <div class="floating-bubble bubble-4"></div>
+      <div class="floating-bubble bubble-5"></div>
+      <div class="light-shine"></div>
+      <div class="dot dot-5"></div>
+    </div>
+  </section>
+
+  <!-- À propos -->
+  <section id="about" class="about-section section-hidden">
+    <div class="section-container">
+      <div class="section-grid">
+        <div class="about-text">
+          <h2 class="section-title">
+            <span class="title-decoration"></span>
+            À propos de l'IHM
+          </h2>
+          <p>L'interaction homme-machine (IHM) étudie la conception des interfaces utilisateur et l'expérience des humains avec la technologie. Née dans les années 1960, cette discipline est au cœur de l'innovation numérique.</p>
+          
+          <h3>Domaines d'application</h3>
+          
+          <div class="domains-list">
+            <div class="domain-item" data-color="red">
+              <div class="domain-icon">
+                <i class="fas fa-hospital"></i>
+              </div>
+              <div class="domain-title">Médecine</div>
+            </div>
+            <div class="domain-item" data-color="purple">
+              <div class="domain-icon">
+                <i class="fas fa-gamepad"></i>
+              </div>
+              <div class="domain-title">Jeux vidéo</div>
+            </div>
+            <div class="domain-item" data-color="blue">
+              <div class="domain-icon">
+                <i class="fas fa-microchip"></i>
+              </div>
+              <div class="domain-title">IA et informatique</div>
+            </div>
+            <div class="domain-item" data-color="green">
+              <div class="domain-icon">
+                <i class="fas fa-vr-cardboard"></i>
+              </div>
+              <div class="domain-title">Réalité virtuelle</div>
+            </div>
+          </div>
+          
+          <button class="btn primary" onclick="window.open('https://fr.wikipedia.org/wiki/Interactions_humain-machine', '_blank')">Lire l'Histoire de l'IHM</button>
+        </div>
+        
+        <div class="about-media">
+          <div class="media-container">
+            <div class="video-container" style="position:relative;">
+              <iframe 
+                id="ihm-video"
+                width="560" 
+                height="315" 
+                src="https://www.youtube.com/embed/9pipdrXs1uY?enablejsapi=1" 
+                title="Qu'est-ce que l'IHM ?" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+              </iframe>
+              <img 
+                id="video-poster"
+                src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+                alt="Aperçu vidéo IHM" 
+                style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;cursor:pointer;border-radius:12px;z-index:2;"
+                onclick="startIhmVideo()"
+              />
+              <div id="video-play-btn" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;pointer-events:none;">
+                <svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="40" fill="rgba(0,0,0,0.5)"/><polygon points="32,25 60,40 32,55" fill="#fff"/></svg>
+              </div>
+            </div>
+            <div class="media-overlay">
+              <h3>Découvrez les interfaces du futur</h3>
+              <p>Nouvelles technologies d'interaction</p>
+            </div>
+          </div>
+          <div class="decoration-square decoration-1"></div>
+          <div class="decoration-square decoration-2"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Témoignages -->
+  <section id="testimonials" class="testimonials-section section-hidden">
+    <div class="section-container">
+      <div class="section-header">
+        <h2 class="section-title">Ce que disent nos utilisateurs</h2>
+        <div class="title-underline"></div>
+        <!-- Barre de recherche et bouton ajout -->
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin: 1.5rem 0 1rem 0;">
+          <div style="position: relative; width: 250px;">
+            <input type="text" class="testimonial-search" placeholder="Rechercher un témoignage..." style="width: 100%; padding: 0.5rem 0.5rem 0.5rem 2rem; border-radius: 20px; border: 1.5px solid #e0e0e0;">
+            <i class="fas fa-search" style="position: absolute; left: 0.7rem; top: 50%; transform: translateY(-50%); color: #aaa;"></i>
+          </div>
+          <button class="add-testimonial-btn" style="background: #00c2cb; color: white; border: none; padding: 0.5rem 1.2rem; border-radius: 20px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-size: 1rem;"><i class="fas fa-plus"></i> Ajouter un témoignage</button>
+        </div>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card" data-tags="Étudiant Pro">
+          <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+          <p class="testimonial-text">"IHM Technologies a complètement transformé ma compréhension des interfaces utilisateur. Les ressources sont incroyablement détaillées et accessibles."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">
+              <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Sophie Martin">
+            </div>
+            <div class="author-info">
+              <strong>Sophie Martin</strong>
+              <span>Designer UX</span>
+            </div>
+          </div>
+          <div style="display: flex; gap: 0.5rem; margin: 0.7rem 0 0 0; align-items: center; flex-wrap: wrap;">
+            <span class="tag">Étudiant</span>
+            <span class="tag">Pro</span>
+            <button class="testimonial-comment-btn" style="background: none; border: none; color: #00c2cb; font-size: 1.1rem; cursor: pointer; margin-left: 0.7rem;" title="Commenter"><i class="fas fa-comment"></i> Commenter</button>
+          </div>
+        </div>
+        <div class="testimonial-card" data-tags="Développeur Pro">
+          <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+          <p class="testimonial-text">"En tant que développeur, j'ai trouvé les concepts et exemples pratiques extrêmement utiles pour améliorer l'expérience utilisateur de mes applications."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Thomas Dubois">
+            </div>
+            <div class="author-info">
+              <strong>Thomas Dubois</strong>
+              <span>Développeur Full-Stack</span>
+            </div>
+          </div>
+          <div style="display: flex; gap: 0.5rem; margin: 0.7rem 0 0 0; align-items: center; flex-wrap: wrap;">
+            <span class="tag">Pro</span>
+            <button class="testimonial-comment-btn" style="background: none; border: none; color: #00c2cb; font-size: 1.1rem; cursor: pointer; margin-left: 0.7rem;" title="Commenter"><i class="fas fa-comment"></i> Commenter</button>
+          </div>
+        </div>
+        <div class="testimonial-card" data-tags="Enseignant">
+          <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+          <p class="testimonial-text">"La plateforme offre une mine d'informations précieuses pour mes étudiants. C'est devenu un outil pédagogique essentiel dans mes cours d'IHM."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">
+              <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Claire Leroy">
+            </div>
+            <div class="author-info">
+              <strong>Claire Leroy</strong>
+              <span>Professeure d'Informatique</span>
+            </div>
+          </div>
+          <div style="display: flex; gap: 0.5rem; margin: 0.7rem 0 0 0; align-items: center; flex-wrap: wrap;">
+            <span class="tag">Enseignant</span>
+            <button class="testimonial-comment-btn" style="background: none; border: none; color: #00c2cb; font-size: 1.1rem; cursor: pointer; margin-left: 0.7rem;" title="Commenter"><i class="fas fa-comment"></i> Commenter</button>
+          </div>
+        </div>
+      </div>
+      <!-- Modal ajout témoignage -->
+      <div class="add-testimonial-modal" style="display:none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); z-index: 2000;">
+        <div style="background: white; border-radius: 12px; max-width: 400px; width: 95%; margin: 5vh auto 0; padding: 1.2rem; position: relative;">
+          <h3 style="margin-top:0;">Ajouter un témoignage</h3>
+          <form class="add-testimonial-form" style="display: flex; flex-direction: column; gap: 0.7rem;">
+            <input type="text" placeholder="Nom" required style="padding: 0.5rem; border-radius: 8px; border: 1.5px solid #e0e0e0;">
+            <input type="text" placeholder="Profession" required style="padding: 0.5rem; border-radius: 8px; border: 1.5px solid #e0e0e0;">
+            <textarea placeholder="Votre témoignage" required style="padding: 0.5rem; border-radius: 8px; border: 1.5px solid #e0e0e0;"></textarea>
+            <input type="text" placeholder="Tags (séparés par des virgules)" style="padding: 0.5rem; border-radius: 8px; border: 1.5px solid #e0e0e0;">
+            <div style="display: flex; gap: 0.7rem; justify-content: flex-end;">
+              <button type="submit" style="background: #00c2cb; color: white; border: none; padding: 0.5rem 1.1rem; border-radius: 8px;">Ajouter</button>
+              <button type="button" class="cancel-add-testimonial" style="background: #f5f5f5; color: #333; border: none; padding: 0.5rem 1.1rem; border-radius: 8px;">Annuler</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Appel à l'action -->
+  <section id="cta" class="cta-section section-hidden">
+    <div class="cta-container">
+      <h2>Prêt à explorer le monde de l'IHM ?</h2>
+      <p>Rejoignez notre communauté et accédez à des ressources exclusives pour approfondir vos connaissances.</p>
+      <a href="connexion.html" class="btn cta-btn">S'inscrire gratuitement <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="cta-bg">
+      <div class="cta-circle cta-circle-1"></div>
+      <div class="cta-circle cta-circle-2"></div>
+      <div class="cta-circle cta-circle-3"></div>
+      <div class="cta-particle cta-particle-1"></div>
+      <div class="cta-particle cta-particle-2"></div>
+      <div class="cta-particle cta-particle-3"></div>
+      <div class="cta-particle cta-particle-4"></div>
+      <div class="cta-particle cta-particle-5"></div>
+    </div>
+  </section>
+
+  <!-- Section Abonnement & Tarification -->
+  <section class="pricing-section section-hidden" style="background: linear-gradient(135deg, #f1f8fd, #e0f1fc); padding: 3rem 0;">
+    <div class="section-container">
+      <div class="section-header" style="text-align: center; margin-bottom: 2rem;">
+        <h2 class="section-title" style="color: #222; text-align: center; margin: 0 auto; display: block; width: fit-content; font-size: 2.2rem;">Abonnements & Tarification</h2>
+        <p style="color: #555; max-width: 600px; margin: 0.5rem auto;">Choisissez l'offre qui correspond à vos besoins et accédez à des ressources exclusives, un support prioritaire et bien plus encore.</p>
+      </div>
+      <div class="pricing-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; max-width: 900px; margin: 0 auto;">
+        <!-- Offre Basique -->
+        <div class="pricing-card" style="background: #fff; border-radius: 16px; box-shadow: 0 8px 30px rgba(0,113,194,0.08); padding: 2rem 1.5rem; display: flex; flex-direction: column; align-items: center;">
+          <h3 style="color: #0071c2; font-size: 1.3rem; margin-bottom: 0.5rem;">Basique</h3>
+          <div style="font-size: 2.2rem; font-weight: 700; color: #00c2cb; margin-bottom: 0.5rem;">Gratuit</div>
+          <ul style="list-style: none; padding: 0; margin: 1.2rem 0 1.5rem 0; color: #555; text-align: left;">
+            <li>✔ Accès aux ressources publiques</li>
+            <li>✔ Participation au forum</li>
+            <li>✔ Newsletter mensuelle</li>
+          </ul>
+          <a href="connexion.html" class="btn primary" style="width: 100%; text-decoration: none; text-align: center;">S'inscrire</a>
+        </div>
+        <!-- Offre Pro -->
+        <div class="pricing-card" style="background: linear-gradient(135deg, #00c2cb, #0071c2); border-radius: 16px; box-shadow: 0 8px 30px rgba(0,113,194,0.12); padding: 2.5rem 1.5rem; display: flex; flex-direction: column; align-items: center; color: #fff; position: relative;">
+          <div style="position: absolute; top: -18px; left: 50%; transform: translateX(-50%); background: #ffb300; color: #fff; font-size: 0.9rem; font-weight: 600; padding: 0.3rem 1.2rem; border-radius: 12px;">Populaire</div>
+          <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Pro</h3>
+          <div style="font-size: 2.2rem; font-weight: 700; margin-bottom: 0.5rem;">9€<span style="font-size: 1rem; font-weight: 400;">/mois</span></div>
+          <ul style="list-style: none; padding: 0; margin: 1.2rem 0 1.5rem 0; text-align: left;">
+            <li>✔ Accès à toutes les ressources</li>
+            <li>✔ Support prioritaire</li>
+            <li>✔ Webinaires exclusifs</li>
+            <li>✔ Badge Pro sur le forum</li>
+          </ul>
+          <button class="btn primary" style="width: 100%; background: #fff; color: #0071c2;">S'abonner</button>
+        </div>
+        <!-- Offre Premium -->
+        <div class="pricing-card" style="background: #fff; border-radius: 16px; box-shadow: 0 8px 30px rgba(0,113,194,0.08); padding: 2.5rem 1.5rem; display: flex; flex-direction: column; align-items: center;">
+          <h3 style="color: #0071c2; font-size: 1.3rem; margin-bottom: 0.5rem;">Premium</h3>
+          <div style="font-size: 2.2rem; font-weight: 700; color: #00c2cb; margin-bottom: 0.5rem;">19€<span style="font-size: 1rem; font-weight: 400;">/mois</span></div>
+          <ul style="list-style: none; padding: 0; margin: 1.2rem 0 1.5rem 0; color: #555; text-align: left;">
+            <li>✔ Tous les avantages Pro</li>
+            <li>✔ Coaching personnalisé</li>
+            <li>✔ Accès anticipé aux nouveautés</li>
+            <li>✔ Certificat de formation</li>
+          </ul>
+          <button class="btn primary" style="width: 100%;">S'abonner</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <div class="logo">
+            <div class="logo-circle">IHM</div>
+            <span>IHM Technologies</span>
+          </div>
+          <p>Explorez le monde de l'Interface Homme-Machine et découvrez comment elle façonne notre avenir numérique.</p>
+          <div class="newsletter">
+            <input type="email" placeholder="Votre email" />
+            <button><i class="fas fa-paper-plane"></i></button>
+          </div>
+        </div>
+        
+        <div class="footer-links">
+          <h4>Liens rapides</h4>
+          <div class="links-grid">
+            <ul>
+              <li><a href="index.html">Accueil</a></li>
+              <li><a href="ressources.html">Ressources</a></li>
+              <li><a href="design.html">Design</a></li>
+              <li><a href="cours.html">Cours</a></li>
+              <li><a href="evenements.html">Événements</a></li>
+            </ul>
+            <ul>
+              <li><a href="concepts.html">Concepts</a></li>
+              <li><a href="forum.html">Forum</a></li>
+              <li><a href="contact.html">Contact</a></li>
+              <li><a href="connexion.html">Connexion</a></li>
+              <li><a href="#">Inscription</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="footer-contact">
+          <h4>Contact</h4>
+          <ul class="contact-list">
+            <li><i class="fas fa-map-marker-alt"></i> 123 Avenue de l'Innovation, 75001 Paris</li>
+            <li><i class="fas fa-phone"></i> +33 1 23 45 67 89</li>
+            <li><i class="fas fa-envelope"></i> contact@ihm-explorer.com</li>
+          </ul>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <div class="copyright">© 2025 IHM Technologies. Tous droits réservés.</div>
+        <div class="legal-links">
+          <a href="#">Mentions légales</a>
+          <a href="#">Politique de confidentialité</a>
+          <a href="#">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    function startIhmVideo() {
+      document.getElementById('video-poster').style.display = 'none';
+      document.getElementById('video-play-btn').style.display = 'none';
+      var iframe = document.getElementById('ihm-video');
+      iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+    }
+  </script>
+  <script src="chatbot.js"></script>
+  <script src="auth.js"></script>
+  <script>
+    // Fonctionnalités interactives pour la section témoignages
+    document.addEventListener('DOMContentLoaded', function() {
+      // Recherche
+      const testimonialSearch = document.querySelector('.testimonial-search');
+      const testimonialCards = document.querySelectorAll('.testimonial-card');
+      if (testimonialSearch) {
+        testimonialSearch.addEventListener('input', function() {
+          const term = this.value.toLowerCase();
+          testimonialCards.forEach(card => {
+            const text = card.querySelector('.testimonial-text').textContent.toLowerCase();
+            const author = card.querySelector('.author-info strong').textContent.toLowerCase();
+            if (text.includes(term) || author.includes(term)) {
+              card.style.display = '';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      }
+      // Tags filtrables
+      const tagFilters = document.querySelectorAll('.testimonial-tag');
+      tagFilters.forEach(tag => {
+        tag.addEventListener('click', function() {
+          tagFilters.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          const filter = this.textContent.toLowerCase();
+          testimonialCards.forEach(card => {
+            const tags = card.getAttribute('data-tags').toLowerCase();
+            if (filter === 'tous' || tags.includes(filter)) {
+              card.style.display = '';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+      // Modal ajout témoignage
+      const addTestimonialBtn = document.querySelector('.add-testimonial-btn');
+      const addTestimonialModal = document.querySelector('.add-testimonial-modal');
+      const cancelAddTestimonial = document.querySelector('.cancel-add-testimonial');
+      if (addTestimonialBtn && addTestimonialModal) {
+        addTestimonialBtn.addEventListener('click', function() {
+          addTestimonialModal.style.display = 'block';
+        });
+      }
+      if (cancelAddTestimonial && addTestimonialModal) {
+        cancelAddTestimonial.addEventListener('click', function() {
+          addTestimonialModal.style.display = 'none';
+        });
+      }
+      // Fermer modal en cliquant dehors
+      window.addEventListener('click', function(e) {
+        if (e.target === addTestimonialModal) {
+          addTestimonialModal.style.display = 'none';
+        }
+      });
+      // Soumission du formulaire (simulé)
+      const addTestimonialForm = document.querySelector('.add-testimonial-form');
+      if (addTestimonialForm && addTestimonialModal) {
+        addTestimonialForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          addTestimonialModal.style.display = 'none';
+          addTestimonialForm.reset();
+          // Ici, tu pourrais ajouter dynamiquement le témoignage à la liste (JS avancé)
+        });
+      }
+    });
+  </script>
+</body>
+</html>

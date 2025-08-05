@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Design IHM - IHM Explorer</title>
+  <link rel="stylesheet" href="auth.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* Styles spécifiques à la page design */
+    .hero-design {
+      background: #E5F2F8;
+      padding: 6rem 0 10rem;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      color: #333;
+      min-height: 240px;
+    }
+    
+    /* Effet brillant animé */
+    .hero-design::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      animation: shine 3s infinite linear;
+      transform: skewX(-20deg);
+    }
+    
+    @keyframes shine {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    .hero-design::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 180px;
+      background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg"><path fill="white" d="M0,160 C80,200 160,240 240,240 C320,240 400,200 480,200 C560,200 640,240 720,240 C800,240 880,200 960,180 C1040,160 1120,160 1200,180 C1280,200 1360,240 1440,240 L1440,320 L0,320 Z"></path></svg>') no-repeat bottom;
+      background-size: cover;
+    }
+    
+    /* Grandes bulles décoratives */
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(0, 194, 203, 0.2), rgba(0, 113, 194, 0.25));
+      border: 1px solid rgba(0, 194, 203, 0.1);
+      z-index: 1;
+      box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(2px);
+    }
+    
+    .bubble-1 {
+      width: 180px;
+      height: 180px;
+      top: 50px;
+      left: 50px;
+      animation: float 8s ease-in-out infinite;
+    }
+    
+    .bubble-2 {
+      width: 120px;
+      height: 120px;
+      top: 180px;
+      right: 80px;
+      animation: float 6s ease-in-out infinite;
+      animation-delay: 1s;
+    }
+    
+    .bubble-3 {
+      width: 100px;
+      height: 100px;
+      bottom: 140px;
+      left: 100px;
+      animation: float 7s ease-in-out infinite;
+      animation-delay: 2s;
+    }
+    
+    .bubble-4 {
+      width: 150px;
+      height: 150px;
+      bottom: 100px;
+      right: 130px;
+      animation: float 9s ease-in-out infinite;
+      animation-delay: 3s;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-20px) rotate(5deg);
+      }
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+    }
+
+    .design-container {
+      max-width: 1200px;
+      margin: -3rem auto 0;
+      padding: 0 2rem 3rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Grid pour les processus de design */
+    .design-process {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-bottom: 4rem;
+      counter-reset: process;
+      padding: 1rem;
+      max-width: 1020px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .design-process::-webkit-scrollbar {
+      height: 6px;
+    }
+    
+    .design-process::-webkit-scrollbar-track {
+      background: #E5F2F8;
+      border-radius: 10px;
+    }
+    
+    .design-process::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #00c2cb, #0071c2);
+      border-radius: 10px;
+    }
+
+    .process-step {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0, 113, 194, 0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      counter-increment: process;
+      flex: 0 0 163px;
+      width: 163px;
+    }
+
+    .process-step:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px rgba(0, 113, 194, 0.15);
+    }
+
+    .process-step::before {
+      content: counter(process);
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(135deg, #00c2cb, #0071c2);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 700;
+      box-shadow: 0 5px 15px rgba(0, 113, 194, 0.2);
+      z-index: 1;
+    }
+
+    .process-img {
+      height: 120px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .process-img::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(to top, rgba(255,255,255,1), transparent);
+    }
+
+    .process-content {
+      padding: 1rem;
+    }
+
+    .process-title {
+      font-size: 1.2rem;
+      margin: 0 0 0.5rem;
+      color: #333;
+      position: relative;
+    }
+
+    .process-title::after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(135deg, #00c2cb, #0071c2);
+      margin-top: 0.3rem;
+      border-radius: 2px;
+    }
+
+    .process-desc {
+      color: #666;
+      line-height: 1.4;
+      margin: 0;
+      font-size: 0.85rem;
+    }
+
+    /* Section outils de design */
+    .tools-section {
+      background: #E5F2F8;
+      border-radius: 15px;
+      padding: 3rem;
+      margin-bottom: 4rem;
+    }
+
+    .tools-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .tools-header h2 {
+      font-size: 2rem;
+      color: #333;
+      margin: 0 0 1rem;
+    }
+
+    .tools-header p {
+      color: #666;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .tool-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 113, 194, 0.08);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 113, 194, 0.15);
+    }
+
+    .tool-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tool-icon i {
+      font-size: 3rem;
+      background: linear-gradient(135deg, #00c2cb, #0071c2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tool-name {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin: 0 0 1rem;
+      color: #333;
+    }
+
+    .tool-desc {
+      color: #666;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* Section ressources */
+    .resources-section {
+      margin-bottom: 4rem;
+    }
+
+    .resource-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .resource-card {
+      background: linear-gradient(145deg, #ffffff, #f0f7ff);
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 113, 194, 0.08);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .resource-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 113, 194, 0.15);
+    }
+
+    .resource-card-header {
+      background: linear-gradient(135deg, #00c2cb, #0071c2);
+      color: white;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .resource-card-header i {
+      font-size: 1.5rem;
+      margin-right: 1rem;
+    }
+
+    .resource-card-header h3 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .resource-card-body {
+      padding: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .resource-card-body p {
+      margin: 0 0 1.5rem;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .resource-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .resource-links li {
+      margin-bottom: 0.8rem;
+    }
+
+    .resource-links li:last-child {
+      margin-bottom: 0;
+    }
+
+    .resource-links a {
+      display: flex;
+      align-items: center;
+      color: #0071c2;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .resource-links a:hover {
+      color: #00c2cb;
+    }
+
+    .resource-links a i {
+      margin-right: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.4rem;
+      }
+      
+      .process-step::before {
+        top: 15px;
+        right: 15px;
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+      }
+    }
+
+    .hero-title span {
+      color: #0071c2;
+      text-shadow: 0 0 15px rgba(0, 194, 203, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header avec navigation -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-circle">IHM</div>
+      <span>IHM Technologies</span>
+    </div>
+    <nav class="nav">
+      <a href="index.html">Accueil</a>
+      <a href="concepts.html">Concepts</a>
+      <a href="ressources.html">Ressources</a>
+      <a href="design.html" class="active">Design</a>
+      <a href="cours.html">Cours</a>
+      <a href="evenements.html">Événements</a>
+      <a href="forum.html">Forum</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <button class="theme-toggle" aria-label="Basculer mode sombre">
+        <i class="fas fa-moon" id="theme-icon"></i>
+      </button>
+      <a href="connexion.html" class="login-btn">
+        <i class="fas fa-user"></i>
+        <span>Connexion</span>
+      </a>
+      <button class="menu-toggle" aria-label="Menu mobile">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Menu mobile -->
+  <div class="mobile-menu">
+    <div class="mobile-menu-header">
+      <div class="logo">
+        <div class="logo-circle">IHM</div>
+        <span>IHM Technologies</span>
+      </div>
+      <button class="mobile-menu-close">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <nav class="mobile-nav">
+      <a href="index.html">Accueil</a>
+      <a href="concepts.html">Concepts</a>
+      <a href="ressources.html">Ressources</a>
+      <a href="design.html" class="active">Design</a>
+      <a href="evenements.html">Événements</a>
+      <a href="cours.html">Cours</a>
+      <a href="forum.html">Forum</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="mobile-menu-footer">
+      <a href="connexion.html" class="login-btn">
+        <i class="fas fa-user"></i>
+        <span>Connexion</span>
+      </a>
+    </div>
+  </div>
+  
+  <!-- Overlay pour menu mobile -->
+  <div class="overlay"></div>
+
+  <!-- Section Hero avec vague -->
+  <section class="hero-design">
+    <!-- Bulles décoratives -->
+    <div class="bubble bubble-1"></div>
+    <div class="bubble bubble-2"></div>
+    <div class="bubble bubble-3"></div>
+    <div class="bubble bubble-4"></div>
+    
+    <h1 class="hero-title">Design d'<span>Interfaces</span></h1>
+    <p class="hero-description">Explorez les techniques et méthodologies pour créer des interfaces utilisateur intuitives et engageantes.</p>
+  </section>
+
+  <!-- Contenu principal -->
+  <div class="design-container">
+    
+    <!-- Section processus de design -->
+    <section>
+      <div style="text-align: center; background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 8px 30px rgba(0, 113, 194, 0.15); margin-bottom: 4rem;">
+        <h2 class="section-title" style="display: inline-block; margin: 0 auto; position: relative;">Processus de Design d'IHM</h2>
+        <p class="section-description">Les étapes essentielles pour concevoir des interfaces centrées sur l'utilisateur.</p>
+        
+        <div class="design-process">
+          <!-- Étape 1 -->
+          <div class="process-step">
+            <div class="process-img" style="background-image: url('https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+            <div class="process-content">
+              <h3 class="process-title">Recherche utilisateur</h3>
+              <p class="process-desc">Comprendre les besoins, objectifs et frustrations des utilisateurs à travers des entretiens, enquêtes et observations directes.</p>
+            </div>
+          </div>
+          
+          <!-- Étape 2 -->
+          <div class="process-step">
+            <div class="process-img" style="background-image: url('https://images.unsplash.com/photo-1576267423445-b2e0074d68a4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+            <div class="process-content">
+              <h3 class="process-title">Conception d'interaction</h3>
+              <p class="process-desc">Définir comment les utilisateurs interagiront avec l'interface, en créant des wireframes et des flux d'utilisateurs clairs.</p>
+            </div>
+          </div>
+          
+          <!-- Étape 3 -->
+          <div class="process-step">
+            <div class="process-img" style="background-image: url('https://images.unsplash.com/photo-1508921340878-ba53e1f016ec?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+            <div class="process-content">
+              <h3 class="process-title">Design visuel</h3>
+              <p class="process-desc">Créer l'esthétique de l'interface en définissant les couleurs, typographie et autres éléments visuels cohérents avec l'identité de la marque.</p>
+            </div>
+          </div>
+          
+          <!-- Étape 4 -->
+          <div class="process-step">
+            <div class="process-img" style="background-image: url('https://images.unsplash.com/photo-1512486130939-2c4f79935e4f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+            <div class="process-content">
+              <h3 class="process-title">Prototypage</h3>
+              <p class="process-desc">Créer des versions interactives de l'interface pour tester les interactions et obtenir des retours concrets avant le développement.</p>
+            </div>
+          </div>
+          
+          <!-- Étape 5 -->
+          <div class="process-step">
+            <div class="process-img" style="background-image: url('https://images.unsplash.com/photo-1559028012-481c04fa702d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+            <div class="process-content">
+              <h3 class="process-title">Tests utilisateurs</h3>
+              <p class="process-desc">Valider les solutions de design en observant comment les utilisateurs réels interagissent avec l'interface et identifier les problèmes potentiels.</p>
+            </div>
+          </div>
+          
+          <!-- Étape 6 -->
+          <div class="process-step">
+            <div class="process-img" style="background-image: url('https://images.unsplash.com/photo-1600132806370-bf17e65e942f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+            <div class="process-content">
+              <h3 class="process-title">Itération</h3>
+              <p class="process-desc">Améliorer continuellement l'interface en fonction des retours d'utilisateurs et des nouvelles exigences pour une expérience optimale.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Section ergonomie IHM redesign moderne -->
+    <section style="position: relative; padding: 4rem 0; margin-bottom: 4rem; overflow: hidden;">
+      <!-- Fond stylisé avec dégradé et formes -->
+      <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(120deg, rgba(0,194,203,0.08), rgba(0,113,194,0.14)); z-index: -1; border-radius: 15px;"></div>
+      <div style="position: absolute; top: -100px; right: -100px; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(0,194,203,0.15), rgba(0,194,203,0)); z-index: -1;"></div>
+      <div style="position: absolute; bottom: -80px; left: -80px; width: 250px; height: 250px; border-radius: 50%; background: radial-gradient(circle, rgba(0,113,194,0.1), rgba(0,113,194,0)); z-index: -1;"></div>
+      
+      <!-- En-tête avec style moderne -->
+      <div style="text-align: center; margin-bottom: 3rem; padding: 0 2rem;">
+        <h2 style="font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, #00c2cb, #0071c2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0 0 1rem; letter-spacing: -0.5px;">Ergonomie des Interfaces</h2>
+        <div style="width: 60px; height: 4px; background: linear-gradient(135deg, #00c2cb, #0071c2); margin: 0 auto 1.5rem; border-radius: 4px;"></div>
+      </div>
+      
+      <!-- Style pour les effets de survol des cartes -->
+      <style>
+        .ergonomics-card {
+          transition: all 0.3s ease;
+          transform: translateY(0);
+        }
+        .ergonomics-card:hover {
+          transform: translateY(-10px);
+          box-shadow: 0 20px 50px rgba(0, 113, 194, 0.2) !important;
+        }
+      </style>
+      
+      <!-- Contenu principal en style carte moderne -->
+      <div style="max-width: 1100px; margin: 0 auto; padding: 0 2rem;">
+        <div style="display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center;">
+          
+          <!-- Première carte : Définition -->
+          <div class="ergonomics-card" style="flex: 1 1 300px; max-width: 500px; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 15px 50px rgba(0, 113, 194, 0.15); position: relative;">
+            <!-- Barre supérieure colorée -->
+            <div style="height: 6px; background: linear-gradient(90deg, #00c2cb, #0071c2);"></div>
+            
+            <!-- Icône flottante -->
+            <div style="position: absolute; top: 2rem; right: 2rem; width: 60px; height: 60px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0, 113, 194, 0.15);">
+              <i class="fas fa-lightbulb" style="font-size: 2rem; background: linear-gradient(135deg, #00c2cb, #0071c2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+            </div>
+            
+            <!-- Contenu principal -->
+            <div style="padding: 2.5rem 2rem 2rem;">
+              <h3 style="font-size: 1.6rem; font-weight: 700; margin: 0 0 1.2rem; color: #333;">Qu'est-ce que l'ergonomie IHM ?</h3>
+              
+              <p style="color: #666; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem;">L'ergonomie des Interfaces Homme-Machine (IHM) est une discipline qui vise à optimiser les interactions entre les humains et les systèmes informatiques. Elle rend ces interactions plus naturelles, intuitives et agréables pour tous les utilisateurs.</p>
+              
+              <!-- Les 3 principes en badges modernes -->
+              <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                <div style="display: flex; align-items: center; padding: 0.8rem 1rem; background: rgba(0, 194, 203, 0.07); border-radius: 8px; border-left: 3px solid #00c2cb;">
+                  <div style="font-weight: 600; color: #00a0a8; margin-right: 0.5rem;">Efficacité</div>
+                  <div style="font-size: 0.85rem; color: #666;">Permettre aux utilisateurs d'accomplir leurs tâches avec précision et complétude</div>
+                </div>
+                
+                <div style="display: flex; align-items: center; padding: 0.8rem 1rem; background: rgba(0, 165, 194, 0.07); border-radius: 8px; border-left: 3px solid #0091c4;">
+                  <div style="font-weight: 600; color: #0091c4; margin-right: 0.5rem;">Efficience</div>
+                  <div style="font-size: 0.85rem; color: #666;">Optimiser les ressources (temps, effort) nécessaires pour accomplir une tâche</div>
+                </div>
+                
+                <div style="display: flex; align-items: center; padding: 0.8rem 1rem; background: rgba(0, 113, 194, 0.07); border-radius: 8px; border-left: 3px solid #0071c2;">
+                  <div style="font-weight: 600; color: #0071c2; margin-right: 0.5rem;">Satisfaction</div>
+                  <div style="font-size: 0.85rem; color: #666;">Créer une expérience agréable, stimulante et sans frustration pour l'utilisateur</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Deuxième carte : Méthodes d'évaluation -->
+          <div class="ergonomics-card" style="flex: 1 1 300px; max-width: 500px; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 15px 50px rgba(0, 113, 194, 0.15); position: relative;">
+            <!-- Barre supérieure colorée -->
+            <div style="height: 6px; background: linear-gradient(90deg, #00c2cb, #0071c2);"></div>
+            
+            <!-- Icône flottante -->
+            <div style="position: absolute; top: 2rem; right: 2rem; width: 60px; height: 60px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0, 113, 194, 0.15);">
+              <i class="fas fa-tasks" style="font-size: 2rem; background: linear-gradient(135deg, #00c2cb, #0071c2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+            </div>
+            
+            <!-- Contenu principal -->
+            <div style="padding: 2.5rem 2rem 2rem;">
+              <h3 style="font-size: 1.6rem; font-weight: 700; margin: 0 0 1.2rem; color: #333;">Méthodes d'évaluation</h3>
+              
+              <!-- Méthodes présentées en liste moderne -->
+              <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem;">
+                  <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #00c2cb, #0071c2); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fas fa-eye" style="color: white; font-size: 1.1rem;"></i>
+                  </div>
+                  <div>
+                    <h4 style="font-size: 1.1rem; font-weight: 600; margin: 0 0 0.2rem; color: #333;">Tests d'utilisabilité</h4>
+                    <p style="color: #666; font-size: 0.9rem; line-height: 1.5; margin: 0;">Observation directe des utilisateurs accomplissant des tâches spécifiques pour identifier les problèmes d'ergonomie et de navigation dans un environnement contrôlé.</p>
+                  </div>
+                </li>
+                
+                <li style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem;">
+                  <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #00c2cb, #0071c2); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fas fa-comments" style="color: white; font-size: 1.1rem;"></i>
+                  </div>
+                  <div>
+                    <h4 style="font-size: 1.1rem; font-weight: 600; margin: 0 0 0.2rem; color: #333;">Recueil de feedback</h4>
+                    <p style="color: #666; font-size: 0.9rem; line-height: 1.5; margin: 0;">Collecte des opinions, impressions et suggestions des utilisateurs via des questionnaires, entretiens et groupes de discussion pour évaluer la satisfaction.</p>
+                  </div>
+                </li>
+                
+                <li style="display: flex; align-items: center; gap: 1rem;">
+                  <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #00c2cb, #0071c2); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fas fa-clipboard-check" style="color: white; font-size: 1.1rem;"></i>
+                  </div>
+                  <div>
+                    <h4 style="font-size: 1.1rem; font-weight: 600; margin: 0 0 0.2rem; color: #333;">Analyse experte</h4>
+                    <p style="color: #666; font-size: 0.9rem; line-height: 1.5; margin: 0;">Évaluation systématique par des spécialistes en ergonomie qui examinent l'interface selon des principes heuristiques établis pour identifier les problèmes potentiels.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Section ressources avec images -->
+    <section style="margin-bottom: 3rem;">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <h2 style="font-size: 1.8rem; color: #333; display: inline-block; margin: 0 auto; position: relative;">Ressources de Design</h2>
+        <div style="width: 60px; height: 2px; background: linear-gradient(135deg, #00c2cb, #0071c2); margin: 0.5rem auto 1rem; border-radius: 2px;"></div>
+        <p style="color: #666; max-width: 600px; margin: 0 auto; font-size: 0.95rem;">Une sélection de ressources essentielles pour enrichir vos connaissances en design d'interfaces.</p>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; max-width: 1000px; margin: 0 auto;">
+        <!-- Style hover pour les cartes -->
+        <style>
+          .resource-card-img:hover img {
+            transform: scale(1.05);
+          }
+          .resource-card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 113, 194, 0.15);
+          }
+        </style>
+        <!-- Ressource 1: Cours en ligne -->
+        <div class="resource-card-hover" style="background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 6px 15px rgba(0, 113, 194, 0.08); transition: all 0.3s ease; height: 100%;">
+          <div class="resource-card-img" style="height: 150px; overflow: hidden; position: relative;">
+            <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Cours en ligne" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;">
+            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6));"></div>
+            <h3 style="position: absolute; bottom: 0; left: 0; width: 100%; color: white; margin: 0; padding: 1rem; font-size: 1.1rem; font-weight: 600; text-shadow: 0 1px 3px rgba(0,0,0,0.3);">Cours en ligne</h3>
+          </div>
+          <div style="padding: 1rem;">
+            <p style="color: #555; font-size: 0.9rem; margin: 0 0 0.8rem; line-height: 1.5;">Formations interactives pour apprendre les techniques modernes de design d'interfaces à votre rythme.</p>
+            <a href="#" style="display: inline-block; color: #0071c2; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease;">
+              <i class="fas fa-arrow-right" style="margin-right: 5px;"></i> Découvrir les cours
+            </a>
+          </div>
+        </div>
+        
+        <!-- Ressource 2: Maquettes et Mockups -->
+        <div class="resource-card-hover" style="background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 6px 15px rgba(0, 113, 194, 0.08); transition: all 0.3s ease; height: 100%;">
+          <div class="resource-card-img" style="height: 150px; overflow: hidden; position: relative;">
+            <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Maquettes et Mockups" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;">
+            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6));"></div>
+            <h3 style="position: absolute; bottom: 0; left: 0; width: 100%; color: white; margin: 0; padding: 1rem; font-size: 1.1rem; font-weight: 600; text-shadow: 0 1px 3px rgba(0,0,0,0.3);">Maquettes et Mockups</h3>
+          </div>
+          <div style="padding: 1rem;">
+            <p style="color: #555; font-size: 0.9rem; margin: 0 0 0.8rem; line-height: 1.5;">Ressources et modèles pour créer rapidement des prototypes d'interfaces utilisateur professionnelles.</p>
+            <a href="#" style="display: inline-block; color: #0071c2; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease;">
+              <i class="fas fa-arrow-right" style="margin-right: 5px;"></i> Explorer les modèles
+            </a>
+          </div>
+        </div>
+        
+        <!-- Ressource 3: Inspiration et tendances -->
+        <div class="resource-card-hover" style="background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 6px 15px rgba(0, 113, 194, 0.08); transition: all 0.3s ease; height: 100%;">
+          <div class="resource-card-img" style="height: 150px; overflow: hidden; position: relative;">
+            <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Inspiration et tendances" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;">
+            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6));"></div>
+            <h3 style="position: absolute; bottom: 0; left: 0; width: 100%; color: white; margin: 0; padding: 1rem; font-size: 1.1rem; font-weight: 600; text-shadow: 0 1px 3px rgba(0,0,0,0.3);">Inspiration et tendances</h3>
+          </div>
+          <div style="padding: 1rem;">
+            <p style="color: #555; font-size: 0.9rem; margin: 0 0 0.8rem; line-height: 1.5;">Découvrez les dernières tendances en UI/UX et trouvez l'inspiration pour vos projets de design d'interfaces.</p>
+            <a href="#" style="display: inline-block; color: #0071c2; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease;">
+              <i class="fas fa-arrow-right" style="margin-right: 5px;"></i> S'inspirer
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+  </div>
+  
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <div class="logo">
+            <div class="logo-circle">IHM</div>
+            <span>IHM Technologies</span>
+          </div>
+          <p>Explorez le monde de l'Interface Homme-Machine et découvrez comment elle façonne notre avenir numérique.</p>
+          <div class="newsletter">
+            <input type="email" placeholder="Votre email" />
+            <button><i class="fas fa-paper-plane"></i></button>
+          </div>
+        </div>
+        
+        <div class="footer-links">
+          <h4>Liens rapides</h4>
+          <div class="links-grid">
+            <ul>
+              <li><a href="index.html">Accueil</a></li>
+              <li><a href="ressources.html">Ressources</a></li>
+              <li><a href="design.html">Design</a></li>
+              <li><a href="cours.html">Cours</a></li>
+              <li><a href="evenements.html">Événements</a></li>
+            </ul>
+            <ul>
+              <li><a href="concepts.html">Concepts</a></li>
+              <li><a href="forum.html">Forum</a></li>
+              <li><a href="contact.html">Contact</a></li>
+              <li><a href="connexion.html">Connexion</a></li>
+              <li><a href="#">Inscription</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="footer-contact">
+          <h4>Contact</h4>
+          <ul class="contact-list">
+            <li><i class="fas fa-map-marker-alt"></i> 123 Avenue de l'Innovation, 75001 Paris</li>
+            <li><i class="fas fa-phone"></i> +33 1 23 45 67 89</li>
+            <li><i class="fas fa-envelope"></i> contact@ihm-explorer.com</li>
+          </ul>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <div class="copyright">© 2025 IHM Technologies. Tous droits réservés.</div>
+        <div class="legal-links">
+          <a href="#">Mentions légales</a>
+          <a href="#">Politique de confidentialité</a>
+          <a href="#">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Initialisation du commutateur de thème pour cette page
+    document.addEventListener('DOMContentLoaded', () => {
+      const themeSwitcher = document.querySelector('.theme-toggle');
+      if (themeSwitcher) {
+        themeSwitcher.addEventListener('click', function() {
+          document.body.classList.toggle('dark-theme');
+          const themeIcon = document.getElementById('theme-icon');
+          
+          if (document.body.classList.contains('dark-theme')) {
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+            localStorage.setItem('theme', 'dark');
+          } else {
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+            localStorage.setItem('theme', 'light');
+          }
+        });
+      }
+    });
+  </script>
+  <script>
+    // Adaptation du hero au thème sombre
+    document.addEventListener('DOMContentLoaded', () => {
+      // Fonction pour mettre à jour le style du hero selon le thème
+      function updateHeroStyle() {
+        // Vérifie d'abord dans le localStorage
+        const savedTheme = localStorage.getItem('theme');
+        const isDarkTheme = savedTheme === 'dark' || document.body.classList.contains('dark-theme');
+        
+        // Sélecteur pour toutes les classes hero possibles
+        const heroSection = document.querySelector('.hero-wave') || 
+                           document.querySelector('.hero-forum') || 
+                           document.querySelector('.hero-design') || 
+                           document.querySelector('.hero-courses');
+        
+        if (heroSection) {
+          if (isDarkTheme) {
+            heroSection.style.background = '#121a24';
+            heroSection.style.color = '#e0e0e0';
+          } else {
+            // Restaurer le style d'origine en fonction de la classe
+            if (heroSection.classList.contains('hero-forum')) {
+              heroSection.style.background = 'linear-gradient(135deg, #f1f8fd, #e0f1fc)';
+            } else {
+              heroSection.style.background = '#E5F2F8';
+            }
+            heroSection.style.color = '#333';
+          }
+        }
+      }
+      
+      // Appliquer au chargement de la page
+      updateHeroStyle();
+      
+      // Observer les changements de thème
+      const themeSwitcher = document.querySelector('.theme-toggle');
+      if (themeSwitcher) {
+        themeSwitcher.addEventListener('click', updateHeroStyle);
+      }
+    });
+  </script>
+  <script src="script.js"></script>
+  <script src="chatbot.js"></script>
+  <script src="auth.js"></script>
+</body>
+</html>
