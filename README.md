@@ -1,4 +1,5 @@
 ## IHM Explorer :  Portail d'Apprentissage Interactif
+https://hajar-bh.github.io/site-IHM-educatif/index.html
 # Plan 
 -	Partie 1:  Présentation du Projet
 -	Partie 2: Installation et tests
